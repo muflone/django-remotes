@@ -17,3 +17,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
+
+from django.contrib import admin
+
+from .models import Setting, SettingAdmin
+
+
+admin.site.register(Setting, SettingAdmin)
