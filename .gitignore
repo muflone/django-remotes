@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+*.sqlite3
+/static/
+/uploads/
+/project/settings_development.py
+*.mo
