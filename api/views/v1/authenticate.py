@@ -18,13 +18,15 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from django.urls import path
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from api.views.v1.authenticate import AuthenticateView
-from api.views.v1.status import StatusView
 
+class AuthenticateView(APIView):
+    permission_classes = (IsAuthenticated, )
 
-urlpatterns = [
-    path('authenticate/', AuthenticateView.as_view()),
-    path('status/', StatusView.as_view()),
-]
+    def get(self, request):
+        return Response(data={'authenticated': True},
+                        status=status.HTTP_200_OK)
