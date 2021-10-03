@@ -24,11 +24,16 @@ from rest_framework.views import APIView
 
 from project import PRODUCT_NAME, VERSION
 
+from remotes.constants import SERVER_URL
+
+from utility.misc.get_setting_value import get_setting_value
+
 
 class StatusView(APIView):
     def get(self, request):
         results = {'app_name': PRODUCT_NAME,
-                   'version': VERSION}
+                   'version': VERSION,
+                   SERVER_URL: get_setting_value(name=SERVER_URL)}
         return Response({'status': 'success',
                          'data': results},
                         status=status.HTTP_200_OK)
