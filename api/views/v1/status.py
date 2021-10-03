@@ -18,11 +18,17 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from django.contrib import admin
-from django.urls import include, path
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from project import PRODUCT_NAME, VERSION
 
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-]
+class StatusView(APIView):
+    def get(self, request):
+        results = {'app_name': PRODUCT_NAME,
+                   'version': VERSION}
+        return Response({'status': 'success',
+                         'data': results},
+                        status=status.HTTP_200_OK)
