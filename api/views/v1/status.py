@@ -31,9 +31,7 @@ from utility.misc.get_setting_value import get_setting_value
 
 class StatusView(APIView):
     def get(self, request):
-        results = {'app_name': PRODUCT_NAME,
-                   'version': VERSION,
-                   SERVER_URL: get_setting_value(name=SERVER_URL)}
-        return Response({'status': 'success',
-                         'data': results},
+        return Response(data={'app_name': PRODUCT_NAME,
+                              'version': VERSION,
+                              SERVER_URL: get_setting_value(name=SERVER_URL)},
                         status=status.HTTP_200_OK)
