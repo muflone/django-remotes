@@ -20,8 +20,12 @@
 
 from django.urls import include, path
 
+from api.views.status import StatusView
 
-# Version 1
+
 urlpatterns = [
+    # Status page
+    path('status/', StatusView.as_view()),
+    # Version 1
     path('v1/', include('api.urls.v1'))
 ]

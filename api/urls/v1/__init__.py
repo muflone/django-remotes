@@ -21,10 +21,8 @@
 from django.urls import path
 
 from api.views.v1.authenticate import AuthenticateView
-from api.views.v1.status import StatusView
 
 
 urlpatterns = [
     path('authenticate/', AuthenticateView.as_view()),
-    path('status/', StatusView.as_view()),
 ]
