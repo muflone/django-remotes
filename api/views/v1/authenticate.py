@@ -23,10 +23,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from remotes.constants import STATUS_FIELD, STATUS_OK
+
 
 class AuthenticateView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        return Response(data={'authenticated': True},
+        return Response(data={STATUS_FIELD: STATUS_OK},
                         status=status.HTTP_200_OK)

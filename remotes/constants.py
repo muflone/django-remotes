@@ -20,3 +20,6 @@
 
 SERVER_URL = 'server_url'
 API_VERSION = 'v1'
+
+STATUS_FIELD = 'status'
+STATUS_OK = 'OK'
