@@ -19,6 +19,7 @@
 ##
 
 from .command import Command, CommandAdmin                         # noqa: F401
+from .commands_queue import CommandQueue, CommandQueueAdmin        # noqa: F401
 from .host import Host, HostAdmin                                  # noqa: F401
 from .hostsgroup import HostsGroup, HostsGroupAdmin                # noqa: F401
 from .setting import Setting, SettingAdmin                         # noqa: F401
