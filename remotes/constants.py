@@ -19,3 +19,4 @@
 ##
 
 SERVER_URL = 'server_url'
+API_VERSION = 'v1'

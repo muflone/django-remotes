@@ -25,7 +25,7 @@ from rest_framework.views import APIView
 
 from project import PRODUCT_NAME, VERSION
 
-from remotes.constants import SERVER_URL
+from remotes.constants import API_VERSION, SERVER_URL
 
 from utility.misc.get_setting_value import get_setting_value
 
@@ -34,7 +34,12 @@ class StatusView(APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request):
+        server_url = get_setting_value(name=SERVER_URL)
+        separator = '' if server_url.endswith('/') else '/'
         return Response(data={'app_name': PRODUCT_NAME,
                               'version': VERSION,
-                              SERVER_URL: get_setting_value(name=SERVER_URL)},
+                              SERVER_URL: server_url,
+                              'api_url': f'{server_url}'
+                                         f'{separator}'
+                                         f'{API_VERSION}/'},
                         status=status.HTTP_200_OK)
