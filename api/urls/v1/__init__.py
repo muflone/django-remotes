@@ -21,8 +21,10 @@
 from django.urls import path
 
 from api.views.v1.authenticate import AuthenticateView
+from api.views.v1.host.register import HostRegisterView
 
 
 urlpatterns = [
     path('authenticate/', AuthenticateView.as_view()),
+    path('host/register/', HostRegisterView.as_view()),
 ]

@@ -17,12 +17,3 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
-
-SERVER_URL = 'server_url'
-API_VERSION = 'v1'
-
-MESSAGE_FIELD = 'message'
-
-STATUS_FIELD = 'status'
-STATUS_OK = 'OK'
-STATUS_ERROR = 'ERROR'
