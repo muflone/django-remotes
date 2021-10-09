@@ -19,4 +19,5 @@
 ##
 
 from .host import Host, HostAdmin                                  # noqa: F401
+from .hostsgroup import HostsGroup, HostsGroupAdmin                # noqa: F401
 from .setting import Setting, SettingAdmin                         # noqa: F401

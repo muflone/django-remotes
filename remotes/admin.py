@@ -21,8 +21,10 @@
 from django.contrib import admin
 
 from .models import (Host, HostAdmin,
+                     HostsGroup, HostsGroupAdmin,
                      Setting, SettingAdmin)
 
 
 admin.site.register(Host, HostAdmin)
+admin.site.register(HostsGroup, HostsGroupAdmin)
 admin.site.register(Setting, SettingAdmin)
