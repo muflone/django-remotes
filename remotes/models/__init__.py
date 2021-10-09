@@ -18,4 +18,5 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+from .host import Host, HostAdmin                                  # noqa: F401
 from .setting import Setting, SettingAdmin                         # noqa: F401

@@ -20,7 +20,9 @@
 
 from django.contrib import admin
 
-from .models import Setting, SettingAdmin
+from .models import (Host, HostAdmin,
+                     Setting, SettingAdmin)
 
 
+admin.site.register(Host, HostAdmin)
 admin.site.register(Setting, SettingAdmin)
