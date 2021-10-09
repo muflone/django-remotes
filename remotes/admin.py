@@ -20,13 +20,15 @@
 
 from django.contrib import admin
 
-from .models import (Host, HostAdmin,
+from .models import (Command, CommandAdmin,
+                     Host, HostAdmin,
                      HostsGroup, HostsGroupAdmin,
                      Setting, SettingAdmin,
                      Variable, VariableAdmin,
                      VariableType, VariableTypeAdmin)
 
 
+admin.site.register(Command, CommandAdmin)
 admin.site.register(Host, HostAdmin)
 admin.site.register(HostsGroup, HostsGroupAdmin)
 admin.site.register(Setting, SettingAdmin)
