@@ -18,7 +18,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+from django.contrib.auth import get_user_model
+
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -42,6 +45,10 @@ class HostRegisterView(APIView):
             try:
                 serialization.load_pem_public_key(
                     data=host_key.encode('utf-8'))
+                # Create a new user and token
+                new_user = get_user_model().objects.create(username=host_uuid,
+                                                           is_active=False)
+                Token.objects.create(user=new_user)
                 # Register a new host
                 Host.objects.create(name=host_uuid,
                                     uuid=host_uuid,
