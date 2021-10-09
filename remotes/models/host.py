@@ -70,4 +70,4 @@ class Host(BaseModel):
 
 
 class HostAdmin(BaseModelAdmin):
-    pass
+    list_display = ('name', 'uuid', 'is_active')

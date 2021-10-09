@@ -67,4 +67,4 @@ class Setting(BaseModel):
 
 
 class SettingAdmin(BaseModelAdmin):
-    pass
+    list_display = ('name', 'is_active')

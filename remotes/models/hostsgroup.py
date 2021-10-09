@@ -66,4 +66,4 @@ class HostsGroup(BaseModel):
 
 
 class HostsGroupAdmin(BaseModelAdmin):
-    pass
+    list_display = ('name', 'is_active')
