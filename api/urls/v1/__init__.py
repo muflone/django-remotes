@@ -21,6 +21,7 @@
 from django.urls import path
 
 from api.views.v1.authenticate import AuthenticateView
+from api.views.v1.discover import DiscoverView
 from api.views.v1.host.register import HostRegisterView
 
 
@@ -28,6 +29,9 @@ urlpatterns = [
     path(route='authenticate/',
          view=AuthenticateView.as_view(),
          name='api.v1.authenticate'),
+    path(route='discover/',
+         view=DiscoverView.as_view(),
+         name='api.v1.discover'),
     path(route='host/register/',
          view=HostRegisterView.as_view(),
          name='api.v1.register'),

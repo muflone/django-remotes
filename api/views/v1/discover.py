@@ -25,26 +25,14 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from client.actions import ACTION_DISCOVER
-
-from project import PRODUCT_NAME, VERSION
-
-from remotes.constants import (API_VERSION, SERVER_URL,
-                               STATUS_FIELD, STATUS_OK)
-
-from utility.misc.get_setting_value import get_setting_value
+from remotes.constants import STATUS_FIELD, STATUS_OK
 
 
-class StatusView(APIView):
+class DiscoverView(APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request):
-        server_url = get_setting_value(name=SERVER_URL)
-        separator = '' if server_url.endswith('/') else '/'
         return Response(
             data={STATUS_FIELD: STATUS_OK,
-                  'app_name': PRODUCT_NAME,
-                  'version': VERSION,
-                  SERVER_URL: f'{server_url}{separator}',
-                  ACTION_DISCOVER: reverse(f'api.{API_VERSION}.discover')},
+                  'authenticate': reverse('api.v1.authenticate')},
             status=status.HTTP_200_OK)
