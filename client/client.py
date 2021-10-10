@@ -61,7 +61,7 @@ class Client(object):
         # Settings argument
         parser.add_argument('--settings', '-S',
                             type=str,
-                            required=False,
+                            required=True,
                             help='settings filename')
         # Key generation arguments
         group = parser.add_argument_group('Keys arguments')
@@ -90,21 +90,12 @@ class Client(object):
         if options.action == ACTION_STATUS:
             if not options.url:
                 parser.error('missing URL argument')
-            if not options.settings:
-                parser.error('missing settings argument')
-        elif options.action == ACTION_DISCOVER:
-            if not options.settings:
-                parser.error('missing settings argument')
         elif options.action == ACTION_GENERATE_KEYS:
-            if not options.settings:
-                parser.error('missing settings argument')
             if not options.private_key:
                 parser.error('missing private_key argument')
             if not options.public_key:
                 parser.error('missing public_key argument')
         elif options.action == ACTION_AUTHENTICATE:
-            if not options.settings:
-                parser.error('missing settings argument')
             if not options.token:
                 parser.error('missing token argument')
 
