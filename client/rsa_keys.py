@@ -42,3 +42,12 @@ def generate_keys(private_key_filename: str,
         file.write(private_key.public_key().public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo))
+
+def load_private_key(filename: str, password: str = None):
+    """
+    Load private key from filename using the provided optional password
+    """
+    with open(filename, 'rb') as file:
+        result = serialization.load_pem_private_key(data=file.read(),
+                                                    password=password)
+    return result
