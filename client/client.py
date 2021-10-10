@@ -25,7 +25,7 @@ from client.actions import (ACTION_AUTHENTICATE,
                             ACTION_QUERY_STATUS,
                             ACTIONS)
 from client.api import Api
-from client.generate_keys import generate_keys
+from client.rsa_keys import generate_keys
 
 from project import PRODUCT_NAME, VERSION
 
