@@ -37,9 +37,9 @@ class Keys(object):
                                                     key_size=size)
         self.public_key = self.private_key.public_key()
 
-    def get_private_key_content(self, password: str = None) -> bytes:
+    def get_private_key_bytes(self, password: str = None) -> bytes:
         """
-        Get the private key content
+        Get the private key content in bytes
         :param password: passphrase used to encrypt the private key
         :return: private key content
         """
@@ -51,6 +51,14 @@ class Keys(object):
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=encryption)
         return result
+
+    def get_private_key_content(self, password: str = None) -> str:
+        """
+        Get the private key content
+        :param password: passphrase used to encrypt the private key
+        :return: private key content
+        """
+        return self.get_private_key_bytes(password=password).decode('utf-8')
 
     def get_public_key_bytes(self) -> bytes:
         """
