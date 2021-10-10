@@ -52,16 +52,6 @@ class Keys(object):
             encryption_algorithm=encryption)
         return result
 
-    def save_private_key(self, filename: str, password: str = None):
-        """
-        Save the private key to file
-        :param filename: destination filename to save the private key
-        :param password: passphrase used to encrypt the private key
-        :return: None
-        """
-        with open(file=filename, mode='wb') as file:
-            file.write(self.get_private_key_content(password=password))
-
     def get_public_key_content(self) -> bytes:
         """
         Get the public key content
@@ -71,15 +61,6 @@ class Keys(object):
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo)
         return result
-
-    def save_public_key(self, filename: str):
-        """
-        Save the public key to file
-        :param filename: destination filename to save the public key
-        :return: None
-        """
-        with open(file=filename, mode='wb') as file:
-            file.write(self.get_public_key_content())
 
     def load_private_key(self, filename: str, password: str = None):
         """
@@ -103,3 +84,22 @@ class Keys(object):
             self.public_key = serialization.load_pem_public_key(
                 data=file.read())
         return self.public_key
+
+    def save_private_key(self, filename: str, password: str = None):
+        """
+        Save the private key to file
+        :param filename: destination filename to save the private key
+        :param password: passphrase used to encrypt the private key
+        :return: None
+        """
+        with open(file=filename, mode='wb') as file:
+            file.write(self.get_private_key_content(password=password))
+
+    def save_public_key(self, filename: str):
+        """
+        Save the public key to file
+        :param filename: destination filename to save the public key
+        :return: None
+        """
+        with open(file=filename, mode='wb') as file:
+            file.write(self.get_public_key_content())

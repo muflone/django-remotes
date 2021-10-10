@@ -25,7 +25,11 @@ from api.views.status import StatusView
 
 urlpatterns = [
     # Status page
-    path('status/', StatusView.as_view()),
+    path(route='status/',
+         view=StatusView.as_view(),
+         name='api.status'),
     # Version 1
-    path('v1/', include('api.urls.v1'))
+    path(route='v1/',
+         view=include('api.urls.v1'),
+         name='api.v1')
 ]

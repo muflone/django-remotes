@@ -25,6 +25,10 @@ from api.views.v1.host.register import HostRegisterView
 
 
 urlpatterns = [
-    path('authenticate/', AuthenticateView.as_view()),
-    path('host/register/', HostRegisterView.as_view()),
+    path(route='authenticate/',
+         view=AuthenticateView.as_view(),
+         name='api.v1.authenticate'),
+    path(route='host/register/',
+         view=HostRegisterView.as_view(),
+         name='api.v1.register'),
 ]
