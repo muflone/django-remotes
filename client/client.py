@@ -27,7 +27,12 @@ from client.actions import (ACTION_AUTHENTICATE,
                             ACTIONS)
 from client.api import Api
 from client.keys import Keys
-from client.settings import Settings, SECTION_ENDPOINTS, SECTION_SERVER
+from client.settings import (Settings,
+                             OPTION_PRIVATE_KEY,
+                             OPTION_PUBLIC_KEY,
+                             SECTION_ENDPOINTS,
+                             SECTION_HOST,
+                             SECTION_SERVER)
 
 from project import PRODUCT_NAME, VERSION
 
@@ -90,6 +95,8 @@ class Client(object):
             if not options.settings:
                 parser.error('missing settings argument')
         elif options.action == ACTION_GENERATE_KEYS:
+            if not options.settings:
+                parser.error('missing settings argument')
             if not options.private_key:
                 parser.error('missing private_key argument')
             if not options.public_key:
@@ -137,6 +144,13 @@ class Client(object):
             keys.save_private_key(filename=self.options.private_key)
             keys.save_public_key(filename=self.options.public_key)
             status = 0
+            # Update settings
+            self.settings.set_value(section=SECTION_HOST,
+                                    option=OPTION_PRIVATE_KEY,
+                                    value=self.options.private_key)
+            self.settings.set_value(section=SECTION_HOST,
+                                    option=OPTION_PUBLIC_KEY,
+                                    value=self.options.public_key)
         elif self.options.action == ACTION_AUTHENTICATE:
             # Authenticate
             result = api.get(headers=headers)
