@@ -37,6 +37,21 @@ class Keys(object):
                                                     key_size=size)
         self.public_key = self.private_key.public_key()
 
+    def get_private_key_content(self, password: str = None) -> bytes:
+        """
+        Get the private key content
+        :param password: passphrase used to encrypt the private key
+        :return: private key content
+        """
+        encryption = (serialization.BestAvailableEncryption(password=password)
+                      if password is not None
+                      else serialization.NoEncryption())
+        result = self.private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=encryption)
+        return result
+
     def save_private_key(self, filename: str, password: str = None):
         """
         Save the private key to file
@@ -44,14 +59,18 @@ class Keys(object):
         :param password: passphrase used to encrypt the private key
         :return: None
         """
-        encryption = (serialization.BestAvailableEncryption(password=password)
-                      if password is not None
-                      else serialization.NoEncryption())
         with open(file=filename, mode='wb') as file:
-            file.write(self.private_key.private_bytes(
-                encoding=serialization.Encoding.PEM,
-                format=serialization.PrivateFormat.PKCS8,
-                encryption_algorithm=encryption))
+            file.write(self.get_private_key_content(password=password))
+
+    def get_public_key_content(self) -> bytes:
+        """
+        Get the public key content
+        :return: public key content
+        """
+        result = self.public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo)
+        return result
 
     def save_public_key(self, filename: str):
         """
@@ -60,9 +79,7 @@ class Keys(object):
         :return: None
         """
         with open(file=filename, mode='wb') as file:
-            file.write(self.public_key.public_bytes(
-                encoding=serialization.Encoding.PEM,
-                format=serialization.PublicFormat.SubjectPublicKeyInfo))
+            file.write(self.get_public_key_content())
 
     def load_private_key(self, filename: str, password: str = None):
         """
