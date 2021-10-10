@@ -25,6 +25,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from client.actions import ACTION_AUTHENTICATE
+
 from remotes.constants import STATUS_FIELD, STATUS_OK
 
 
@@ -34,5 +36,5 @@ class DiscoverView(APIView):
     def get(self, request):
         return Response(
             data={STATUS_FIELD: STATUS_OK,
-                  'authenticate': reverse('api.v1.authenticate')},
+                  ACTION_AUTHENTICATE: reverse('api.v1.authenticate')},
             status=status.HTTP_200_OK)
