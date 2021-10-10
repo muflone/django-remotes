@@ -18,4 +18,5 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-ACTIONS = ()
+ACTION_GENERATE_KEYS = 'generate_keys'
+ACTIONS = (ACTION_GENERATE_KEYS,)
