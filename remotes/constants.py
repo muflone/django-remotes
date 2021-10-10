@@ -28,3 +28,4 @@ STATUS_OK = 'OK'
 STATUS_ERROR = 'ERROR'
 
 ENDPOINTS_FIELD = 'endpoints'
+UUID_FIELD = 'uuid'

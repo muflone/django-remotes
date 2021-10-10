@@ -20,24 +20,23 @@
 
 import argparse
 
-from client.actions import (ACTION_AUTHENTICATE,
-                            ACTION_DISCOVER,
+from client.actions import (ACTION_DISCOVER,
                             ACTION_GENERATE_KEYS,
                             ACTION_STATUS,
+                            ACTION_USER_REGISTER,
                             ACTIONS)
 from client.api import Api
 from client.keys import Keys
 from client.settings import (Settings,
                              OPTION_PRIVATE_KEY,
                              OPTION_PUBLIC_KEY,
-                             OPTION_TOKEN,
                              SECTION_ENDPOINTS,
                              SECTION_HOST,
                              SECTION_SERVER)
 
 from project import PRODUCT_NAME, VERSION
 
-from remotes.constants import ENDPOINTS_FIELD, SERVER_URL
+from remotes.constants import ENDPOINTS_FIELD, SERVER_URL, UUID_FIELD
 
 
 class Client(object):
@@ -95,7 +94,7 @@ class Client(object):
                 parser.error('missing private_key argument')
             if not options.public_key:
                 parser.error('missing public_key argument')
-        elif options.action == ACTION_AUTHENTICATE:
+        elif options.action == ACTION_USER_REGISTER:
             if not options.token:
                 parser.error('missing token argument')
 
@@ -145,17 +144,17 @@ class Client(object):
             self.settings.set_value(section=SECTION_HOST,
                                     option=OPTION_PUBLIC_KEY,
                                     value=self.options.public_key)
-        elif self.options.action == ACTION_AUTHENTICATE:
-            # Authenticate
+        elif self.options.action == ACTION_USER_REGISTER:
+            # User registration
             api.url = self.settings.build_url(
                 url=self.settings.get_value(section=SECTION_ENDPOINTS,
-                                            option=ACTION_AUTHENTICATE))
-            result = api.get(headers=headers)
+                                            option=ACTION_USER_REGISTER))
+            result = api.post(headers=headers)
             status = 0
             # Update settings
             self.settings.set_value(section=SECTION_HOST,
-                                    option=OPTION_TOKEN,
-                                    value=self.options.token)
+                                    option=UUID_FIELD,
+                                    value=result[UUID_FIELD])
         return status, result
 
     def load(self):

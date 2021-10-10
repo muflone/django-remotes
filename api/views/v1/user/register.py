@@ -18,17 +18,26 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+import uuid
+
+from django.contrib.auth import get_user_model
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from remotes.constants import STATUS_FIELD, STATUS_OK
+from remotes.constants import STATUS_FIELD, STATUS_OK, UUID_FIELD
 
 
-class AuthenticateView(APIView):
+class UserRegisterView(APIView):
     permission_classes = (IsAuthenticated, )
 
-    def get(self, request):
-        return Response(data={STATUS_FIELD: STATUS_OK},
+    def post(self, request):
+        # Create a new user
+        new_uuid = uuid.uuid4()
+        get_user_model().objects.create(username=new_uuid,
+                                        is_active=False)
+        return Response(data={STATUS_FIELD: STATUS_OK,
+                              UUID_FIELD: new_uuid},
                         status=status.HTTP_200_OK)
