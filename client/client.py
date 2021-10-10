@@ -26,6 +26,7 @@ from client.actions import (ACTION_AUTHENTICATE,
                             ACTIONS)
 from client.api import Api
 from client.keys import Keys
+from client.settings import Settings
 
 from project import PRODUCT_NAME, VERSION
 
@@ -33,6 +34,7 @@ from project import PRODUCT_NAME, VERSION
 class Client(object):
     def __init__(self):
         self.options = None
+        self.settings = None
 
     def get_command_line(self):
         parser = argparse.ArgumentParser(prog=f'{PRODUCT_NAME}')
@@ -47,6 +49,11 @@ class Client(object):
                             action='version',
                             version=f'{PRODUCT_NAME} v{VERSION}',
                             help='show version')
+        # Settings argument
+        parser.add_argument('--settings', '-S',
+                            type=str,
+                            required=False,
+                            help='settings filename')
         # Key generation arguments
         group = parser.add_argument_group('Keys arguments')
         group.add_argument('--private_key',
@@ -109,3 +116,20 @@ class Client(object):
             result = api.get(headers=headers)
             status = 0
         return status, result
+
+    def load(self):
+        """
+        Load settings
+        :return: None
+        """
+        self.settings = Settings()
+        if self.options.settings:
+            self.settings.load(self.options.settings)
+
+    def save(self):
+        """
+        Save settings
+        :return: None
+        """
+        if self.options.settings:
+            self.settings.save(self.options.settings)

@@ -1,0 +1,89 @@
+##
+#     Project: Django Remotes
+# Description: A Django application to execute remote commands
+#      Author: Fabio Castelli (Muflone) <muflone@muflone.com>
+#   Copyright: 2021 Fabio Castelli
+#     License: GPL-3+
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+##
+
+import configparser
+import urllib.parse
+
+from remotes.constants import SERVER_URL
+
+
+SECTION_ENDPOINTS = 'endpoints'
+SECTION_SERVER = 'server'
+
+
+class Settings(object):
+    def __init__(self):
+        self.settings = configparser.RawConfigParser()
+
+    def load(self, filename: str):
+        """
+        Load the settings file
+        :param filename: file to load settings from
+        :return: None
+        """
+        self.settings.read(filenames=filename)
+
+    def save(self, filename: str):
+        """
+        Save settings to file
+        :return: None
+        """
+        with open(file=filename, mode='w') as file:
+            self.settings.write(file)
+
+    def get_value(self, section: str, option: str):
+        """
+        Get a value from an option
+        :param section: section in settings
+        :param option: option name
+        :param value: value
+        :return: value
+        """
+        result = None
+        if section in self.settings.sections():
+            result = self.settings.get(section=section,
+                                       option=option)
+        return result
+
+    def set_value(self, section: str, option: str, value: str):
+        """
+        Save a value to an option
+        :param section: section in settings
+        :param option: option name
+        :param value: value
+        :return: None
+        """
+        if section not in self.settings.sections():
+            self.settings.add_section(section)
+        self.settings.set(section=section,
+                          option=option,
+                          value=value)
+
+    def build_url(self, url: str) -> str:
+        """
+        Build URL using the server_url and the url
+        :param url: additional URL
+        :return: full URL
+        """
+        result = urllib.parse.urljoin(
+            base=self.get_value(section=SECTION_SERVER,
+                                option=SERVER_URL),
+            url=url)
+        return result
