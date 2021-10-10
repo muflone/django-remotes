@@ -26,5 +26,7 @@ from client.client import Client
 if __name__ == '__main__':
     client = Client()
     client.get_command_line()
-    status = client.process()
+    status, results = client.process()
+    if results is not None:
+        print(results)
     sys.exit(status)

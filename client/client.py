@@ -20,7 +20,8 @@
 
 import argparse
 
-from client.actions import ACTION_GENERATE_KEYS, ACTIONS
+from client.actions import ACTION_GENERATE_KEYS, ACTION_QUERY_STATUS, ACTIONS
+from client.api import Api
 from client.generate_keys import generate_keys
 
 from project import PRODUCT_NAME, VERSION
@@ -53,6 +54,12 @@ class Client(object):
                            type=str,
                            required=False,
                            help='public key filename')
+        # Server arguments
+        group = parser.add_argument_group('Server arguments')
+        group.add_argument('--url',
+                           type=str,
+                           required=False,
+                           help='server URL')
         # Process options
         options = parser.parse_args()
         self.options = options
@@ -62,12 +69,21 @@ class Client(object):
                 parser.error('missing private_key argument')
             if not options.public_key:
                 parser.error('missing public_key argument')
+        elif options.action == ACTION_QUERY_STATUS:
+            if not options.url:
+                parser.error('missing URL argument')
 
     def process(self):
         status = -1
+        result = None
         if self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys
             generate_keys(private_key_filename=self.options.private_key,
                           public_key_filename=self.options.public_key)
             status = 0
-        return status
+        elif self.options.action == ACTION_QUERY_STATUS:
+            # Query status
+            api = Api(url=self.options.url)
+            result = api.get()
+            status = 0
+        return status, result
