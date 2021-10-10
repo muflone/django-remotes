@@ -21,6 +21,7 @@
 import argparse
 
 from client.actions import (ACTION_AUTHENTICATE,
+                            ACTION_DISCOVER,
                             ACTION_GENERATE_KEYS,
                             ACTION_STATUS,
                             ACTIONS)
@@ -85,6 +86,9 @@ class Client(object):
                 parser.error('missing URL argument')
             if not options.settings:
                 parser.error('missing settings argument')
+        elif options.action == ACTION_DISCOVER:
+            if not options.settings:
+                parser.error('missing settings argument')
         elif options.action == ACTION_GENERATE_KEYS:
             if not options.private_key:
                 parser.error('missing private_key argument')
@@ -115,6 +119,17 @@ class Client(object):
             self.settings.set_value(section=SECTION_ENDPOINTS,
                                     option=ACTION_DISCOVER,
                                     value=result[ACTION_DISCOVER])
+        elif self.options.action == ACTION_DISCOVER:
+            # Discover services URLS
+            api.url = self.settings.build_url(
+                url=self.settings.get_value(section=SECTION_ENDPOINTS,
+                                            option=ACTION_DISCOVER))
+            result = api.get(headers=headers)
+            status = 0
+            # Update settings
+            self.settings.set_value(section=SECTION_ENDPOINTS,
+                                    option=ACTION_AUTHENTICATE,
+                                    value=result[ACTION_AUTHENTICATE])
         elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
             keys = Keys()
