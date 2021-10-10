@@ -52,15 +52,22 @@ class Keys(object):
             encryption_algorithm=encryption)
         return result
 
-    def get_public_key_content(self) -> bytes:
+    def get_public_key_bytes(self) -> bytes:
         """
-        Get the public key content
+        Get the public key content in bytes
         :return: public key content
         """
         result = self.public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo)
         return result
+
+    def get_public_key_content(self) -> str:
+        """
+        Get the public key content
+        :return: public key content
+        """
+        return self.get_public_key_bytes().decode('utf-8')
 
     def load_private_key(self, data: str, password: str = None):
         """
