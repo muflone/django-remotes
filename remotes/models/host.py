@@ -18,6 +18,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
@@ -47,6 +48,14 @@ class Host(BaseModel):
                               verbose_name=pgettext_lazy(
                                   'Host',
                                   'public key'))
+    user = models.ForeignKey(to=get_user_model(),
+                             on_delete=models.CASCADE,
+                             blank=True,
+                             null=True,
+                             default=None,
+                             verbose_name=pgettext_lazy(
+                                 'Host',
+                                 'user'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=pgettext_lazy(
                                         'Host',

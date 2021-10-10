@@ -52,7 +52,8 @@ class HostRegisterView(APIView):
                 # Register a new host
                 Host.objects.create(name=host_uuid,
                                     uuid=host_uuid,
-                                    pubkey=host_key)
+                                    pubkey=host_key,
+                                    user=new_user)
                 return Response(data={STATUS_FIELD: STATUS_OK},
                                 status=status.HTTP_200_OK)
             except ValueError:
