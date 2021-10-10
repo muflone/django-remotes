@@ -25,7 +25,7 @@ from client.actions import (ACTION_AUTHENTICATE,
                             ACTION_QUERY_STATUS,
                             ACTIONS)
 from client.api import Api
-from client.rsa_keys import generate_keys
+from client.keys import Keys
 
 from project import PRODUCT_NAME, VERSION
 
@@ -94,9 +94,11 @@ class Client(object):
         if self.options.token:
             headers['Authorization'] = f'Token {self.options.token}'
         if self.options.action == ACTION_GENERATE_KEYS:
-            # Generate private and public keys
-            generate_keys(private_key_filename=self.options.private_key,
-                          public_key_filename=self.options.public_key)
+            # Generate private and public keys and save them in two files
+            keys = Keys()
+            keys.create_new_rsa_key(size=4096)
+            keys.save_private_key(filename=self.options.private_key)
+            keys.save_public_key(filename=self.options.public_key)
             status = 0
         elif self.options.action == ACTION_AUTHENTICATE:
             # Authenticate
