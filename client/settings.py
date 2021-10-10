@@ -64,7 +64,8 @@ class Settings(object):
         result = None
         if section in self.settings.sections():
             result = self.settings.get(section=section,
-                                       option=option)
+                                       option=option,
+                                       fallback=None)
         return result
 
     def set_value(self, section: str, option: str, value: str):
