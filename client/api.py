@@ -25,19 +25,29 @@ class Api(object):
     def __init__(self, url: str):
         self.url = url
 
-    def request(self, method: str):
+    def request(self, method: str, headers: dict):
         """
         Process a request using the requested method
         :param method: REST method to execute
         :return: JSON data in response
         """
         req = requests.request(method=method,
-                               url=self.url)
+                               url=self.url,
+                               headers=headers)
         return req.json()
 
-    def get(self):
+    def get(self, headers: dict = {}):
         """
         Process a GET request
         :return: JSON data in response
         """
-        return self.request(method='GET')
+        return self.request(method='GET',
+                            headers=headers)
+
+    def post(self, headers: dict = {}):
+        """
+        Process a POST request
+        :return: JSON data in response
+        """
+        return self.request(method='POST',
+                            headers=headers)
