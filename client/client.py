@@ -30,6 +30,7 @@ from client.keys import Keys
 from client.settings import (Settings,
                              OPTION_PRIVATE_KEY,
                              OPTION_PUBLIC_KEY,
+                             OPTION_TOKEN,
                              SECTION_ENDPOINTS,
                              SECTION_HOST,
                              SECTION_SERVER)
@@ -102,8 +103,8 @@ class Client(object):
             if not options.public_key:
                 parser.error('missing public_key argument')
         elif options.action == ACTION_AUTHENTICATE:
-            if not options.url:
-                parser.error('missing URL argument')
+            if not options.settings:
+                parser.error('missing settings argument')
             if not options.token:
                 parser.error('missing token argument')
 
@@ -153,8 +154,15 @@ class Client(object):
                                     value=self.options.public_key)
         elif self.options.action == ACTION_AUTHENTICATE:
             # Authenticate
+            api.url = self.settings.build_url(
+                url=self.settings.get_value(section=SECTION_ENDPOINTS,
+                                            option=ACTION_AUTHENTICATE))
             result = api.get(headers=headers)
             status = 0
+            # Update settings
+            self.settings.set_value(section=SECTION_HOST,
+                                    option=OPTION_TOKEN,
+                                    value=self.options.token)
         return status, result
 
     def load(self):

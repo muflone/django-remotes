@@ -30,6 +30,7 @@ SECTION_SERVER = 'server'
 
 OPTION_PRIVATE_KEY = 'private_key'
 OPTION_PUBLIC_KEY = 'public_key'
+OPTION_TOKEN = 'token'
 
 
 class Settings(object):
