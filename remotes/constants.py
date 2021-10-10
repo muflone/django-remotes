@@ -28,4 +28,6 @@ STATUS_OK = 'OK'
 STATUS_ERROR = 'ERROR'
 
 ENDPOINTS_FIELD = 'endpoints'
+PUBLIC_KEY_FIELD = 'public_key'
+TOKEN_FIELD = 'token'
 UUID_FIELD = 'uuid'

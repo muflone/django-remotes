@@ -24,7 +24,7 @@ from client.actions import (ACTION_DISCOVER,
                             ACTION_GENERATE_KEYS,
                             ACTION_STATUS,
                             ACTION_HOST_REGISTER,
-                            ACTION_USER_REGISTER,
+                            ACTION_HOST_CONFIRM,
                             ACTIONS)
 from client.api import Api
 from client.keys import Keys
@@ -39,6 +39,7 @@ from project import PRODUCT_NAME, VERSION
 
 from remotes.constants import (ENDPOINTS_FIELD,
                                MESSAGE_FIELD,
+                               PUBLIC_KEY_FIELD,
                                SERVER_URL,
                                STATUS_FIELD,
                                STATUS_ERROR,
@@ -103,7 +104,7 @@ class Client(object):
         elif options.action == ACTION_HOST_REGISTER:
             if not options.token:
                 parser.error('missing token argument')
-        elif options.action == ACTION_USER_REGISTER:
+        elif options.action == ACTION_HOST_CONFIRM:
             if not options.token:
                 parser.error('missing token argument')
 
@@ -172,17 +173,23 @@ class Client(object):
                 result = {STATUS_FIELD: STATUS_ERROR,
                           MESSAGE_FIELD: 'Host UUID already set'}
                 status = 1
-        elif self.options.action == ACTION_USER_REGISTER:
-            # User registration
+        elif self.options.action == ACTION_HOST_CONFIRM:
+            host_uuid = self.settings.get_value(section=SECTION_HOST,
+                                                option=UUID_FIELD)
+            # Host confirmation
             api.url = self.settings.build_url(
                 url=self.settings.get_value(section=SECTION_ENDPOINTS,
-                                            option=ACTION_USER_REGISTER))
-            result = api.post(headers=headers)
+                                            option=ACTION_HOST_CONFIRM))
+            # Load public key
+            keys = Keys()
+            keys.load_public_key_from_file(
+                filename=self.settings.get_value(section=SECTION_HOST,
+                                                 option=OPTION_PUBLIC_KEY))
+            data = {UUID_FIELD: host_uuid,
+                    PUBLIC_KEY_FIELD: keys.get_public_key_content()}
+            result = api.post(headers=headers,
+                              data=data)
             status = 0
-            # Update settings
-            self.settings.set_value(section=SECTION_HOST,
-                                    option=UUID_FIELD,
-                                    value=result[UUID_FIELD])
         return status, result
 
     def load(self):
