@@ -25,8 +25,12 @@ from client.client import Client
 
 if __name__ == '__main__':
     client = Client()
+    # Get command line arguments
     client.get_command_line()
+    # Process the arguments
     status, results = client.process()
     if results is not None:
+        # Show the results
         print(results)
+    # Set exit code accordingly to the executed action
     sys.exit(status)

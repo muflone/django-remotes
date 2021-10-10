@@ -89,6 +89,10 @@ class Client(object):
         status = -1
         result = None
         api = Api(url=self.options.url)
+        headers = {}
+        # Save token authorization if passed in the arguments
+        if self.options.token:
+            headers['Authorization'] = f'Token {self.options.token}'
         if self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys
             generate_keys(private_key_filename=self.options.private_key,
@@ -96,11 +100,10 @@ class Client(object):
             status = 0
         elif self.options.action == ACTION_AUTHENTICATE:
             # Authenticate
-            headers = {'Authorization': f'Token {self.options.token}'}
             result = api.get(headers=headers)
             status = 0
         elif self.options.action == ACTION_QUERY_STATUS:
             # Query status
-            result = api.get()
+            result = api.get(headers=headers)
             status = 0
         return status, result

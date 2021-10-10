@@ -32,22 +32,23 @@ def generate_keys(private_key_filename: str,
     private_key = rsa.generate_private_key(public_exponent=65537,
                                            key_size=4096)
     # Save private key
-    with open(private_key_filename, 'wb') as file:
+    with open(file=private_key_filename, mode='wb') as file:
         file.write(private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption()))
     # Save public key
-    with open(public_key_filename, 'wb') as file:
+    with open(file=public_key_filename, mode='wb') as file:
         file.write(private_key.public_key().public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo))
+
 
 def load_private_key(filename: str, password: str = None):
     """
     Load private key from filename using the provided optional password
     """
-    with open(filename, 'rb') as file:
+    with open(file=filename, mode='rb') as file:
         result = serialization.load_pem_private_key(data=file.read(),
                                                     password=password)
     return result

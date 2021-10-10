@@ -25,18 +25,24 @@ class Api(object):
     def __init__(self, url: str):
         self.url = url
 
-    def request(self, method: str, headers: dict):
+    def request(self,
+                method: str,
+                headers: dict = None,
+                data: dict = None):
         """
         Process a request using the requested method
         :param method: REST method to execute
+        :param headers: HTTP headers to include
+        :param data: JSON data to send in the request
         :return: JSON data in response
         """
         req = requests.request(method=method,
                                url=self.url,
-                               headers=headers)
+                               headers=headers,
+                               json=data)
         return req.json()
 
-    def get(self, headers: dict = {}):
+    def get(self, headers: dict = None):
         """
         Process a GET request
         :return: JSON data in response
@@ -44,10 +50,11 @@ class Api(object):
         return self.request(method='GET',
                             headers=headers)
 
-    def post(self, headers: dict = {}):
+    def post(self, headers: dict = None, data: dict = None):
         """
         Process a POST request
         :return: JSON data in response
         """
         return self.request(method='POST',
-                            headers=headers)
+                            headers=headers,
+                            data=data)
