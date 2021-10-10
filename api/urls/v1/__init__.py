@@ -34,5 +34,5 @@ urlpatterns = [
          name='api.v1.discover'),
     path(route='host/register/',
          view=HostRegisterView.as_view(),
-         name='api.v1.register'),
+         name='api.v1.host.register'),
 ]

@@ -25,7 +25,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from client.actions import ACTION_AUTHENTICATE
+from client.actions import ACTION_AUTHENTICATE, ACTION_HOST_REGISTER
 
 from remotes.constants import ENDPOINTS, STATUS_FIELD, STATUS_OK
 
@@ -38,5 +38,6 @@ class DiscoverView(APIView):
             data={STATUS_FIELD: STATUS_OK,
                   ENDPOINTS: {
                     ACTION_AUTHENTICATE: reverse('api.v1.authenticate'),
+                    ACTION_HOST_REGISTER: reverse('api.v1.host.register'),
                   }},
             status=status.HTTP_200_OK)

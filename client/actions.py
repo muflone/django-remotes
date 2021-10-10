@@ -22,7 +22,9 @@ ACTION_AUTHENTICATE = 'authenticate'
 ACTION_DISCOVER = 'discover'
 ACTION_GENERATE_KEYS = 'generate_keys'
 ACTION_STATUS = 'status'
+ACTION_HOST_REGISTER = 'host_register'
 ACTIONS = (ACTION_AUTHENTICATE,
            ACTION_DISCOVER,
            ACTION_GENERATE_KEYS,
-           ACTION_STATUS)
+           ACTION_STATUS,
+           ACTION_HOST_REGISTER)
