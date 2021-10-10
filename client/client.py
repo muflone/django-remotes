@@ -22,13 +22,15 @@ import argparse
 
 from client.actions import (ACTION_AUTHENTICATE,
                             ACTION_GENERATE_KEYS,
-                            ACTION_QUERY_STATUS,
+                            ACTION_STATUS,
                             ACTIONS)
 from client.api import Api
 from client.keys import Keys
-from client.settings import Settings
+from client.settings import Settings, SECTION_ENDPOINTS, SECTION_SERVER
 
 from project import PRODUCT_NAME, VERSION
+
+from remotes.constants import SERVER_URL
 
 
 class Client(object):
@@ -78,7 +80,12 @@ class Client(object):
         options = parser.parse_args()
         self.options = options
         # Check needed extra arguments
-        if options.action == ACTION_GENERATE_KEYS:
+        if options.action == ACTION_STATUS:
+            if not options.url:
+                parser.error('missing URL argument')
+            if not options.settings:
+                parser.error('missing settings argument')
+        elif options.action == ACTION_GENERATE_KEYS:
             if not options.private_key:
                 parser.error('missing private_key argument')
             if not options.public_key:
@@ -88,9 +95,6 @@ class Client(object):
                 parser.error('missing URL argument')
             if not options.token:
                 parser.error('missing token argument')
-        elif options.action == ACTION_QUERY_STATUS:
-            if not options.url:
-                parser.error('missing URL argument')
 
     def process(self):
         status = -1
@@ -100,7 +104,18 @@ class Client(object):
         # Save token authorization if passed in the arguments
         if self.options.token:
             headers['Authorization'] = f'Token {self.options.token}'
-        if self.options.action == ACTION_GENERATE_KEYS:
+        if self.options.action == ACTION_STATUS:
+            # Get status
+            result = api.get(headers=headers)
+            status = 0
+            # Update settings
+            self.settings.set_value(section=SECTION_SERVER,
+                                    option=SERVER_URL,
+                                    value=result[SERVER_URL])
+            self.settings.set_value(section=SECTION_ENDPOINTS,
+                                    option=ACTION_DISCOVER,
+                                    value=result[ACTION_DISCOVER])
+        elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
             keys = Keys()
             keys.create_new_rsa_key(size=4096)
@@ -109,10 +124,6 @@ class Client(object):
             status = 0
         elif self.options.action == ACTION_AUTHENTICATE:
             # Authenticate
-            result = api.get(headers=headers)
-            status = 0
-        elif self.options.action == ACTION_QUERY_STATUS:
-            # Query status
             result = api.get(headers=headers)
             status = 0
         return status, result

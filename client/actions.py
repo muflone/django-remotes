@@ -21,7 +21,7 @@
 ACTION_AUTHENTICATE = 'authenticate'
 ACTION_DISCOVER = 'discover'
 ACTION_GENERATE_KEYS = 'generate_keys'
-ACTION_QUERY_STATUS = 'query_status'
+ACTION_STATUS = 'status'
 ACTIONS = (ACTION_AUTHENTICATE,
            ACTION_GENERATE_KEYS,
-           ACTION_QUERY_STATUS)
+           ACTION_STATUS)
