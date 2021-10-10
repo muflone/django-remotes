@@ -27,4 +27,4 @@ STATUS_FIELD = 'status'
 STATUS_OK = 'OK'
 STATUS_ERROR = 'ERROR'
 
-ENDPOINTS = 'endpoints'
+ENDPOINTS_FIELD = 'endpoints'

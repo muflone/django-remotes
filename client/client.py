@@ -37,7 +37,7 @@ from client.settings import (Settings,
 
 from project import PRODUCT_NAME, VERSION
 
-from remotes.constants import ENDPOINTS, SERVER_URL
+from remotes.constants import ENDPOINTS_FIELD, SERVER_URL
 
 
 class Client(object):
@@ -126,10 +126,11 @@ class Client(object):
             result = api.get(headers=headers)
             status = 0
             # Update settings
-            for endpoint in result[ENDPOINTS]:
-                self.settings.set_value(section=SECTION_ENDPOINTS,
-                                        option=endpoint,
-                                        value=result[ENDPOINTS][endpoint])
+            for endpoint in result[ENDPOINTS_FIELD]:
+                self.settings.set_value(
+                    section=SECTION_ENDPOINTS,
+                    option=endpoint,
+                    value=result[ENDPOINTS_FIELD][endpoint])
         elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
             keys = Keys()

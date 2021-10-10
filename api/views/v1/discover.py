@@ -27,7 +27,7 @@ from rest_framework.views import APIView
 
 from client.actions import ACTION_AUTHENTICATE, ACTION_HOST_REGISTER
 
-from remotes.constants import ENDPOINTS, STATUS_FIELD, STATUS_OK
+from remotes.constants import ENDPOINTS_FIELD, STATUS_FIELD, STATUS_OK
 
 
 class DiscoverView(APIView):
@@ -36,7 +36,7 @@ class DiscoverView(APIView):
     def get(self, request):
         return Response(
             data={STATUS_FIELD: STATUS_OK,
-                  ENDPOINTS: {
+                  ENDPOINTS_FIELD: {
                     ACTION_AUTHENTICATE: reverse('api.v1.authenticate'),
                     ACTION_HOST_REGISTER: reverse('api.v1.host.register'),
                   }},
