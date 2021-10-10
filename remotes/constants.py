@@ -26,3 +26,5 @@ MESSAGE_FIELD = 'message'
 STATUS_FIELD = 'status'
 STATUS_OK = 'OK'
 STATUS_ERROR = 'ERROR'
+
+ENDPOINTS = 'endpoints'

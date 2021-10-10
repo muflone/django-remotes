@@ -27,7 +27,7 @@ from rest_framework.views import APIView
 
 from client.actions import ACTION_AUTHENTICATE
 
-from remotes.constants import STATUS_FIELD, STATUS_OK
+from remotes.constants import ENDPOINTS, STATUS_FIELD, STATUS_OK
 
 
 class DiscoverView(APIView):
@@ -36,5 +36,7 @@ class DiscoverView(APIView):
     def get(self, request):
         return Response(
             data={STATUS_FIELD: STATUS_OK,
-                  ACTION_AUTHENTICATE: reverse('api.v1.authenticate')},
+                  ENDPOINTS: {
+                    ACTION_AUTHENTICATE: reverse('api.v1.authenticate'),
+                  }},
             status=status.HTTP_200_OK)

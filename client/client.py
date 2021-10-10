@@ -37,7 +37,7 @@ from client.settings import (Settings,
 
 from project import PRODUCT_NAME, VERSION
 
-from remotes.constants import SERVER_URL
+from remotes.constants import ENDPOINTS, SERVER_URL
 
 
 class Client(object):
@@ -135,9 +135,10 @@ class Client(object):
             result = api.get(headers=headers)
             status = 0
             # Update settings
-            self.settings.set_value(section=SECTION_ENDPOINTS,
-                                    option=ACTION_AUTHENTICATE,
-                                    value=result[ACTION_AUTHENTICATE])
+            for endpoint in result[ENDPOINTS]:
+                self.settings.set_value(section=SECTION_ENDPOINTS,
+                                        option=endpoint,
+                                        value=result[ENDPOINTS][endpoint])
         elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
             keys = Keys()
