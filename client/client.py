@@ -20,7 +20,10 @@
 
 import argparse
 
-from client.actions import ACTION_GENERATE_KEYS, ACTION_QUERY_STATUS, ACTIONS
+from client.actions import (ACTION_AUTHENTICATE,
+                            ACTION_GENERATE_KEYS,
+                            ACTION_QUERY_STATUS,
+                            ACTIONS)
 from client.api import Api
 from client.generate_keys import generate_keys
 
@@ -60,6 +63,10 @@ class Client(object):
                            type=str,
                            required=False,
                            help='server URL')
+        group.add_argument('--token',
+                           type=str,
+                           required=False,
+                           help='authentication token')
         # Process options
         options = parser.parse_args()
         self.options = options
@@ -69,6 +76,11 @@ class Client(object):
                 parser.error('missing private_key argument')
             if not options.public_key:
                 parser.error('missing public_key argument')
+        elif options.action == ACTION_AUTHENTICATE:
+            if not options.url:
+                parser.error('missing URL argument')
+            if not options.token:
+                parser.error('missing token argument')
         elif options.action == ACTION_QUERY_STATUS:
             if not options.url:
                 parser.error('missing URL argument')
@@ -76,14 +88,19 @@ class Client(object):
     def process(self):
         status = -1
         result = None
+        api = Api(url=self.options.url)
         if self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys
             generate_keys(private_key_filename=self.options.private_key,
                           public_key_filename=self.options.public_key)
             status = 0
+        elif self.options.action == ACTION_AUTHENTICATE:
+            # Authenticate
+            headers = {'Authorization': f'Token {self.options.token}'}
+            result = api.get(headers=headers)
+            status = 0
         elif self.options.action == ACTION_QUERY_STATUS:
             # Query status
-            api = Api(url=self.options.url)
             result = api.get()
             status = 0
         return status, result

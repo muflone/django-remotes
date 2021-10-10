@@ -18,7 +18,9 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+ACTION_AUTHENTICATE = 'authenticate'
 ACTION_GENERATE_KEYS = 'generate_keys'
 ACTION_QUERY_STATUS = 'query_status'
-ACTIONS = (ACTION_GENERATE_KEYS,
+ACTIONS = (ACTION_AUTHENTICATE,
+           ACTION_GENERATE_KEYS,
            ACTION_QUERY_STATUS)
