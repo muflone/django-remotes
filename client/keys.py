@@ -126,7 +126,7 @@ class Keys(object):
         :return: None
         """
         with open(file=filename, mode='wb') as file:
-            file.write(self.get_private_key_content(password=password))
+            file.write(self.get_private_key_bytes(password=password))
 
     def save_public_key(self, filename: str):
         """
@@ -135,4 +135,4 @@ class Keys(object):
         :return: None
         """
         with open(file=filename, mode='wb') as file:
-            file.write(self.get_public_key_content())
+            file.write(self.get_public_key_bytes())
