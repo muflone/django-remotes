@@ -52,3 +52,12 @@ def load_private_key(filename: str, password: str = None):
         result = serialization.load_pem_private_key(data=file.read(),
                                                     password=password)
     return result
+
+
+def load_public_key(filename: str):
+    """
+    Load public key from filename
+    """
+    with open(file=filename, mode='rb') as file:
+        result = serialization.load_pem_public_key(data=file.read())
+    return result
