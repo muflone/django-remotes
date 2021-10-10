@@ -43,8 +43,8 @@ class Host(BaseModel):
                                    verbose_name=pgettext_lazy(
                                        'Host',
                                        'description'))
-    pubkey = models.TextField(null=False,
-                              blank=False,
+    pubkey = models.TextField(null=True,
+                              blank=True,
                               verbose_name=pgettext_lazy(
                                   'Host',
                                   'public key'))
