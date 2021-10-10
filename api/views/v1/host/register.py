@@ -18,18 +18,16 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from django.contrib.auth import get_user_model
+import uuid
 
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from cryptography.hazmat.primitives import serialization
-
-from remotes.constants import (MESSAGE_FIELD,
-                               STATUS_FIELD, STATUS_ERROR, STATUS_OK)
+from remotes.constants import (STATUS_FIELD,
+                               STATUS_OK,
+                               UUID_FIELD)
 from remotes.models import Host
 
 
@@ -37,32 +35,14 @@ class HostRegisterView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
-        host_uuid = request.data['uuid']
-        host_key = request.data['key']
-        # Check if the host with the same UUID already exists
-        if not Host.objects.filter(uuid=host_uuid).first():
-            # Inexistent host
-            try:
-                serialization.load_pem_public_key(
-                    data=host_key.encode('utf-8'))
-                # Create a new user and token
-                new_user = get_user_model().objects.create(username=host_uuid,
-                                                           is_active=False)
-                Token.objects.create(user=new_user)
-                # Register a new host
-                Host.objects.create(name=host_uuid,
-                                    uuid=host_uuid,
-                                    pubkey=host_key,
-                                    user=new_user)
-                return Response(data={STATUS_FIELD: STATUS_OK},
-                                status=status.HTTP_200_OK)
-            except ValueError:
-                # Invalid PEM key
-                return Response(data={STATUS_FIELD: STATUS_ERROR,
-                                      MESSAGE_FIELD: 'Invalid PEM key'},
-                                status=status.HTTP_400_BAD_REQUEST)
-        else:
-            # Existing host
-            return Response(data={STATUS_FIELD: STATUS_ERROR,
-                                  MESSAGE_FIELD: 'Existing host'},
-                            status=status.HTTP_400_BAD_REQUEST)
+        # Create a new Host
+        new_uuid = uuid.uuid4()
+        # Register a new host
+        Host.objects.create(name=new_uuid,
+                            uuid=new_uuid,
+                            pubkey=None,
+                            user=None,
+                            is_active=False)
+        return Response(data={STATUS_FIELD: STATUS_OK,
+                              UUID_FIELD: new_uuid},
+                        status=status.HTTP_200_OK)

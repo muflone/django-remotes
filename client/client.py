@@ -23,6 +23,7 @@ import argparse
 from client.actions import (ACTION_DISCOVER,
                             ACTION_GENERATE_KEYS,
                             ACTION_STATUS,
+                            ACTION_HOST_REGISTER,
                             ACTION_USER_REGISTER,
                             ACTIONS)
 from client.api import Api
@@ -36,7 +37,12 @@ from client.settings import (Settings,
 
 from project import PRODUCT_NAME, VERSION
 
-from remotes.constants import ENDPOINTS_FIELD, SERVER_URL, UUID_FIELD
+from remotes.constants import (ENDPOINTS_FIELD,
+                               MESSAGE_FIELD,
+                               SERVER_URL,
+                               STATUS_FIELD,
+                               STATUS_ERROR,
+                               UUID_FIELD)
 
 
 class Client(object):
@@ -94,6 +100,9 @@ class Client(object):
                 parser.error('missing private_key argument')
             if not options.public_key:
                 parser.error('missing public_key argument')
+        elif options.action == ACTION_HOST_REGISTER:
+            if not options.token:
+                parser.error('missing token argument')
         elif options.action == ACTION_USER_REGISTER:
             if not options.token:
                 parser.error('missing token argument')
@@ -144,6 +153,25 @@ class Client(object):
             self.settings.set_value(section=SECTION_HOST,
                                     option=OPTION_PUBLIC_KEY,
                                     value=self.options.public_key)
+        elif self.options.action == ACTION_HOST_REGISTER:
+            host_uuid = self.settings.get_value(section=SECTION_HOST,
+                                                option=UUID_FIELD)
+            if not host_uuid:
+                # Host registration
+                api.url = self.settings.build_url(
+                    url=self.settings.get_value(section=SECTION_ENDPOINTS,
+                                                option=ACTION_HOST_REGISTER))
+                result = api.post(headers=headers)
+                status = 0
+                # Update settings
+                self.settings.set_value(section=SECTION_HOST,
+                                        option=UUID_FIELD,
+                                        value=result[UUID_FIELD])
+            else:
+                # Host already registered
+                result = {STATUS_FIELD: STATUS_ERROR,
+                          MESSAGE_FIELD: 'Host UUID already set'}
+                status = 1
         elif self.options.action == ACTION_USER_REGISTER:
             # User registration
             api.url = self.settings.build_url(
