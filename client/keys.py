@@ -74,15 +74,23 @@ class Keys(object):
                 password=password)
         return self.private_key
 
-    def load_public_key(self, filename: str):
+    def load_public_key(self, data: str):
+        """
+        Load public key from a string
+        :param data: public key content
+        :return: public key
+        """
+        self.public_key = serialization.load_pem_public_key(data=data)
+        return self.public_key
+
+    def load_public_key_from_file(self, filename: str):
         """
         Load public key from filename
         :param filename: source filename to load the public key
-        :return: None
+        :return: public key
         """
         with open(file=filename, mode='rb') as file:
-            self.public_key = serialization.load_pem_public_key(
-                data=file.read())
+            self.public_key = self.load_public_key(data=file.read())
         return self.public_key
 
     def save_private_key(self, filename: str, password: str = None):
