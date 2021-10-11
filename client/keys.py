@@ -146,6 +146,7 @@ class Keys(object):
         """
         Encrypt text using the public key
         :param text: text to be encrypted
+        :param use_base64: encode encrypted text in base64
         :return: resulting encrypted text
         """
         encrypted = self.public_key.encrypt(
@@ -159,7 +160,8 @@ class Keys(object):
     def decrypt(self, text: str, use_base64: bool) -> str:
         """
         Decrypt text using the private key
-        :param text: text to be decrypted
+        :param text: encrypted text to decrypt
+        :param use_base64: encrypted text is in base64
         :return: resulting plain text
         """
         result = self.private_key.decrypt(
