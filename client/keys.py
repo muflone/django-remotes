@@ -139,7 +139,7 @@ class Keys(object):
         with open(file=filename, mode='wb') as file:
             file.write(self.get_public_key_bytes())
 
-    def encrypt(self, text: str, use_base64: bool) -> str:
+    def encrypt(self, text: str, use_base64: bool) -> bytes:
         """
         Encrypt text using the public key
         :param text: text to be encrypted
@@ -152,7 +152,7 @@ class Keys(object):
                                  label=None))
         return result if not use_base64 else base64.b64encode(result)
 
-    def decrypt(self, text: str, use_base64: bool) -> str:
+    def decrypt(self, text: str, use_base64: bool) -> bytes:
         """
         Decrypt text using the private key
         :param text: text to be decrypted
