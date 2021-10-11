@@ -37,6 +37,9 @@ class Keys(object):
         """
         self.private_key = rsa.generate_private_key(public_exponent=65537,
                                                     key_size=size)
+        self.load_public_key_from_private_key()
+
+    def load_public_key_from_private_key(self) -> None:
         self.public_key = self.private_key.public_key()
 
     def get_private_key_bytes(self, password: str = None) -> bytes:
