@@ -18,8 +18,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
+import base64
+
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import hashes, serialization
 
 
 class Keys(object):
@@ -136,3 +138,28 @@ class Keys(object):
         """
         with open(file=filename, mode='wb') as file:
             file.write(self.get_public_key_bytes())
+
+    def encrypt(self, text: str, use_base64: bool) -> str:
+        """
+        Encrypt text using the public key
+        :param text: text to be encrypted
+        :return: resulting encrypted text
+        """
+        result = self.public_key.encrypt(
+            plaintext=text,
+            padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                                 algorithm=hashes.SHA256(),
+                                 label=None))
+        return result if not use_base64 else base64.b64encode(result)
+
+    def decrypt(self, text: str, use_base64: bool) -> str:
+        """
+        Decrypt text using the private key
+        :param text: text to be decrypted
+        :return: resulting plain text
+        """
+        return self.private_key.decrypt(
+            ciphertext=text if not use_base64 else base64.b64decode(text),
+            padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                                 algorithm=hashes.SHA256(),
+                                 label=None))
