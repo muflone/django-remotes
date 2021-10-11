@@ -26,10 +26,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from client.keys import Keys
-
 from remotes.constants import (MESSAGE_FIELD,
-                               PUBLIC_KEY_FIELD,
                                STATUS_FIELD,
                                STATUS_ERROR,
                                STATUS_OK,
@@ -42,22 +39,6 @@ class HostConfirmView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
-        # Get host public key
-        try:
-            host_key = request.data[PUBLIC_KEY_FIELD]
-        except KeyError:
-            return Response(data={STATUS_FIELD: STATUS_ERROR,
-                                  MESSAGE_FIELD: 'Missing host public key'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        # Check public key
-        try:
-            keys = Keys()
-            keys.load_public_key(data=host_key.encode('utf-8'))
-        except ValueError:
-            # Invalid PEM key
-            return Response(data={STATUS_FIELD: STATUS_ERROR,
-                                  MESSAGE_FIELD: 'Invalid PEM key'},
-                            status=status.HTTP_400_BAD_REQUEST)
         # Get host UUID
         try:
             host_uuid = request.data[UUID_FIELD]
@@ -73,7 +54,6 @@ class HostConfirmView(APIView):
             # Update host with the new user
             new_user = get_user_model().objects.create(username=host_uuid,
                                                        is_active=True)
-            host.pubkey = keys.get_public_key_content()
             host.user = new_user
             host.is_active = True
             host.save()

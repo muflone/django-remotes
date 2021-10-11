@@ -162,7 +162,14 @@ class Client(object):
                 api.url = self.settings.build_url(
                     url=self.settings.get_value(section=SECTION_ENDPOINTS,
                                                 option=ACTION_HOST_REGISTER))
-                result = api.post(headers=headers)
+                # Load public key
+                keys = Keys()
+                keys.load_public_key_from_file(
+                    filename=self.settings.get_value(section=SECTION_HOST,
+                                                     option=OPTION_PUBLIC_KEY))
+                data = {PUBLIC_KEY_FIELD: keys.get_public_key_content()}
+                result = api.post(headers=headers,
+                                  data=data)
                 status = 0
                 # Update settings
                 self.settings.set_value(section=SECTION_HOST,
@@ -180,13 +187,7 @@ class Client(object):
             api.url = self.settings.build_url(
                 url=self.settings.get_value(section=SECTION_ENDPOINTS,
                                             option=ACTION_HOST_CONFIRM))
-            # Load public key
-            keys = Keys()
-            keys.load_public_key_from_file(
-                filename=self.settings.get_value(section=SECTION_HOST,
-                                                 option=OPTION_PUBLIC_KEY))
-            data = {UUID_FIELD: host_uuid,
-                    PUBLIC_KEY_FIELD: keys.get_public_key_content()}
+            data = {UUID_FIELD: host_uuid}
             result = api.post(headers=headers,
                               data=data)
             status = 0

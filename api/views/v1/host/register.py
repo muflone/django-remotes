@@ -25,7 +25,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from remotes.constants import (STATUS_FIELD,
+from client.keys import Keys
+
+from remotes.constants import (MESSAGE_FIELD,
+                               PUBLIC_KEY_FIELD,
+                               STATUS_FIELD,
+                               STATUS_ERROR,
                                STATUS_OK,
                                UUID_FIELD)
 from remotes.models import Host
@@ -35,12 +40,28 @@ class HostRegisterView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
+        # Get host public key
+        try:
+            host_key = request.data[PUBLIC_KEY_FIELD]
+        except KeyError:
+            return Response(data={STATUS_FIELD: STATUS_ERROR,
+                                  MESSAGE_FIELD: 'Missing host public key'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        # Check public key
+        try:
+            keys = Keys()
+            keys.load_public_key(data=host_key.encode('utf-8'))
+        except ValueError:
+            # Invalid PEM key
+            return Response(data={STATUS_FIELD: STATUS_ERROR,
+                                  MESSAGE_FIELD: 'Invalid PEM key'},
+                            status=status.HTTP_400_BAD_REQUEST)
         # Create a new Host
         new_uuid = uuid.uuid4()
         # Register a new host
         Host.objects.create(name=new_uuid,
                             uuid=new_uuid,
-                            pubkey=None,
+                            pubkey=keys.get_public_key_content(),
                             user=None,
                             is_active=False)
         return Response(data={STATUS_FIELD: STATUS_OK,
