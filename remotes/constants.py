@@ -27,6 +27,7 @@ STATUS_FIELD = 'status'
 STATUS_OK = 'OK'
 STATUS_ERROR = 'ERROR'
 
+ENCRYPTED_FIELD = 'encrypted'
 ENDPOINTS_FIELD = 'endpoints'
 PUBLIC_KEY_FIELD = 'public_key'
 TOKEN_FIELD = 'token'

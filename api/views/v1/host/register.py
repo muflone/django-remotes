@@ -27,12 +27,12 @@ from rest_framework.views import APIView
 
 from client.keys import Keys
 
-from remotes.constants import (MESSAGE_FIELD,
+from remotes.constants import (ENCRYPTED_FIELD,
+                               MESSAGE_FIELD,
                                PUBLIC_KEY_FIELD,
                                STATUS_FIELD,
                                STATUS_ERROR,
-                               STATUS_OK,
-                               UUID_FIELD)
+                               STATUS_OK)
 from remotes.models import Host
 
 
@@ -65,5 +65,7 @@ class HostRegisterView(APIView):
                             user=None,
                             is_active=False)
         return Response(data={STATUS_FIELD: STATUS_OK,
-                              UUID_FIELD: new_uuid},
+                              ENCRYPTED_FIELD: keys.encrypt(
+                                  text=str(new_uuid).encode('utf-8'),
+                                  use_base64=True)},
                         status=status.HTTP_200_OK)

@@ -37,7 +37,8 @@ from client.settings import (Settings,
 
 from project import PRODUCT_NAME, VERSION
 
-from remotes.constants import (ENDPOINTS_FIELD,
+from remotes.constants import (ENCRYPTED_FIELD,
+                               ENDPOINTS_FIELD,
                                MESSAGE_FIELD,
                                PUBLIC_KEY_FIELD,
                                SERVER_URL,
@@ -171,10 +172,17 @@ class Client(object):
                 result = api.post(headers=headers,
                                   data=data)
                 status = 0
+                # Load private key and decrypt UUID
+                keys.load_private_key_from_file(
+                    filename=self.settings.get_value(
+                        section=SECTION_HOST,
+                        option=OPTION_PRIVATE_KEY))
+                uuid_decrypted = keys.decrypt(text=result[ENCRYPTED_FIELD],
+                                              use_base64=True).decode('utf-8')
                 # Update settings
                 self.settings.set_value(section=SECTION_HOST,
                                         option=UUID_FIELD,
-                                        value=result[UUID_FIELD])
+                                        value=uuid_decrypted)
             else:
                 # Host already registered
                 result = {STATUS_FIELD: STATUS_ERROR,
