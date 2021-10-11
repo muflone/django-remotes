@@ -73,6 +73,7 @@ class HostConfirmView(APIView):
             # Update host with the new user
             new_user = get_user_model().objects.create(username=host_uuid,
                                                        is_active=True)
+            host.pubkey = keys.get_public_key_content()
             host.user = new_user
             host.is_active = True
             host.save()
