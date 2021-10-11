@@ -178,7 +178,7 @@ class Client(object):
                         section=SECTION_HOST,
                         option=OPTION_PRIVATE_KEY))
                 uuid_decrypted = keys.decrypt(text=result[ENCRYPTED_FIELD],
-                                              use_base64=True).decode('utf-8')
+                                              use_base64=True)
                 # Update settings
                 self.settings.set_value(section=SECTION_HOST,
                                         option=UUID_FIELD,

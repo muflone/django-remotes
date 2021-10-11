@@ -142,27 +142,29 @@ class Keys(object):
         with open(file=filename, mode='wb') as file:
             file.write(self.get_public_key_bytes())
 
-    def encrypt(self, text: str, use_base64: bool) -> bytes:
+    def encrypt(self, text: str, use_base64: bool) -> str:
         """
         Encrypt text using the public key
         :param text: text to be encrypted
         :return: resulting encrypted text
         """
-        result = self.public_key.encrypt(
-            plaintext=text,
+        encrypted = self.public_key.encrypt(
+            plaintext=text.encode('utf-8'),
             padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
                                  algorithm=hashes.SHA256(),
                                  label=None))
-        return result if not use_base64 else base64.b64encode(result)
+        result = encrypted if not use_base64 else base64.b64encode(encrypted)
+        return result.decode('utf-8')
 
-    def decrypt(self, text: str, use_base64: bool) -> bytes:
+    def decrypt(self, text: str, use_base64: bool) -> str:
         """
         Decrypt text using the private key
         :param text: text to be decrypted
         :return: resulting plain text
         """
-        return self.private_key.decrypt(
+        result = self.private_key.decrypt(
             ciphertext=text if not use_base64 else base64.b64decode(text),
             padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
                                  algorithm=hashes.SHA256(),
                                  label=None))
+        return result.decode('utf-8')
