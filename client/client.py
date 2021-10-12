@@ -31,6 +31,7 @@ from client.keys import Keys
 from client.settings import (Settings,
                              OPTION_PRIVATE_KEY,
                              OPTION_PUBLIC_KEY,
+                             OPTION_TOKEN,
                              SECTION_ENDPOINTS,
                              SECTION_HOST,
                              SECTION_SERVER)
@@ -210,6 +211,10 @@ class Client(object):
             result = api.post(headers=headers,
                               data=data)
             status = 0
+            # Save token
+            self.settings.set_value(section=SECTION_HOST,
+                                    option=OPTION_TOKEN,
+                                    value=result[OPTION_TOKEN])
         return status, result
 
     def load(self):
