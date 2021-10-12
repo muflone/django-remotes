@@ -50,7 +50,7 @@ class HostRegisterView(APIView):
         # Check public key
         try:
             keys = Keys()
-            keys.load_public_key(data=host_key.encode('utf-8'))
+            keys.load_public_key(data=host_key)
         except ValueError:
             # Invalid PEM key
             return Response(data={STATUS_FIELD: STATUS_ERROR,

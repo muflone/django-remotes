@@ -90,7 +90,7 @@ class Keys(object):
         :return: private key
         """
         self.private_key = serialization.load_pem_private_key(
-            data=data,
+            data=data.encode('utf-8'),
             password=password)
         return self.private_key
 
@@ -100,7 +100,7 @@ class Keys(object):
         :param filename: source filename to load the private key
         :return: private key
         """
-        with open(file=filename, mode='rb') as file:
+        with open(file=filename, mode='r') as file:
             self.private_key = self.load_private_key(data=file.read(),
                                                      password=password)
         return self.private_key
@@ -111,7 +111,8 @@ class Keys(object):
         :param data: public key content
         :return: public key
         """
-        self.public_key = serialization.load_pem_public_key(data=data)
+        self.public_key = serialization.load_pem_public_key(
+            data=data.encode('utf-8'))
         return self.public_key
 
     def load_public_key_from_file(self, filename: str):
@@ -120,7 +121,7 @@ class Keys(object):
         :param filename: source filename to load the public key
         :return: public key
         """
-        with open(file=filename, mode='rb') as file:
+        with open(file=filename, mode='r') as file:
             self.public_key = self.load_public_key(data=file.read())
         return self.public_key
 

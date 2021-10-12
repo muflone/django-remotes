@@ -64,7 +64,7 @@ class HostConfirmView(APIView):
         if host := Host.objects.filter(uuid=host_uuid).first():
             # Check status
             keys = Keys()
-            keys.load_public_key(data=host.pubkey.encode('utf-8'))
+            keys.load_public_key(data=host.pubkey)
             if not keys.verify(data=message_encrypted,
                                text=STATUS_OK,
                                use_base64=True):
