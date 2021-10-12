@@ -38,7 +38,7 @@ from remotes.constants import (ENCRYPTED_FIELD,
 from remotes.models import Host
 
 
-class HostConfirmView(APIView):
+class HostVerifyView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):

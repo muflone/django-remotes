@@ -24,7 +24,7 @@ from client.actions import (ACTION_DISCOVER,
                             ACTION_GENERATE_KEYS,
                             ACTION_STATUS,
                             ACTION_HOST_REGISTER,
-                            ACTION_HOST_CONFIRM,
+                            ACTION_HOST_VERIFY,
                             ACTIONS)
 from client.api import Api
 from client.keys import Keys
@@ -107,7 +107,7 @@ class Client(object):
         elif options.action == ACTION_HOST_REGISTER:
             if not options.token:
                 parser.error('missing token argument')
-        elif options.action == ACTION_HOST_CONFIRM:
+        elif options.action == ACTION_HOST_VERIFY:
             if not options.token:
                 parser.error('missing token argument')
 
@@ -190,7 +190,7 @@ class Client(object):
                 result = {STATUS_FIELD: STATUS_ERROR,
                           MESSAGE_FIELD: 'Host UUID already set'}
                 status = 1
-        elif self.options.action == ACTION_HOST_CONFIRM:
+        elif self.options.action == ACTION_HOST_VERIFY:
             host_uuid = self.settings.get_value(section=SECTION_HOST,
                                                 option=UUID_FIELD)
             # Load private key and encrypt UUID
@@ -202,10 +202,10 @@ class Client(object):
             keys.load_public_key_from_private_key()
             message_encrypted = keys.sign(text=STATUS_OK,
                                           use_base64=True)
-            # Host confirmation
+            # Host verification
             api.url = self.settings.build_url(
                 url=self.settings.get_value(section=SECTION_ENDPOINTS,
-                                            option=ACTION_HOST_CONFIRM))
+                                            option=ACTION_HOST_VERIFY))
             data = {UUID_FIELD: host_uuid,
                     ENCRYPTED_FIELD: message_encrypted}
             result = api.post(headers=headers,

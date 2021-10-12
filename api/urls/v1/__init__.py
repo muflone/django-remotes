@@ -22,7 +22,7 @@ from django.urls import path
 
 from api.views.v1.discover import DiscoverView
 from api.views.v1.host.register import HostRegisterView
-from api.views.v1.host.confirm import HostConfirmView
+from api.views.v1.host.verify import HostVerifyView
 
 
 urlpatterns = [
@@ -32,7 +32,7 @@ urlpatterns = [
     path(route='host/register/',
          view=HostRegisterView.as_view(),
          name='api.v1.host.register'),
-    path(route='host/confirm/',
-         view=HostConfirmView.as_view(),
-         name='api.v1.host.confirm'),
+    path(route='host/verify/',
+         view=HostVerifyView.as_view(),
+         name='api.v1.host.verify'),
 ]
