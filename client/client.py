@@ -44,6 +44,7 @@ from remotes.constants import (ENCRYPTED_FIELD,
                                SERVER_URL,
                                STATUS_FIELD,
                                STATUS_ERROR,
+                               STATUS_OK,
                                UUID_FIELD)
 
 
@@ -191,11 +192,21 @@ class Client(object):
         elif self.options.action == ACTION_HOST_CONFIRM:
             host_uuid = self.settings.get_value(section=SECTION_HOST,
                                                 option=UUID_FIELD)
+            # Load private key and encrypt UUID
+            keys = Keys()
+            keys.load_private_key_from_file(
+                filename=self.settings.get_value(
+                    section=SECTION_HOST,
+                    option=OPTION_PRIVATE_KEY))
+            keys.load_public_key_from_private_key()
+            message_encrypted = keys.sign(text=STATUS_OK,
+                                          use_base64=True)
             # Host confirmation
             api.url = self.settings.build_url(
                 url=self.settings.get_value(section=SECTION_ENDPOINTS,
                                             option=ACTION_HOST_CONFIRM))
-            data = {UUID_FIELD: host_uuid}
+            data = {UUID_FIELD: host_uuid,
+                    ENCRYPTED_FIELD: message_encrypted}
             result = api.post(headers=headers,
                               data=data)
             status = 0

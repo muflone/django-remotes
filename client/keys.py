@@ -20,6 +20,7 @@
 
 import base64
 
+from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes, serialization
 
@@ -170,3 +171,38 @@ class Keys(object):
                                  algorithm=hashes.SHA256(),
                                  label=None))
         return result.decode('utf-8')
+
+    def sign(self, text: str, use_base64: bool) -> str:
+        """
+        Sign text using the private key
+        :param text: text to be signed
+        :return: signed text
+        """
+        encrypted = self.private_key.sign(
+            data=text.encode('utf-8'),
+            padding=padding.PSS(mgf=padding.MGF1(hashes.SHA256()),
+                                salt_length=padding.PSS.MAX_LENGTH),
+            algorithm=hashes.SHA256())
+        result = encrypted if not use_base64 else base64.b64encode(encrypted)
+        return result.decode('utf-8')
+
+    def verify(self, data: str, text: str, use_base64: bool) -> bool:
+        """
+        Verify encrypted text using the public key
+        :param data: signature text to verify
+        :param text: clear text to verify
+        :return: resulting encrypted text
+        """
+        try:
+            self.public_key.verify(
+                signature=(data.encode('utf-8')
+                           if not use_base64
+                           else base64.b64decode(data)),
+                data=text.encode('utf-8'),
+                padding=padding.PSS(mgf=padding.MGF1(hashes.SHA256()),
+                                    salt_length=padding.PSS.MAX_LENGTH),
+                algorithm=hashes.SHA256())
+            result = True
+        except InvalidSignature:
+            result = False
+        return result
