@@ -80,7 +80,9 @@ class HostVerifyView(APIView):
             # Create new token for the user
             new_token = Token.objects.create(user=new_user)
             return Response(data={STATUS_FIELD: STATUS_OK,
-                                  TOKEN_FIELD: new_token.key},
+                                  ENCRYPTED_FIELD: keys.encrypt(
+                                      text=new_token.key,
+                                      use_base64=True)},
                             status=status.HTTP_200_OK)
         else:
             # Host not found
