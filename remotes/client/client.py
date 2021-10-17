@@ -19,6 +19,7 @@
 ##
 
 import argparse
+import sys
 
 from project import PRODUCT_NAME, VERSION
 
@@ -238,3 +239,20 @@ class Client(object):
         else:
             results = None
         return results
+
+
+if __name__ == '__main__':
+    client = Client()
+    # Get command line arguments
+    client.get_command_line()
+    # Load settings
+    client.load()
+    # Process the arguments
+    status, results = client.process()
+    if results is not None:
+        # Show the results
+        print(results)
+    # Save settings
+    client.save()
+    # Set exit code accordingly to the executed action
+    sys.exit(status)
