@@ -35,7 +35,6 @@ class CommandQueue(BaseModel):
                                   'CommandQueue',
                                   'hosts'))
     name = models.CharField(max_length=255,
-                            unique=True,
                             verbose_name=pgettext_lazy(
                                 'CommandQueue',
                                 'name'))
@@ -76,7 +75,8 @@ class CommandQueue(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['hosts', 'order', '-is_active', 'command']
+        ordering = ['hosts', 'name', 'order', '-is_active', 'command']
+        unique_together = ['hosts', 'name', 'order']
         verbose_name = pgettext_lazy('CommandQueue',
                                      'Command queue')
         verbose_name_plural = pgettext_lazy('CommandQueue',
