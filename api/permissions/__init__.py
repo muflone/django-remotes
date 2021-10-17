@@ -19,3 +19,4 @@
 ##
 
 from .is_user_with_host import IsUserWithHost                      # noqa: F401
+from .can_user_register_hosts import CanUserRegisterHosts          # noqa: F401

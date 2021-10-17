@@ -22,9 +22,10 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.permissions import CanUserRegisterHosts
 
 from remotes.client.keys import Keys
 from remotes.constants import (ENCRYPTED_FIELD,
@@ -37,7 +38,7 @@ from remotes.models import Host
 
 
 class HostVerifyView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (CanUserRegisterHosts, )
 
     def post(self, request):
         # Get host UUID

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # Local applications
     'remotes',
     'utility',
+    'api'
 ]
 
 MIDDLEWARE = [

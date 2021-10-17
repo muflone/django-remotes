@@ -18,22 +18,14 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-SERVER_URL = 'server_url'
-API_VERSION = 'v1'
+from rest_framework.permissions import IsAuthenticated
 
-MESSAGE_FIELD = 'message'
+from remotes.constants import PERMISSION_CAN_REGISTER_HOSTS_FULL
 
-STATUS_FIELD = 'status'
-STATUS_OK = 'OK'
-STATUS_ERROR = 'ERROR'
 
-ENCRYPTED_FIELD = 'encrypted'
-ENDPOINTS_FIELD = 'endpoints'
-PUBLIC_KEY_FIELD = 'public_key'
-TOKEN_FIELD = 'token'
-UUID_FIELD = 'uuid'
-
-USER_GROUP_REGISTER_HOSTS = 'user_register_hosts'
-
-PERMISSION_CAN_REGISTER_HOSTS = 'can_register_hosts'
-PERMISSION_CAN_REGISTER_HOSTS_FULL = f'auth.{PERMISSION_CAN_REGISTER_HOSTS}'
+class CanUserRegisterHosts(IsAuthenticated):
+    """
+    Authentication for users with can_register_hosts permissions
+    """
+    def has_permission(self, request, view):
+        return request.user.has_perm(PERMISSION_CAN_REGISTER_HOSTS_FULL)
