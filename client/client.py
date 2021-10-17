@@ -214,7 +214,7 @@ class Client(object):
             # Save token
             self.settings.set_value(section=SECTION_HOST,
                                     option=OPTION_TOKEN,
-                                    value=data[ENCRYPTED_FIELD])
+                                    value=result[ENCRYPTED_FIELD])
         return status, result
 
     def load(self):
