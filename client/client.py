@@ -158,9 +158,7 @@ class Client(object):
                                     option=OPTION_PUBLIC_KEY,
                                     value=self.options.public_key)
         elif self.options.action == ACTION_HOST_REGISTER:
-            host_uuid = self.settings.get_value(section=SECTION_HOST,
-                                                option=UUID_FIELD)
-            if not host_uuid:
+            if not self.load_uuid():
                 # Host registration
                 api.url = self.build_url(section=SECTION_ENDPOINTS,
                                          option=ACTION_HOST_REGISTER)
@@ -168,27 +166,23 @@ class Client(object):
                 result = api.post(headers=headers,
                                   data=data)
                 status = 0
-                uuid_decrypted = self.keys.decrypt(text=result[ENCRYPTED_FIELD],
-                                                   use_base64=True)
                 # Update settings
                 self.settings.set_value(section=SECTION_HOST,
                                         option=UUID_FIELD,
-                                        value=uuid_decrypted)
+                                        value=result[ENCRYPTED_FIELD])
             else:
                 # Host already registered
                 result = {STATUS_FIELD: STATUS_ERROR,
                           MESSAGE_FIELD: 'Host UUID already set'}
                 status = 1
         elif self.options.action == ACTION_HOST_VERIFY:
-            host_uuid = self.settings.get_value(section=SECTION_HOST,
-                                                option=UUID_FIELD)
             # Load private key and encrypt UUID
             message_encrypted = self.keys.sign(text=STATUS_OK,
                                                use_base64=True)
             # Host verification
             api.url = self.build_url(section=SECTION_ENDPOINTS,
                                      option=ACTION_HOST_VERIFY)
-            data = {UUID_FIELD: host_uuid,
+            data = {UUID_FIELD: self.load_uuid(),
                     ENCRYPTED_FIELD: message_encrypted}
             result = api.post(headers=headers,
                               data=data)
@@ -232,3 +226,16 @@ class Client(object):
         return self.settings.build_url(
                 url=self.settings.get_value(section=section,
                                             option=option))
+
+    def load_uuid(self) -> str:
+        """
+        Load UUID from settings
+        :return: host UUID
+        """
+        if encrypted_data := self.settings.get_value(section=SECTION_HOST,
+                                                     option=UUID_FIELD):
+            results = self.keys.decrypt(text=encrypted_data,
+                                        use_base64=True)
+        else:
+            results = None
+        return results
