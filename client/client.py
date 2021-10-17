@@ -132,9 +132,8 @@ class Client(object):
                                     value=result[ACTION_DISCOVER])
         elif self.options.action == ACTION_DISCOVER:
             # Discover services URLS
-            api.url = self.settings.build_url(
-                url=self.settings.get_value(section=SECTION_ENDPOINTS,
-                                            option=ACTION_DISCOVER))
+            api.url = self.build_url(section=SECTION_ENDPOINTS,
+                                     option=ACTION_DISCOVER)
             result = api.get(headers=headers)
             status = 0
             # Update settings
@@ -162,9 +161,8 @@ class Client(object):
                                                 option=UUID_FIELD)
             if not host_uuid:
                 # Host registration
-                api.url = self.settings.build_url(
-                    url=self.settings.get_value(section=SECTION_ENDPOINTS,
-                                                option=ACTION_HOST_REGISTER))
+                api.url = self.build_url(section=SECTION_ENDPOINTS,
+                                         option=ACTION_HOST_REGISTER)
                 # Load public key
                 keys = Keys()
                 keys.load_public_key_from_file(
@@ -203,9 +201,8 @@ class Client(object):
             message_encrypted = keys.sign(text=STATUS_OK,
                                           use_base64=True)
             # Host verification
-            api.url = self.settings.build_url(
-                url=self.settings.get_value(section=SECTION_ENDPOINTS,
-                                            option=ACTION_HOST_VERIFY))
+            api.url = self.build_url(section=SECTION_ENDPOINTS,
+                                     option=ACTION_HOST_VERIFY)
             data = {UUID_FIELD: host_uuid,
                     ENCRYPTED_FIELD: message_encrypted}
             result = api.post(headers=headers,
@@ -233,3 +230,14 @@ class Client(object):
         """
         if self.options.settings:
             self.settings.save(self.options.settings)
+
+    def build_url(self, section: str, option: str) -> str:
+        """
+        Build URL from settings option
+        :param section: settings section
+        :param option: settings option
+        :return: resulting URL
+        """
+        return self.settings.build_url(
+                url=self.settings.get_value(section=section,
+                                            option=option))
