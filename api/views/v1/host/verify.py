@@ -33,7 +33,6 @@ from remotes.constants import (ENCRYPTED_FIELD,
                                STATUS_FIELD,
                                STATUS_ERROR,
                                STATUS_OK,
-                               TOKEN_FIELD,
                                UUID_FIELD)
 from remotes.models import Host
 
