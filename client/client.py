@@ -53,6 +53,7 @@ class Client(object):
     def __init__(self):
         self.options = None
         self.settings = None
+        self.keys = None
 
     def get_command_line(self):
         parser = argparse.ArgumentParser(prog=f'{PRODUCT_NAME}')
@@ -163,22 +164,12 @@ class Client(object):
                 # Host registration
                 api.url = self.build_url(section=SECTION_ENDPOINTS,
                                          option=ACTION_HOST_REGISTER)
-                # Load public key
-                keys = Keys()
-                keys.load_public_key_from_file(
-                    filename=self.settings.get_value(section=SECTION_HOST,
-                                                     option=OPTION_PUBLIC_KEY))
-                data = {PUBLIC_KEY_FIELD: keys.get_public_key_content()}
+                data = {PUBLIC_KEY_FIELD: self.keys.get_public_key_content()}
                 result = api.post(headers=headers,
                                   data=data)
                 status = 0
-                # Load private key and decrypt UUID
-                keys.load_private_key_from_file(
-                    filename=self.settings.get_value(
-                        section=SECTION_HOST,
-                        option=OPTION_PRIVATE_KEY))
-                uuid_decrypted = keys.decrypt(text=result[ENCRYPTED_FIELD],
-                                              use_base64=True)
+                uuid_decrypted = self.keys.decrypt(text=result[ENCRYPTED_FIELD],
+                                                   use_base64=True)
                 # Update settings
                 self.settings.set_value(section=SECTION_HOST,
                                         option=UUID_FIELD,
@@ -192,14 +183,8 @@ class Client(object):
             host_uuid = self.settings.get_value(section=SECTION_HOST,
                                                 option=UUID_FIELD)
             # Load private key and encrypt UUID
-            keys = Keys()
-            keys.load_private_key_from_file(
-                filename=self.settings.get_value(
-                    section=SECTION_HOST,
-                    option=OPTION_PRIVATE_KEY))
-            keys.load_public_key_from_private_key()
-            message_encrypted = keys.sign(text=STATUS_OK,
-                                          use_base64=True)
+            message_encrypted = self.keys.sign(text=STATUS_OK,
+                                               use_base64=True)
             # Host verification
             api.url = self.build_url(section=SECTION_ENDPOINTS,
                                      option=ACTION_HOST_VERIFY)
@@ -222,6 +207,12 @@ class Client(object):
         self.settings = Settings()
         if self.options.settings:
             self.settings.load(self.options.settings)
+        # Load private and public keys if available
+        if priv_key_path := self.settings.get_value(section=SECTION_HOST,
+                                                    option=OPTION_PRIVATE_KEY):
+            self.keys = Keys()
+            self.keys.load_private_key_from_file(filename=priv_key_path)
+            self.keys.load_public_key_from_private_key()
 
     def save(self):
         """
