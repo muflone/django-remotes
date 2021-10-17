@@ -20,7 +20,7 @@
 
 import sys
 
-from client.client import Client
+from remotes.client.client import Client
 
 
 if __name__ == '__main__':

@@ -25,10 +25,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from client.actions import ACTION_DISCOVER
-
 from project import PRODUCT_NAME, VERSION
 
+from remotes.client.actions import ACTION_DISCOVER
 from remotes.constants import (API_VERSION, SERVER_URL,
                                STATUS_FIELD, STATUS_OK)
 

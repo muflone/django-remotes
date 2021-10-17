@@ -26,8 +26,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from client.keys import Keys
-
+from remotes.client.keys import Keys
 from remotes.constants import (ENCRYPTED_FIELD,
                                MESSAGE_FIELD,
                                STATUS_FIELD,

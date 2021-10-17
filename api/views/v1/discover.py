@@ -25,8 +25,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from client.actions import ACTION_HOST_REGISTER, ACTION_HOST_VERIFY
-
+from remotes.client.actions import ACTION_HOST_REGISTER, ACTION_HOST_VERIFY
 from remotes.constants import ENDPOINTS_FIELD, STATUS_FIELD, STATUS_OK
 
 

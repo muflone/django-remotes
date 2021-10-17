@@ -20,24 +20,23 @@
 
 import argparse
 
-from client.actions import (ACTION_DISCOVER,
-                            ACTION_GENERATE_KEYS,
-                            ACTION_STATUS,
-                            ACTION_HOST_REGISTER,
-                            ACTION_HOST_VERIFY,
-                            ACTIONS)
-from client.api import Api
-from client.keys import Keys
-from client.settings import (Settings,
-                             OPTION_PRIVATE_KEY,
-                             OPTION_PUBLIC_KEY,
-                             OPTION_TOKEN,
-                             SECTION_ENDPOINTS,
-                             SECTION_HOST,
-                             SECTION_SERVER)
-
 from project import PRODUCT_NAME, VERSION
 
+from remotes.client.actions import (ACTION_DISCOVER,
+                                    ACTION_GENERATE_KEYS,
+                                    ACTION_STATUS,
+                                    ACTION_HOST_REGISTER,
+                                    ACTION_HOST_VERIFY,
+                                    ACTIONS)
+from remotes.client.api import Api
+from remotes.client.keys import Keys
+from remotes.client.settings import (Settings,
+                                     OPTION_PRIVATE_KEY,
+                                     OPTION_PUBLIC_KEY,
+                                     OPTION_TOKEN,
+                                     SECTION_ENDPOINTS,
+                                     SECTION_HOST,
+                                     SECTION_SERVER)
 from remotes.constants import (ENCRYPTED_FIELD,
                                ENDPOINTS_FIELD,
                                MESSAGE_FIELD,
