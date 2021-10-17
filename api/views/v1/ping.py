@@ -18,25 +18,18 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from django.urls import path
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from api.views.v1.discover import DiscoverView
-from api.views.v1.host.register import HostRegisterView
-from api.views.v1.host.verify import HostVerifyView
-from api.views.v1.ping import PingView
+from api.permissions import IsUserWithHost
+from remotes.constants import STATUS_FIELD, STATUS_OK
 
 
-urlpatterns = [
-    path(route='discover/',
-         view=DiscoverView.as_view(),
-         name='api.v1.discover'),
-    path(route='host/register/',
-         view=HostRegisterView.as_view(),
-         name='api.v1.host.register'),
-    path(route='host/verify/',
-         view=HostVerifyView.as_view(),
-         name='api.v1.host.verify'),
-    path(route='ping/',
-         view=PingView.as_view(),
-         name='api.v1.ping'),
-]
+class PingView(APIView):
+    permission_classes = (IsUserWithHost, )
+
+    def get(self, request):
+        return Response(
+            data={STATUS_FIELD: STATUS_OK},
+            status=status.HTTP_200_OK)
