@@ -22,6 +22,7 @@ from .command import Command, CommandAdmin                         # noqa: F401
 from .commands_group import CommandsGroup, CommandsGroupAdmin      # noqa: F401
 from .commands_group_item import (CommandsGroupItem,               # noqa: F401
                                   CommandsGroupItemAdmin)          # noqa: F401
+from .commands_output import CommandsOutput, CommandsOutputAdmin   # noqa: F401
 from .host import Host, HostAdmin                                  # noqa: F401
 from .hostsgroup import HostsGroup, HostsGroupAdmin                # noqa: F401
 from .setting import Setting, SettingAdmin                         # noqa: F401
