@@ -21,6 +21,7 @@
 from django.contrib import admin
 
 from .models import (Command, CommandAdmin,
+                     CommandsGroup, CommandsGroupAdmin,
                      CommandQueue, CommandQueueAdmin,
                      Host, HostAdmin,
                      HostsGroup, HostsGroupAdmin,
@@ -30,6 +31,7 @@ from .models import (Command, CommandAdmin,
 
 
 admin.site.register(Command, CommandAdmin)
+admin.site.register(CommandsGroup, CommandsGroupAdmin)
 admin.site.register(CommandQueue, CommandQueueAdmin)
 admin.site.register(Host, HostAdmin)
 admin.site.register(HostsGroup, HostsGroupAdmin)
