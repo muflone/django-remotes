@@ -25,47 +25,42 @@ from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
 
-class CommandQueue(BaseModel):
+class CommandsGroupItem(BaseModel):
     """
-    CommandQueue
+    CommandsGroupItem
     """
-    hosts = models.ForeignKey(to='remotes.HostsGroup',
+    group = models.ForeignKey(to='remotes.CommandsGroup',
                               on_delete=models.PROTECT,
                               verbose_name=pgettext_lazy(
-                                  'CommandQueue',
-                                  'hosts'))
+                                  'CommandsGroupItem',
+                                  'group'))
     name = models.CharField(max_length=255,
                             verbose_name=pgettext_lazy(
-                                'CommandQueue',
+                                'CommandsGroupItem',
                                 'name'))
+    description = models.TextField(blank=True,
+                                   null=True,
+                                   verbose_name=pgettext_lazy(
+                                       'CommandsGroupItem',
+                                       'description'))
     command = models.ForeignKey(to='remotes.Command',
                                 on_delete=models.PROTECT,
                                 verbose_name=pgettext_lazy(
-                                    'CommandQueue',
+                                    'CommandsGroupItem',
                                     'command'))
     variable = models.CharField(max_length=255,
                                 blank=True,
                                 null=False,
                                 verbose_name=pgettext_lazy(
-                                    'CommandQueue',
+                                    'CommandsGroupItem',
                                     'variable'))
     order = models.PositiveIntegerField(default=1,
                                         verbose_name=pgettext_lazy(
-                                            'CommandQueue',
+                                            'CommandsGroupItem',
                                             'order'))
-    after = models.DateTimeField(blank=True,
-                                 null=True,
-                                 verbose_name=pgettext_lazy(
-                                     'CommandQueue',
-                                     'after'))
-    before = models.DateTimeField(blank=True,
-                                  null=True,
-                                  verbose_name=pgettext_lazy(
-                                      'CommandQueue',
-                                      'before'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=pgettext_lazy(
-                                        'CommandQueue',
+                                        'CommandsGroupItem',
                                         'active'))
 
     # Set the managers for the model
@@ -75,16 +70,16 @@ class CommandQueue(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['hosts', 'name', 'order', '-is_active', 'command']
-        unique_together = ['hosts', 'name', 'order']
-        verbose_name = pgettext_lazy('CommandQueue',
-                                     'Command queue')
-        verbose_name_plural = pgettext_lazy('CommandQueue',
-                                            'Command queues')
+        ordering = ['group', 'order', 'name', '-is_active', 'command']
+        unique_together = ['group', 'name']
+        verbose_name = pgettext_lazy('CommandsGroupItem',
+                                     'Commands group item')
+        verbose_name_plural = pgettext_lazy('CommandsGroupItem',
+                                            'Commands group items')
 
     def __str__(self):
         return '{NAME}'.format(NAME=self.name)
 
 
-class CommandQueueAdmin(BaseModelAdmin):
-    list_display = ('hosts', 'name', 'order', 'after', 'before', 'is_active')
+class CommandsGroupItemAdmin(BaseModelAdmin):
+    list_display = ('group', 'name', 'order', 'is_active')
