@@ -17,27 +17,3 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
-
-SERVER_URL = 'server_url'
-API_VERSION = 'v1'
-
-MESSAGE_FIELD = 'message'
-
-STATUS_FIELD = 'status'
-STATUS_OK = 'OK'
-STATUS_ERROR = 'ERROR'
-
-ENCRYPTED_FIELD = 'encrypted'
-ENDPOINTS_FIELD = 'endpoints'
-PUBLIC_KEY_FIELD = 'public_key'
-TOKEN_FIELD = 'token'
-UUID_FIELD = 'uuid'
-
-USER_GROUP_REGISTER_HOSTS = 'user_register_hosts'
-
-PERMISSION_CAN_REGISTER_HOSTS = 'can_register_hosts'
-PERMISSION_CAN_REGISTER_HOSTS_FULL = f'auth.{PERMISSION_CAN_REGISTER_HOSTS}'
-
-RESULTS_FIELD = 'results'
-GROUP_FIELD = 'group'
-COMMAND_FIELD = 'command'

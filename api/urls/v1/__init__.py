@@ -20,6 +20,7 @@
 
 from django.urls import path
 
+from api.views.v1.commands.list import CommandsListView
 from api.views.v1.discover import DiscoverView
 from api.views.v1.host.register import HostRegisterView
 from api.views.v1.host.verify import HostVerifyView
@@ -30,6 +31,9 @@ urlpatterns = [
     path(route='discover/',
          view=DiscoverView.as_view(),
          name='api.v1.discover'),
+    path(route='commands/list/',
+         view=CommandsListView.as_view(),
+         name='api.v1.commands.list'),
     path(route='host/register/',
          view=HostRegisterView.as_view(),
          name='api.v1.host.register'),
