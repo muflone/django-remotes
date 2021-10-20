@@ -30,10 +30,10 @@ class CommandsOutput(BaseModel):
     CommandsOutput
     """
     host = models.ForeignKey(to='remotes.Host',
-                              on_delete=models.PROTECT,
-                              verbose_name=pgettext_lazy(
-                                  'CommandsOutput',
-                                  'host'))
+                             on_delete=models.PROTECT,
+                             verbose_name=pgettext_lazy(
+                                 'CommandsOutput',
+                                 'host'))
     command = models.ForeignKey(to='remotes.Command',
                                 on_delete=models.PROTECT,
                                 verbose_name=pgettext_lazy(
