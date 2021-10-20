@@ -43,13 +43,13 @@ class CommandsGroup(BaseModel):
                                         verbose_name=pgettext_lazy(
                                             'CommandsGroup',
                                             'order'))
-    after = models.DateTimeField(blank=True,
-                                 null=True,
+    after = models.DateTimeField(blank=False,
+                                 null=False,
                                  verbose_name=pgettext_lazy(
                                      'CommandsGroup',
                                      'after'))
-    before = models.DateTimeField(blank=True,
-                                  null=True,
+    before = models.DateTimeField(blank=False,
+                                  null=False,
                                   verbose_name=pgettext_lazy(
                                       'CommandsGroup',
                                       'before'))
