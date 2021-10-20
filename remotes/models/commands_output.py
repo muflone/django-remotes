@@ -29,16 +29,11 @@ class CommandsOutput(BaseModel):
     """
     CommandsOutput
     """
-    host = models.ForeignKey(to='remotes.Host',
-                             on_delete=models.PROTECT,
-                             verbose_name=pgettext_lazy(
-                                 'CommandsOutput',
-                                 'host'))
-    command = models.ForeignKey(to='remotes.Command',
-                                on_delete=models.PROTECT,
-                                verbose_name=pgettext_lazy(
-                                    'CommandsOutput',
-                                    'command'))
+    group_item = models.ForeignKey(to='remotes.CommandsGroupItem',
+                                   on_delete=models.PROTECT,
+                                   verbose_name=pgettext_lazy(
+                                       'CommandsOutput',
+                                       'group item'))
     output = models.TextField(blank=True,
                               null=True,
                               verbose_name=pgettext_lazy(
@@ -62,7 +57,7 @@ class CommandsOutput(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['timestamp', 'host', 'command']
+        ordering = ['timestamp', 'group_item_id']
         verbose_name = pgettext_lazy('CommandsOutput',
                                      'Commands output')
         verbose_name_plural = pgettext_lazy('CommandsOutput',
@@ -73,4 +68,4 @@ class CommandsOutput(BaseModel):
 
 
 class CommandsOutputAdmin(BaseModelAdmin):
-    list_display = ('timestamp', 'host', 'command')
+    list_display = ('timestamp', 'group_item')
