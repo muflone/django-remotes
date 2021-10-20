@@ -62,7 +62,7 @@ class HostsGroup(BaseModel):
                                             'Hosts groups')
 
     def __str__(self):
-        return '{NAME}'.format(NAME=self.name)
+        return f'{self.name}'
 
 
 class HostsGroupAdmin(BaseModelAdmin):

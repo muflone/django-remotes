@@ -69,7 +69,7 @@ class CommandsOutput(BaseModel):
                                             'Commands outputs')
 
     def __str__(self):
-        return '{TIMESTAMP}'.format(TIMESTAMP=self.timestamp)
+        return f'{self.timestamp}'
 
 
 class CommandsOutputAdmin(BaseModelAdmin):

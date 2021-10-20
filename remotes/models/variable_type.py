@@ -53,7 +53,7 @@ class VariableType(BaseModel):
                                             'Variable types')
 
     def __str__(self):
-        return '{NAME}'.format(NAME=self.name)
+        return f'{self.name}'
 
 
 class VariableTypeAdmin(BaseModelAdmin):

@@ -72,7 +72,7 @@ class CommandsGroup(BaseModel):
                                             'Commands groups')
 
     def __str__(self):
-        return '{NAME}'.format(NAME=self.name)
+        return f'{self.name}'
 
 
 class CommandsGroupAdmin(BaseModelAdmin):

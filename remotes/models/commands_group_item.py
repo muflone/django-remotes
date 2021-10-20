@@ -78,7 +78,7 @@ class CommandsGroupItem(BaseModel):
                                             'Commands group items')
 
     def __str__(self):
-        return '{NAME}'.format(NAME=self.name)
+        return f'{self.group_id} - {self.group} - {self.name}'
 
     def group_order(self):
         """

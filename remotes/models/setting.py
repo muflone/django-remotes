@@ -63,7 +63,7 @@ class Setting(BaseModel):
                                             'Settings')
 
     def __str__(self):
-        return '{NAME}'.format(NAME=self.name)
+        return f'{self.name}'
 
 
 class SettingAdmin(BaseModelAdmin):

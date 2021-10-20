@@ -75,7 +75,7 @@ class Host(BaseModel):
                                             'Hosts')
 
     def __str__(self):
-        return '{NAME}'.format(NAME=self.name)
+        return f'{self.name}'
 
 
 class HostAdmin(BaseModelAdmin):
