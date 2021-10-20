@@ -80,6 +80,12 @@ class CommandsGroupItem(BaseModel):
     def __str__(self):
         return '{NAME}'.format(NAME=self.name)
 
+    def group_order(self):
+        """
+        Return the group order
+        :return: group order
+        """
+        return self.group.order
 
 class CommandsGroupItemAdmin(BaseModelAdmin):
-    list_display = ('group', 'name', 'order', 'is_active')
+    list_display = ('group', 'group_order', 'name', 'order', 'is_active')
