@@ -87,6 +87,7 @@ class CommandsGroupItem(BaseModel):
         """
         return self.group.order
 
+
 class CommandsGroupItemAdmin(BaseModelAdmin):
     list_display = ('__str__', 'group',
                     'order', 'name', 'is_active')
