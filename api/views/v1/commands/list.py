@@ -38,7 +38,7 @@ from remotes.models import CommandsGroup, CommandsOutput, Host
 class CommandsListView(ListAPIView):
     permission_classes = (IsUserWithHost, )
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         results = []
         now = timezone.now()
         # Get all the already executed commands to exclude
