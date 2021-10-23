@@ -30,7 +30,6 @@ STATUS_ERROR = 'ERROR'
 ENCRYPTED_FIELD = 'encrypted'
 ENDPOINTS_FIELD = 'endpoints'
 PUBLIC_KEY_FIELD = 'public_key'
-TOKEN_FIELD = 'token'
 UUID_FIELD = 'uuid'
 
 USER_GROUP_REGISTER_HOSTS = 'user_register_hosts'
