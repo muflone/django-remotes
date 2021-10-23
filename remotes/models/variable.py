@@ -18,8 +18,6 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from decimal import Decimal
-
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
@@ -43,11 +41,6 @@ class Variable(BaseModel):
                                    verbose_name=pgettext_lazy(
                                        'Variable',
                                        'description'))
-    type = models.ForeignKey(to='remotes.VariableType',
-                             on_delete=models.PROTECT,
-                             verbose_name=pgettext_lazy(
-                                 'Variable',
-                                 'type'))
     raw_value = models.TextField(blank=True,
                                  null=False,
                                  verbose_name=pgettext_lazy(
@@ -65,22 +58,6 @@ class Variable(BaseModel):
 
     def __str__(self):
         return f'{self.name}'
-
-    def get_value(self):
-        """
-        Format the value to the according type
-        """
-        FORMATTERS = {'bool': bool,
-                      'decimal': Decimal,
-                      'float': float,
-                      'int': int,
-                      'str.lstrip': str.lstrip,
-                      'str.rstrip': str.rstrip,
-                      'str.strip': str.strip,
-                      'str.lower': str.lower,
-                      'str.upper': str.upper,
-                      }
-        return FORMATTERS.get(self.type.type, str)(self.raw_value)
 
 
 class VariableAdmin(BaseModelAdmin):

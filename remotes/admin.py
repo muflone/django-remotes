@@ -27,8 +27,7 @@ from .models import (Command, CommandAdmin,
                      Host, HostAdmin,
                      HostsGroup, HostsGroupAdmin,
                      Setting, SettingAdmin,
-                     Variable, VariableAdmin,
-                     VariableType, VariableTypeAdmin)
+                     Variable, VariableAdmin)
 
 
 admin.site.register(Command, CommandAdmin)
@@ -39,4 +38,3 @@ admin.site.register(Host, HostAdmin)
 admin.site.register(HostsGroup, HostsGroupAdmin)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(Variable, VariableAdmin)
-admin.site.register(VariableType, VariableTypeAdmin)
