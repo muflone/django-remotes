@@ -37,10 +37,6 @@ class Variable(BaseModel):
                             verbose_name=pgettext_lazy(
                                 'Variable',
                                 'name'))
-    description = models.TextField(blank=True,
-                                   verbose_name=pgettext_lazy(
-                                       'Variable',
-                                       'description'))
     raw_value = models.TextField(blank=True,
                                  null=False,
                                  verbose_name=pgettext_lazy(
