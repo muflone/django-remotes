@@ -22,6 +22,7 @@ from django.urls import path
 
 from api.views.v1.commands.get import CommandGetView
 from api.views.v1.commands.list import CommandsListView
+from api.views.v1.commands.post import CommandPostView
 from api.views.v1.discover import DiscoverView
 from api.views.v1.host.register import HostRegisterView
 from api.views.v1.host.verify import HostVerifyView
@@ -36,6 +37,10 @@ urlpatterns = [
                '<int:pk>/',
          view=CommandGetView.as_view(),
          name='api.v1.command.get'),
+    path(route='commands/post/'
+               '<int:pk>/',
+         view=CommandPostView.as_view(),
+         name='api.v1.command.post'),
     path(route='commands/list/',
          view=CommandsListView.as_view(),
          name='api.v1.commands.list'),
