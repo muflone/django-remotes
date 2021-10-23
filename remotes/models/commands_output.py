@@ -46,6 +46,7 @@ class CommandsOutput(BaseModel):
                                   'result'))
     timestamp = models.DateTimeField(blank=True,
                                      null=True,
+                                     auto_now_add=True,
                                      verbose_name=pgettext_lazy(
                                          'CommandsOutput',
                                          'timestamp'))
