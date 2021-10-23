@@ -20,8 +20,6 @@
 
 from rest_framework.generics import RetrieveAPIView
 
-from remotes.client.keys import Keys
-from remotes.constants import ENCRYPTED_FIELD
 from remotes.models import Host
 
 
@@ -36,16 +34,5 @@ class RetrieveAPIEncryptedView(RetrieveAPIView):
         results = super().get(request, *args, **kwargs)
         # Get host for the current user
         host = Host.objects.get(user=self.request.user)
-        # Obtain the host public key to encrypt the data
-        keys = Keys()
-        keys.load_public_key(data=host.pubkey)
-        # Encrypt any field listed in encrypted_fields
-        if self.encrypted_fields:
-            results.data[ENCRYPTED_FIELD] = []
-        for field in self.encrypted_fields:
-            if field in results.data:
-                # Encrypt the data
-                results.data[field] = keys.encrypt(text=results.data[field],
-                                                   use_base64=True)
-                results.data[ENCRYPTED_FIELD].append(field)
+        host.encrypt_data(data=results.data, fields=self.encrypted_fields)
         return results
