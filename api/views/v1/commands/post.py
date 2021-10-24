@@ -70,9 +70,9 @@ class CommandPostView(APIView):
             pk=kwargs['pk'],
             group__hosts__hosts=host.id).first()
         if command_group_item:
-            serializer = CommandPostSerializer(data=request.data)
+            serializer = CommandPostSerializer(data=request.data.copy())
             # Add ID to the data from the querystring
-            request.data['id'] = kwargs['pk']
+            serializer.initial_data['id'] = kwargs['pk']
             if serializer.is_valid():
                 # Save data creating a new CommandOutput object
                 command_output = serializer.save()
