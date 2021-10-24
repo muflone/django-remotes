@@ -26,6 +26,8 @@ from rest_framework.views import APIView
 
 from api.permissions import IsUserWithHost
 
+from encryption.fernet_encrypt import FernetEncrypt
+
 from remotes.constants import (ID_FIELD,
                                RESULTS_FIELD,
                                STATUS_FIELD,
@@ -73,6 +75,14 @@ class CommandPostView(APIView):
             serializer = CommandPostSerializer(data=request.data.copy())
             # Add ID to the data from the querystring
             serializer.initial_data['id'] = kwargs['pk']
+            # Decrypt data using the host UUID
+            decryptor = FernetEncrypt()
+            decryptor.load_key_from_uuid(host.uuid)
+            serializer.initial_data['output'] = decryptor.decrypt(
+                text=request.data['output'])
+            serializer.initial_data['result'] = decryptor.decrypt(
+                text=request.data['result'])
+            # Process the data
             if serializer.is_valid():
                 # Save data creating a new CommandOutput object
                 command_output = serializer.save()
