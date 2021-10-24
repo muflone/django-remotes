@@ -21,6 +21,8 @@
 import argparse
 import sys
 
+from encryption.rsa_key import RsaKey
+
 from project import PRODUCT_NAME, VERSION
 
 from remotes.client.actions import (ACTION_DISCOVER,
@@ -30,7 +32,6 @@ from remotes.client.actions import (ACTION_DISCOVER,
                                     ACTION_HOST_VERIFY,
                                     ACTIONS)
 from remotes.client.api import Api
-from remotes.client.keys import Keys
 from remotes.client.settings import (Settings,
                                      OPTION_PRIVATE_KEY,
                                      OPTION_PUBLIC_KEY,
@@ -53,7 +54,7 @@ class Client(object):
     def __init__(self):
         self.options = None
         self.settings = None
-        self.keys = None
+        self.key = None
 
     def get_command_line(self):
         parser = argparse.ArgumentParser(prog=f'{PRODUCT_NAME}')
@@ -145,10 +146,10 @@ class Client(object):
                     value=result[ENDPOINTS_FIELD][endpoint])
         elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
-            keys = Keys()
-            keys.create_new_rsa_key(size=4096)
-            keys.save_private_key(filename=self.options.private_key)
-            keys.save_public_key(filename=self.options.public_key)
+            key = RsaKey()
+            key.create_new_key(size=4096)
+            key.save_private_key(filename=self.options.private_key)
+            key.save_public_key(filename=self.options.public_key)
             status = 0
             # Update settings
             self.settings.set_value(section=SECTION_HOST,
@@ -162,7 +163,7 @@ class Client(object):
                 # Host registration
                 api.url = self.build_url(section=SECTION_ENDPOINTS,
                                          option=ACTION_HOST_REGISTER)
-                data = {PUBLIC_KEY_FIELD: self.keys.get_public_key_content()}
+                data = {PUBLIC_KEY_FIELD: self.key.get_public_key_content()}
                 result = api.post(headers=headers,
                                   data=data)
                 status = 0
@@ -177,8 +178,8 @@ class Client(object):
                 status = 1
         elif self.options.action == ACTION_HOST_VERIFY:
             # Load private key and encrypt UUID
-            message_encrypted = self.keys.sign(text=STATUS_OK,
-                                               use_base64=True)
+            message_encrypted = self.key.sign(text=STATUS_OK,
+                                              use_base64=True)
             # Host verification
             api.url = self.build_url(section=SECTION_ENDPOINTS,
                                      option=ACTION_HOST_VERIFY)
@@ -204,9 +205,9 @@ class Client(object):
         # Load private and public keys if available
         if priv_key_path := self.settings.get_value(section=SECTION_HOST,
                                                     option=OPTION_PRIVATE_KEY):
-            self.keys = Keys()
-            self.keys.load_private_key_from_file(filename=priv_key_path)
-            self.keys.load_public_key_from_private_key()
+            self.key = RsaKey()
+            self.key.load_private_key_from_file(filename=priv_key_path)
+            self.key.load_public_key_from_private_key()
 
     def save(self):
         """
@@ -234,8 +235,8 @@ class Client(object):
         """
         if encrypted_data := self.settings.get_value(section=SECTION_HOST,
                                                      option=UUID_FIELD):
-            results = self.keys.decrypt(text=encrypted_data,
-                                        use_base64=True)
+            results = self.key.decrypt(text=encrypted_data,
+                                       use_base64=True)
         else:
             results = None
         return results

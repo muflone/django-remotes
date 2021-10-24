@@ -22,7 +22,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
-from remotes.client.keys import Keys
+from encryption.rsa_key import RsaKey
+
 from remotes.constants import ENCRYPTED_FIELD
 
 from utility.models import (BaseModel, BaseModelAdmin,
@@ -88,16 +89,16 @@ class Host(BaseModel):
         :return: None
         """
         # Obtain the host public key to encrypt the data
-        keys = Keys()
-        keys.load_public_key(data=self.pubkey)
+        key = RsaKey()
+        key.load_public_key(data=self.pubkey)
         # Encrypt any field listed in encrypted_fields
         if fields:
             data[ENCRYPTED_FIELD] = []
         for field in fields:
             if field in data:
                 # Encrypt the data
-                data[field] = keys.encrypt(text=data[field],
-                                           use_base64=True)
+                data[field] = key.encrypt(text=data[field],
+                                          use_base64=True)
                 data[ENCRYPTED_FIELD].append(field)
 
 

@@ -26,7 +26,8 @@ from rest_framework.views import APIView
 
 from api.permissions import CanUserRegisterHosts
 
-from remotes.client.keys import Keys
+from encryption.rsa_key import RsaKey
+
 from remotes.constants import (ENCRYPTED_FIELD,
                                MESSAGE_FIELD,
                                PUBLIC_KEY_FIELD,
@@ -49,8 +50,8 @@ class HostRegisterView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         # Check public key
         try:
-            keys = Keys()
-            keys.load_public_key(data=host_key)
+            key = RsaKey()
+            key.load_public_key(data=host_key)
         except ValueError:
             # Invalid PEM key
             return Response(data={STATUS_FIELD: STATUS_ERROR,
@@ -61,10 +62,10 @@ class HostRegisterView(APIView):
         # Register a new host
         Host.objects.create(name=new_uuid,
                             uuid=new_uuid,
-                            pubkey=keys.get_public_key_content(),
+                            pubkey=key.get_public_key_content(),
                             user=None,
                             is_active=False)
         return Response(data={STATUS_FIELD: STATUS_OK,
-                              ENCRYPTED_FIELD: keys.encrypt(text=str(new_uuid),
+                              ENCRYPTED_FIELD: key.encrypt(text=str(new_uuid),
                                                             use_base64=True)},
                         status=status.HTTP_200_OK)

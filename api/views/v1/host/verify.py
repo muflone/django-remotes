@@ -27,7 +27,8 @@ from rest_framework.views import APIView
 
 from api.permissions import CanUserRegisterHosts
 
-from remotes.client.keys import Keys
+from encryption.rsa_key import RsaKey
+
 from remotes.constants import (ENCRYPTED_FIELD,
                                MESSAGE_FIELD,
                                STATUS_FIELD,
@@ -62,11 +63,11 @@ class HostVerifyView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         if host := Host.objects.filter(uuid=host_uuid).first():
             # Check status
-            keys = Keys()
-            keys.load_public_key(data=host.pubkey)
-            if not keys.verify(data=message_encrypted,
-                               text=STATUS_OK,
-                               use_base64=True):
+            key = RsaKey()
+            key.load_public_key(data=host.pubkey)
+            if not key.verify(data=message_encrypted,
+                              text=STATUS_OK,
+                              use_base64=True):
                 return Response(data={STATUS_FIELD: STATUS_ERROR,
                                       MESSAGE_FIELD: 'Invalid signature'},
                                 status=status.HTTP_400_BAD_REQUEST)
@@ -79,7 +80,7 @@ class HostVerifyView(APIView):
             # Create new token for the user
             new_token = Token.objects.create(user=new_user)
             return Response(data={STATUS_FIELD: STATUS_OK,
-                                  ENCRYPTED_FIELD: keys.encrypt(
+                                  ENCRYPTED_FIELD: key.encrypt(
                                       text=new_token.key,
                                       use_base64=True)},
                             status=status.HTTP_200_OK)

@@ -25,12 +25,12 @@ from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes, serialization
 
 
-class Keys(object):
+class RsaKey(object):
     def __init__(self):
         self.private_key = None
         self.public_key = None
 
-    def create_new_rsa_key(self, size: int):
+    def create_new_key(self, size: int):
         """
         Generate new private and public keys
         :param size: key size in bytes
