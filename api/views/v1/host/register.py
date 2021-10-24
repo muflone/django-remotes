@@ -67,5 +67,5 @@ class HostRegisterView(APIView):
                             is_active=False)
         return Response(data={STATUS_FIELD: STATUS_OK,
                               ENCRYPTED_FIELD: key.encrypt(text=str(new_uuid),
-                                                            use_base64=True)},
+                                                           use_base64=True)},
                         status=status.HTTP_200_OK)
