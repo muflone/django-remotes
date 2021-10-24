@@ -52,14 +52,14 @@ class Host(BaseModel):
                               verbose_name=pgettext_lazy(
                                   'Host',
                                   'public key'))
-    user = models.ForeignKey(to=get_user_model(),
-                             on_delete=models.CASCADE,
-                             blank=True,
-                             null=True,
-                             default=None,
-                             verbose_name=pgettext_lazy(
-                                 'Host',
-                                 'user'))
+    user = models.OneToOneField(to=get_user_model(),
+                                on_delete=models.CASCADE,
+                                blank=True,
+                                null=True,
+                                default=None,
+                                verbose_name=pgettext_lazy(
+                                    'Host',
+                                    'user'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=pgettext_lazy(
                                         'Host',
