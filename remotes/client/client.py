@@ -115,7 +115,7 @@ class Client(object):
 
     def process(self):
         status = -1
-        result = None
+        results = None
         api = Api(url=self.options.url)
         headers = {}
         # Save token authorization if passed in the arguments
@@ -123,27 +123,27 @@ class Client(object):
             headers['Authorization'] = f'Token {self.options.token}'
         if self.options.action == ACTION_STATUS:
             # Get status
-            result = api.get(headers=headers)
+            results = api.get(headers=headers)
             status = 0
             # Update settings
             self.settings.set_value(section=SECTION_SERVER,
                                     option=SERVER_URL,
-                                    value=result[SERVER_URL])
+                                    value=results[SERVER_URL])
             self.settings.set_value(section=SECTION_ENDPOINTS,
                                     option=ACTION_DISCOVER,
-                                    value=result[ACTION_DISCOVER])
+                                    value=results[ACTION_DISCOVER])
         elif self.options.action == ACTION_DISCOVER:
             # Discover services URLS
             api.url = self.build_url(section=SECTION_ENDPOINTS,
                                      option=ACTION_DISCOVER)
-            result = api.get(headers=headers)
+            results = api.get(headers=headers)
             status = 0
             # Update settings
-            for endpoint in result[ENDPOINTS_FIELD]:
+            for endpoint in results[ENDPOINTS_FIELD]:
                 self.settings.set_value(
                     section=SECTION_ENDPOINTS,
                     option=endpoint,
-                    value=result[ENDPOINTS_FIELD][endpoint])
+                    value=results[ENDPOINTS_FIELD][endpoint])
         elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
             key = RsaKey()
@@ -164,17 +164,17 @@ class Client(object):
                 api.url = self.build_url(section=SECTION_ENDPOINTS,
                                          option=ACTION_HOST_REGISTER)
                 data = {PUBLIC_KEY_FIELD: self.key.get_public_key_content()}
-                result = api.post(headers=headers,
-                                  data=data)
+                results = api.post(headers=headers,
+                                   data=data)
                 status = 0
                 # Update settings
                 self.settings.set_value(section=SECTION_HOST,
                                         option=UUID_FIELD,
-                                        value=result[ENCRYPTED_FIELD])
+                                        value=results[ENCRYPTED_FIELD])
             else:
                 # Host already registered
-                result = {STATUS_FIELD: STATUS_ERROR,
-                          MESSAGE_FIELD: 'Host UUID already set'}
+                results = {STATUS_FIELD: STATUS_ERROR,
+                           MESSAGE_FIELD: 'Host UUID already set'}
                 status = 1
         elif self.options.action == ACTION_HOST_VERIFY:
             # Load private key and encrypt UUID
@@ -185,14 +185,14 @@ class Client(object):
                                      option=ACTION_HOST_VERIFY)
             data = {UUID_FIELD: self.load_uuid(),
                     ENCRYPTED_FIELD: message_encrypted}
-            result = api.post(headers=headers,
-                              data=data)
+            results = api.post(headers=headers,
+                               data=data)
             status = 0
             # Save token
             self.settings.set_value(section=SECTION_HOST,
                                     option=OPTION_TOKEN,
                                     value=result[ENCRYPTED_FIELD])
-        return status, result
+        return status, results
 
     def load(self):
         """

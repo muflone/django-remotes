@@ -52,11 +52,11 @@ class RsaKey(object):
         encryption = (serialization.BestAvailableEncryption(password=password)
                       if password is not None
                       else serialization.NoEncryption())
-        result = self._private_key.private_bytes(
+        results = self._private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=encryption)
-        return result
+        return results
 
     def get_private_key_content(self, password: str = None) -> str:
         """
@@ -71,10 +71,10 @@ class RsaKey(object):
         Get the public key content in bytes
         :return: public key content
         """
-        result = self._public_key.public_bytes(
+        results = self._public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo)
-        return result
+        return results
 
     def get_public_key_content(self) -> str:
         """
@@ -156,8 +156,8 @@ class RsaKey(object):
             padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
                                  algorithm=hashes.SHA256(),
                                  label=None))
-        result = encrypted if not use_base64 else base64.b64encode(encrypted)
-        return result.decode('utf-8')
+        results = encrypted if not use_base64 else base64.b64encode(encrypted)
+        return results.decode('utf-8')
 
     def decrypt(self, text: str, use_base64: bool) -> str:
         """
@@ -166,12 +166,12 @@ class RsaKey(object):
         :param use_base64: encrypted text is in base64
         :return: resulting plain text
         """
-        result = self._private_key.decrypt(
+        results = self._private_key.decrypt(
             ciphertext=text if not use_base64 else base64.b64decode(text),
             padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
                                  algorithm=hashes.SHA256(),
                                  label=None))
-        return result.decode('utf-8')
+        return results.decode('utf-8')
 
     def sign(self, text: str, use_base64: bool) -> str:
         """
@@ -184,8 +184,8 @@ class RsaKey(object):
             padding=padding.PSS(mgf=padding.MGF1(hashes.SHA256()),
                                 salt_length=padding.PSS.MAX_LENGTH),
             algorithm=hashes.SHA256())
-        result = encrypted if not use_base64 else base64.b64encode(encrypted)
-        return result.decode('utf-8')
+        results = encrypted if not use_base64 else base64.b64encode(encrypted)
+        return results.decode('utf-8')
 
     def verify(self, data: str, text: str, use_base64: bool) -> bool:
         """
@@ -203,7 +203,7 @@ class RsaKey(object):
                 padding=padding.PSS(mgf=padding.MGF1(hashes.SHA256()),
                                     salt_length=padding.PSS.MAX_LENGTH),
                 algorithm=hashes.SHA256())
-            result = True
+            results = True
         except InvalidSignature:
-            result = False
-        return result
+            results = False
+        return results

@@ -61,12 +61,12 @@ class Settings(object):
         :param value: value
         :return: value
         """
-        result = None
+        results = None
         if section in self.settings.sections():
-            result = self.settings.get(section=section,
-                                       option=option,
-                                       fallback=None)
-        return result
+            results = self.settings.get(section=section,
+                                        option=option,
+                                        fallback=None)
+        return results
 
     def set_value(self, section: str, option: str, value: str):
         """
@@ -88,8 +88,8 @@ class Settings(object):
         :param url: additional URL
         :return: full URL
         """
-        result = urllib.parse.urljoin(
+        results = urllib.parse.urljoin(
             base=self.get_value(section=SECTION_SERVER,
                                 option=SERVER_URL),
             url=url)
-        return result
+        return results
