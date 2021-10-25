@@ -33,6 +33,9 @@ urlpatterns = [
     path(route='discover/',
          view=DiscoverView.as_view(),
          name='api.v1.discover'),
+    path(route='commands/get/',
+         view=CommandGetView.as_view(),
+         name='api.v1.command.get.generic'),
     path(route='commands/get/'
                '<int:pk>/',
          view=CommandGetView.as_view(),

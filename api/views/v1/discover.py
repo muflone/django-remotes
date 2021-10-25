@@ -25,7 +25,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from remotes.client.actions import ACTION_HOST_REGISTER, ACTION_HOST_VERIFY
+from remotes.client.actions import (ACTION_COMMAND_GET,
+                                    ACTION_HOST_REGISTER,
+                                    ACTION_HOST_VERIFY)
 from remotes.constants import ENDPOINTS_FIELD, STATUS_FIELD, STATUS_OK
 
 
@@ -36,6 +38,7 @@ class DiscoverView(APIView):
         return Response(
             data={STATUS_FIELD: STATUS_OK,
                   ENDPOINTS_FIELD: {
+                    ACTION_COMMAND_GET: reverse('api.v1.command.get.generic'),
                     ACTION_HOST_REGISTER: reverse('api.v1.host.register'),
                     ACTION_HOST_VERIFY: reverse('api.v1.host.verify'),
                   }},
