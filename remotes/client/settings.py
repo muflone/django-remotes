@@ -82,14 +82,17 @@ class Settings(object):
                           option=option,
                           value=value)
 
-    def build_url(self, url: str) -> str:
+    def build_url(self, url: str, extra: str = None) -> str:
         """
         Build URL using the server_url and the url
         :param url: additional URL
+        :param extra: additional URL path
         :return: full URL
         """
         results = urllib.parse.urljoin(
             base=self.get_value(section=SECTION_SERVER,
                                 option=SERVER_URL),
             url=url)
-        return results
+        return (results
+                if not extra
+                else f'{results}{extra}')

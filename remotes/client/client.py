@@ -217,7 +217,7 @@ class Client(object):
         if self.options.settings:
             self.settings.save(self.options.settings)
 
-    def build_url(self, section: str, option: str) -> str:
+    def build_url(self, section: str, option: str, extra: str = None) -> str:
         """
         Build URL from settings option
         :param section: settings section
@@ -226,7 +226,8 @@ class Client(object):
         """
         return self.settings.build_url(
                 url=self.settings.get_value(section=section,
-                                            option=option))
+                                            option=option),
+                extra=extra)
 
     def load_uuid(self) -> str:
         """
