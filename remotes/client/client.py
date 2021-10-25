@@ -19,13 +19,17 @@
 ##
 
 import argparse
+import os
+import subprocess
 import sys
+import tempfile
 
 from encryption.rsa_key import RsaKey
 
 from project import PRODUCT_NAME, VERSION
 
-from remotes.client.actions import (ACTION_DISCOVER,
+from remotes.client.actions import (ACTION_COMMAND_GET,
+                                    ACTION_DISCOVER,
                                     ACTION_GENERATE_KEYS,
                                     ACTION_STATUS,
                                     ACTION_HOST_REGISTER,
@@ -94,6 +98,12 @@ class Client(object):
                            type=str,
                            required=False,
                            help='authentication token')
+        # Command arguments
+        group = parser.add_argument_group('Command')
+        group.add_argument('--command',
+                           type=int,
+                           required=False,
+                           help='command ID')
         # Process options
         options = parser.parse_args()
         self.options = options
@@ -112,6 +122,9 @@ class Client(object):
         elif options.action == ACTION_HOST_VERIFY:
             if not options.token:
                 parser.error('missing token argument')
+        elif options.action == ACTION_COMMAND_GET:
+            if not options.command:
+                parser.error('missing command argument')
 
     def process(self):
         status = -1
@@ -191,7 +204,47 @@ class Client(object):
             # Save token
             self.settings.set_value(section=SECTION_HOST,
                                     option=OPTION_TOKEN,
-                                    value=result[ENCRYPTED_FIELD])
+                                    value=results[ENCRYPTED_FIELD])
+        elif self.options.action == ACTION_COMMAND_GET:
+            # Execute command
+            api.url = self.build_url(section=SECTION_ENDPOINTS,
+                                     option=ACTION_COMMAND_GET,
+                                     extra=f'{self.options.command}/')
+            results = api.get(headers=headers)
+            # Check if there's a valid command in the command
+            if 'id' in results and results['id'] == self.options.command:
+                # Create a new temporary file with the decrypted command
+                _, temp_file_source = tempfile.mkstemp(
+                    prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
+                    text=True)
+                with open(temp_file_source, 'w') as file:
+                    file.write('__RESULT__ = ""'
+                               '\n'
+                               '\n')
+                    file.write(self.key.decrypt(text=results['command'],
+                                                use_base64=True))
+                    # Write __RESULT__ variable in stderr
+                    file.write('\n'
+                               '\n'
+                               'import sys\n'
+                               'sys.stderr.write(__RESULT__)\n')
+                # Execute the source code in a Python process
+                process = subprocess.Popen(args=['python', temp_file_source],
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+                stdout, stderr = process.communicate(timeout=15)
+                print(f'{stdout=}')
+                print(f'{stderr=}')
+                # Remove the temporary file
+                try:
+                    os.remove(path=temp_file_source)
+                except FileNotFoundError:
+                    # File was already removed
+                    pass
+                status = 0
+            else:
+                # Invalid command
+                status = 1
         return status, results
 
     def load(self):
