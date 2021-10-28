@@ -29,6 +29,7 @@ from encryption.rsa_key import RsaKey
 from project import PRODUCT_NAME, VERSION
 
 from remotes.client.actions import (ACTION_COMMAND_GET,
+                                    ACTION_COMMANDS_LIST,
                                     ACTION_DISCOVER,
                                     ACTION_GENERATE_KEYS,
                                     ACTION_STATUS,
@@ -205,6 +206,12 @@ class Client(object):
             self.settings.set_value(section=SECTION_HOST,
                                     option=OPTION_TOKEN,
                                     value=results[ENCRYPTED_FIELD])
+        elif self.options.action == ACTION_COMMANDS_LIST:
+            # List commands
+            api.url = self.build_url(section=SECTION_ENDPOINTS,
+                                     option=ACTION_COMMANDS_LIST)
+            results = api.get(headers=headers)
+            status = 0
         elif self.options.action == ACTION_COMMAND_GET:
             # Execute command
             api.url = self.build_url(section=SECTION_ENDPOINTS,
