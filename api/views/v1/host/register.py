@@ -60,8 +60,7 @@ class HostRegisterView(APIView):
         # Create a new Host
         new_uuid = uuid.uuid4()
         # Register a new host
-        Host.objects.create(name=new_uuid,
-                            uuid=new_uuid,
+        Host.objects.create(uuid=new_uuid,
                             pubkey=key.get_public_key_content(),
                             user=None,
                             is_active=False)

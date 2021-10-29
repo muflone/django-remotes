@@ -34,11 +34,6 @@ class Host(BaseModel):
     """
     Host
     """
-    name = models.CharField(max_length=255,
-                            unique=True,
-                            verbose_name=pgettext_lazy(
-                                'Host',
-                                'name'))
     uuid = models.UUIDField(unique=True,
                             verbose_name=pgettext_lazy(
                                 'Host',
@@ -72,14 +67,14 @@ class Host(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['-is_active', 'name']
+        ordering = ['-is_active', 'user', 'uuid']
         verbose_name = pgettext_lazy('Host',
                                      'Host')
         verbose_name_plural = pgettext_lazy('Host',
                                             'Hosts')
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.uuid}'
 
     def encrypt_data(self, data: dict, fields: list) -> None:
         """
@@ -103,4 +98,4 @@ class Host(BaseModel):
 
 
 class HostAdmin(BaseModelAdmin):
-    list_display = ('name', 'uuid', 'is_active')
+    list_display = ('uuid', 'user', 'is_active')
