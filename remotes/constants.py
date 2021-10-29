@@ -41,3 +41,6 @@ RESULTS_FIELD = 'results'
 ID_FIELD = 'id'
 GROUP_FIELD = 'group'
 COMMAND_FIELD = 'command'
+
+METHOD_GET = 'get'
+METHOD_POST = 'post'

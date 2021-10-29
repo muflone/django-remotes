@@ -47,6 +47,8 @@ from remotes.client.settings import (Settings,
 from remotes.constants import (ENCRYPTED_FIELD,
                                ENDPOINTS_FIELD,
                                MESSAGE_FIELD,
+                               METHOD_GET,
+                               METHOD_POST,
                                PUBLIC_KEY_FIELD,
                                SERVER_URL,
                                STATUS_FIELD,
@@ -128,130 +130,226 @@ class Client(object):
                 parser.error('missing command argument')
 
     def process(self):
-        status = -1
-        results = None
-        api = Api(url=self.options.url)
-        headers = {}
-        # Save token authorization if passed in the arguments
-        if self.options.token:
-            headers['Authorization'] = f'Token {self.options.token}'
         if self.options.action == ACTION_STATUS:
             # Get status
-            results = api.get(headers=headers)
-            status = 0
-            # Update settings
-            self.settings.set_value(section=SECTION_SERVER,
-                                    option=SERVER_URL,
-                                    value=results[SERVER_URL])
-            self.settings.set_value(section=SECTION_ENDPOINTS,
-                                    option=ACTION_DISCOVER,
-                                    value=results[ACTION_DISCOVER])
+            status, results = self.do_get_status(url=self.options.url)
         elif self.options.action == ACTION_DISCOVER:
             # Discover services URLS
-            api.url = self.build_url(section=SECTION_ENDPOINTS,
-                                     option=ACTION_DISCOVER)
-            results = api.get(headers=headers)
-            status = 0
-            # Update settings
-            for endpoint in results[ENDPOINTS_FIELD]:
-                self.settings.set_value(
-                    section=SECTION_ENDPOINTS,
-                    option=endpoint,
-                    value=results[ENDPOINTS_FIELD][endpoint])
+            status, results = self.do_discover()
         elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
-            key = RsaKey()
-            key.create_new_key(size=4096)
-            key.save_private_key(filename=self.options.private_key)
-            key.save_public_key(filename=self.options.public_key)
+            status, results = self.do_generate_keys(
+                private_key_filename=self.options.private_key,
+                public_key_filename=self.options.public_key)
+        elif self.options.action == ACTION_HOST_REGISTER:
+            # Host registration
+            status, results = self.do_host_register(
+                token=self.options.token)
+        elif self.options.action == ACTION_HOST_VERIFY:
+            # Host verification
+            status, results = self.do_host_verify(
+                token=self.options.token)
+        elif self.options.action == ACTION_COMMANDS_LIST:
+            # List commands
+            status, results = self.do_list_commands()
+        elif self.options.action == ACTION_COMMAND_GET:
+            # Execute command
+            status, results = self.do_get_command(
+                command_id=self.options.command)
+        else:
+            # Unexpected action
+            status = -1
+            results = None
+        return status, results
+
+    def do_api_request(self,
+                       method: str,
+                       url: str,
+                       headers: dict = None,
+                       data: dict = None) -> dict:
+        """
+        Execute an API request for the selected URL
+        :param method: REST method to execute
+        :param url: URL to process
+        :param data: dictionary with data to pass
+        :return: resulting data response
+        """
+        if headers is None:
+            headers = {}
+        api = Api(url=url)
+        if method == METHOD_GET:
+            results = api.get(headers=headers)
+        elif method == METHOD_POST:
+            results = api.post(headers=headers,
+                               data=data)
+        return results
+
+    def do_get_status(self, url: str) -> tuple[int, dict]:
+        """
+        Get status
+        :param url: URL to request
+        :return: tuple with the status and the resulting data
+        """
+        results = self.do_api_request(method=METHOD_GET,
+                                      url=url)
+        # Update settings
+        self.settings.set_value(section=SECTION_SERVER,
+                                option=SERVER_URL,
+                                value=results[SERVER_URL])
+        self.settings.set_value(section=SECTION_ENDPOINTS,
+                                option=ACTION_DISCOVER,
+                                value=results[ACTION_DISCOVER])
+        return 0, results
+
+    def do_discover(self) -> tuple[int, dict]:
+        """
+        Discover services URLS
+        :return: tuple with the status and the resulting data
+        """
+        url = self.build_url(section=SECTION_ENDPOINTS,
+                             option=ACTION_DISCOVER)
+        results = self.do_api_request(method=METHOD_GET,
+                                      url=url,
+                                      data=None)
+        # Update settings
+        for endpoint in results[ENDPOINTS_FIELD]:
+            self.settings.set_value(
+                section=SECTION_ENDPOINTS,
+                option=endpoint,
+                value=results[ENDPOINTS_FIELD][endpoint])
+        return 0, results
+
+    def do_generate_keys(self,
+                         private_key_filename: str,
+                         public_key_filename: str) -> tuple[int, dict]:
+        """
+        Generate private and public keys and save them in two files
+        :param private_key_filename: filename where to save the private key
+        :param public_key_filename: filename where to save the public key
+        :return: tuple with the status and the resulting data
+        """
+        key = RsaKey()
+        key.create_new_key(size=4096)
+        key.save_private_key(filename=private_key_filename)
+        key.save_public_key(filename=public_key_filename)
+        # Update settings
+        self.settings.set_value(section=SECTION_HOST,
+                                option=OPTION_PRIVATE_KEY,
+                                value=private_key_filename)
+        self.settings.set_value(section=SECTION_HOST,
+                                option=OPTION_PUBLIC_KEY,
+                                value=public_key_filename)
+        return 0, None
+
+    def do_host_register(self, token: str) -> tuple[int, dict]:
+        """
+        Discover services URLS
+        :param token: authorization token
+        :return: tuple with the status and the resulting data
+        """
+        if not self.load_uuid():
+            # Host registration
+            url = self.build_url(section=SECTION_ENDPOINTS,
+                                 option=ACTION_HOST_REGISTER)
+            headers = {'Authorization': f'Token {token}'}
+            data = {PUBLIC_KEY_FIELD: self.key.get_public_key_content()}
+            results = self.do_api_request(method=METHOD_POST,
+                                          url=url,
+                                          headers=headers,
+                                          data=data)
             status = 0
             # Update settings
             self.settings.set_value(section=SECTION_HOST,
-                                    option=OPTION_PRIVATE_KEY,
-                                    value=self.options.private_key)
-            self.settings.set_value(section=SECTION_HOST,
-                                    option=OPTION_PUBLIC_KEY,
-                                    value=self.options.public_key)
-        elif self.options.action == ACTION_HOST_REGISTER:
-            if not self.load_uuid():
-                # Host registration
-                api.url = self.build_url(section=SECTION_ENDPOINTS,
-                                         option=ACTION_HOST_REGISTER)
-                data = {PUBLIC_KEY_FIELD: self.key.get_public_key_content()}
-                results = api.post(headers=headers,
-                                   data=data)
-                status = 0
-                # Update settings
-                self.settings.set_value(section=SECTION_HOST,
-                                        option=UUID_FIELD,
-                                        value=results[ENCRYPTED_FIELD])
-            else:
-                # Host already registered
-                results = {STATUS_FIELD: STATUS_ERROR,
-                           MESSAGE_FIELD: 'Host UUID already set'}
-                status = 1
-        elif self.options.action == ACTION_HOST_VERIFY:
-            # Load private key and encrypt UUID
-            message_encrypted = self.key.sign(text=STATUS_OK,
-                                              use_base64=True)
-            # Host verification
-            api.url = self.build_url(section=SECTION_ENDPOINTS,
-                                     option=ACTION_HOST_VERIFY)
-            data = {UUID_FIELD: self.load_uuid(),
-                    ENCRYPTED_FIELD: message_encrypted}
-            results = api.post(headers=headers,
-                               data=data)
-            status = 0
-            # Save token
-            self.settings.set_value(section=SECTION_HOST,
-                                    option=OPTION_TOKEN,
+                                    option=UUID_FIELD,
                                     value=results[ENCRYPTED_FIELD])
-        elif self.options.action == ACTION_COMMANDS_LIST:
-            # List commands
-            api.url = self.build_url(section=SECTION_ENDPOINTS,
-                                     option=ACTION_COMMANDS_LIST)
-            results = api.get(headers=headers)
+        else:
+            # Host already registered
+            results = {STATUS_FIELD: STATUS_ERROR,
+                       MESSAGE_FIELD: 'Host UUID already set'}
+            status = 1
+        return status, results
+
+    def do_host_verify(self, token: str) -> tuple[int, dict]:
+        """
+        Host verification
+        :param token: authorization token
+        :return: tuple with the status and the resulting data
+        """
+        message_encrypted = self.key.sign(text=STATUS_OK,
+                                          use_base64=True)
+        url = self.build_url(section=SECTION_ENDPOINTS,
+                             option=ACTION_HOST_VERIFY)
+        headers = {'Authorization': f'Token {token}'}
+        data = {UUID_FIELD: self.load_uuid(),
+                ENCRYPTED_FIELD: message_encrypted}
+        results = self.do_api_request(method=METHOD_POST,
+                                      url=url,
+                                      headers=headers,
+                                      data=data)
+        # Save token
+        self.settings.set_value(section=SECTION_HOST,
+                                option=OPTION_TOKEN,
+                                value=results[ENCRYPTED_FIELD])
+        return 0, results
+
+    def do_list_commands(self) -> tuple[int, dict]:
+        """
+        List commands
+        :return: tuple with the status and the resulting data
+        """
+        url = self.build_url(section=SECTION_ENDPOINTS,
+                             option=ACTION_COMMANDS_LIST)
+        results = self.do_api_request(method=METHOD_GET,
+                                      url=url,
+                                      data=None)
+        return 0, results
+
+    def do_get_command(self, command_id: int) -> tuple[int, dict]:
+        """
+        Execute command
+        :param command_id: command ID to execute
+        :return: tuple with the status and the resulting data
+        """
+        url = self.build_url(section=SECTION_ENDPOINTS,
+                             option=ACTION_COMMAND_GET,
+                             extra=f'{command_id}/')
+        results = self.do_api_request(method=METHOD_GET,
+                                      url=url,
+                                      data=None)
+        # Check if there's a valid command in the command
+        if 'id' in results and results['id'] == command_id:
+            # Create a new temporary file with the decrypted command
+            _, temp_file_source = tempfile.mkstemp(
+                prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
+                text=True)
+            with open(temp_file_source, 'w') as file:
+                file.write('__RESULT__ = ""'
+                           '\n'
+                           '\n')
+                file.write(self.key.decrypt(text=results['command'],
+                                            use_base64=True))
+                # Write __RESULT__ variable in stderr
+                file.write('\n'
+                           '\n'
+                           'import sys\n'
+                           'sys.stderr.write(__RESULT__)\n')
+            # Execute the source code in a Python process
+            process = subprocess.Popen(args=['python', temp_file_source],
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate(timeout=15)
+            print(f'{stdout=}')
+            print(f'{stderr=}')
+            # Remove the temporary file
+            try:
+                os.remove(path=temp_file_source)
+            except FileNotFoundError:
+                # File was already removed
+                pass
             status = 0
-        elif self.options.action == ACTION_COMMAND_GET:
-            # Execute command
-            api.url = self.build_url(section=SECTION_ENDPOINTS,
-                                     option=ACTION_COMMAND_GET,
-                                     extra=f'{self.options.command}/')
-            results = api.get(headers=headers)
-            # Check if there's a valid command in the command
-            if 'id' in results and results['id'] == self.options.command:
-                # Create a new temporary file with the decrypted command
-                _, temp_file_source = tempfile.mkstemp(
-                    prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
-                    text=True)
-                with open(temp_file_source, 'w') as file:
-                    file.write('__RESULT__ = ""'
-                               '\n'
-                               '\n')
-                    file.write(self.key.decrypt(text=results['command'],
-                                                use_base64=True))
-                    # Write __RESULT__ variable in stderr
-                    file.write('\n'
-                               '\n'
-                               'import sys\n'
-                               'sys.stderr.write(__RESULT__)\n')
-                # Execute the source code in a Python process
-                process = subprocess.Popen(args=['python', temp_file_source],
-                                           stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE)
-                stdout, stderr = process.communicate(timeout=15)
-                print(f'{stdout=}')
-                print(f'{stderr=}')
-                # Remove the temporary file
-                try:
-                    os.remove(path=temp_file_source)
-                except FileNotFoundError:
-                    # File was already removed
-                    pass
-                status = 0
-            else:
-                # Invalid command
-                status = 1
+        else:
+            # Invalid command
+            status = 1
         return status, results
 
     def load(self):
