@@ -247,7 +247,7 @@ class Client(object):
         :param token: authorization token
         :return: tuple with the status and the resulting data
         """
-        if not self.load_uuid():
+        if not self.decrypt_option(section=SECTION_HOST, option=UUID_FIELD):
             # Host registration
             url = self.build_url(section=SECTION_ENDPOINTS,
                                  option=ACTION_HOST_REGISTER)
@@ -280,7 +280,8 @@ class Client(object):
         url = self.build_url(section=SECTION_ENDPOINTS,
                              option=ACTION_HOST_VERIFY)
         headers = {'Authorization': f'Token {token}'}
-        data = {UUID_FIELD: self.load_uuid(),
+        data = {UUID_FIELD: self.decrypt_option(section=SECTION_HOST,
+                                                option=UUID_FIELD),
                 ENCRYPTED_FIELD: message_encrypted}
         results = self.do_api_request(method=METHOD_POST,
                                       url=url,
@@ -387,13 +388,15 @@ class Client(object):
                                             option=option),
                 extra=extra)
 
-    def load_uuid(self) -> str:
+    def decrypt_option(self, section: str, option: str) -> str:
         """
         Load UUID from settings
+        :param section: setting section
+        :param option: setting option
         :return: host UUID
         """
-        if encrypted_data := self.settings.get_value(section=SECTION_HOST,
-                                                     option=UUID_FIELD):
+        if encrypted_data := self.settings.get_value(section=section,
+                                                     option=option):
             results = self.key.decrypt(text=encrypted_data,
                                        use_base64=True)
         else:
