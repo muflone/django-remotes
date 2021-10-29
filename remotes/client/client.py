@@ -300,8 +300,12 @@ class Client(object):
         """
         url = self.build_url(section=SECTION_ENDPOINTS,
                              option=ACTION_COMMANDS_LIST)
+        token = self.decrypt_option(section=SECTION_HOST,
+                                    option=OPTION_TOKEN)
+        headers = {'Authorization': f'Token {token}'}
         results = self.do_api_request(method=METHOD_GET,
                                       url=url,
+                                      headers=headers,
                                       data=None)
         return 0, results
 
@@ -314,8 +318,12 @@ class Client(object):
         url = self.build_url(section=SECTION_ENDPOINTS,
                              option=ACTION_COMMAND_GET,
                              extra=f'{command_id}/')
+        token = self.decrypt_option(section=SECTION_HOST,
+                                    option=OPTION_TOKEN)
+        headers = {'Authorization': f'Token {token}'}
         results = self.do_api_request(method=METHOD_GET,
                                       url=url,
+                                      headers=headers,
                                       data=None)
         # Check if there's a valid command in the command
         if 'id' in results and results['id'] == command_id:
