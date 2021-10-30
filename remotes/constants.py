@@ -32,6 +32,7 @@ ENDPOINTS_FIELD = 'endpoints'
 PUBLIC_KEY_FIELD = 'public_key'
 UUID_FIELD = 'uuid'
 
+HOSTS_GROUP_AUTO_ADD = 'hosts_group_auto_add'
 USER_GROUP_REGISTER_HOSTS = 'user_register_hosts'
 
 PERMISSION_CAN_REGISTER_HOSTS = 'can_register_hosts'

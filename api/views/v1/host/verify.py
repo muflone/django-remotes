@@ -30,12 +30,15 @@ from api.permissions import CanUserRegisterHosts
 from encryption.rsa_key import RsaKey
 
 from remotes.constants import (ENCRYPTED_FIELD,
+                               HOSTS_GROUP_AUTO_ADD,
                                MESSAGE_FIELD,
                                STATUS_FIELD,
                                STATUS_ERROR,
                                STATUS_OK,
                                UUID_FIELD)
-from remotes.models import Host
+from remotes.models import Host, HostsGroup
+
+from utility.misc.get_setting_value import get_setting_value
 
 
 class HostVerifyView(APIView):
@@ -82,6 +85,11 @@ class HostVerifyView(APIView):
             host.save()
             # Create new token for the user
             new_token = Token.objects.create(user=new_user)
+            # Automatically add host to the hosts group
+            if group_auto_add := get_setting_value(name=HOSTS_GROUP_AUTO_ADD):
+                if hosts_group := HostsGroup.objects.filter(
+                        name=group_auto_add).first():
+                    hosts_group.hosts.add(host)
             return Response(data={STATUS_FIELD: STATUS_OK,
                                   ENCRYPTED_FIELD: key.encrypt(
                                       text=new_token.key,
