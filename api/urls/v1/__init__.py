@@ -40,6 +40,9 @@ urlpatterns = [
                '<int:pk>/',
          view=CommandGetView.as_view(),
          name='api.v1.command.get'),
+    path(route='commands/post/',
+         view=CommandPostView.as_view(),
+         name='api.v1.command.post.generic'),
     path(route='commands/post/'
                '<int:pk>/',
          view=CommandPostView.as_view(),

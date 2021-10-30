@@ -39,6 +39,7 @@ class DiscoverView(APIView):
     def get(self, request):
         endpoints = {
             ACTION_COMMAND_GET: reverse('api.v1.command.get.generic'),
+            ACTION_COMMAND_POST: reverse('api.v1.command.post.generic'),
             ACTION_COMMANDS_LIST: reverse('api.v1.commands.list'),
             ACTION_HOST_REGISTER: reverse('api.v1.host.register'),
             ACTION_HOST_VERIFY: reverse('api.v1.host.verify')

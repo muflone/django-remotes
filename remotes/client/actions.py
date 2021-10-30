@@ -25,8 +25,10 @@ ACTION_HOST_REGISTER = 'host_register'
 ACTION_HOST_VERIFY = 'host_verify'
 ACTION_COMMANDS_LIST = 'commands_list'
 ACTION_COMMAND_GET = 'command_get'
+ACTION_COMMAND_POST = 'command_post'
 
 ACTIONS = (ACTION_COMMAND_GET,
+           ACTION_COMMAND_POST,
            ACTION_COMMANDS_LIST,
            ACTION_DISCOVER,
            ACTION_GENERATE_KEYS,

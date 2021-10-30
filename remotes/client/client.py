@@ -23,12 +23,15 @@ import os
 import subprocess
 import sys
 import tempfile
+import uuid
 
+from encryption.fernet_encrypt import FernetEncrypt
 from encryption.rsa_key import RsaKey
 
 from project import PRODUCT_NAME, VERSION
 
 from remotes.client.actions import (ACTION_COMMAND_GET,
+                                    ACTION_COMMAND_POST,
                                     ACTION_COMMANDS_LIST,
                                     ACTION_DISCOVER,
                                     ACTION_GENERATE_KEYS,
@@ -62,6 +65,7 @@ class Client(object):
         self.options = None
         self.settings = None
         self.key = None
+        self.encryptor = None
 
     def get_command_line(self) -> None:
         """
@@ -362,16 +366,36 @@ class Client(object):
             process = subprocess.Popen(args=['python', temp_file_source],
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate(timeout=15)
-            print(f'{stdout=}')
-            print(f'{stderr=}')
+            try:
+                stdout, stderr = [stream.decode('utf-8')
+                                  for stream
+                                  in process.communicate(timeout=15)]
+                status = process.returncode
+            except subprocess.TimeoutExpired:
+                status = -1
+                stdout = None
+                stderr = None
             # Remove the temporary file
             try:
                 os.remove(path=temp_file_source)
             except FileNotFoundError:
                 # File was already removed
                 pass
-            status = 0
+            # Transmit command results
+            if stdout is not None:
+                url = self.build_url(section=SECTION_ENDPOINTS,
+                                     option=ACTION_COMMAND_POST,
+                                     extra=f'{command_id}/')
+                data = {'output': self.encryptor.encrypt(text=stdout),
+                        'result': self.encryptor.encrypt(text=stderr)}
+                post_results = self.do_api_request(method=METHOD_POST,
+                                                   url=url,
+                                                   headers=headers,
+                                                   data=data)
+                # Save results
+                results['stdout'] = stdout
+                results['stderr'] = stderr
+                results['output'] = post_results
         else:
             # Invalid command
             status = 1
@@ -391,6 +415,11 @@ class Client(object):
             self.key = RsaKey()
             self.key.load_private_key_from_file(filename=priv_key_path)
             self.key.load_public_key_from_private_key()
+        # Initialize encryptor
+        self.encryptor = FernetEncrypt()
+        self.encryptor.load_key_from_uuid(
+            guid=uuid.UUID(hex=self.decrypt_option(section=SECTION_HOST,
+                                                   option=UUID_FIELD)))
 
     def save(self) -> None:
         """
