@@ -264,7 +264,13 @@ class Client(object):
         :param token: authorization token
         :return: tuple with the status and the resulting data
         """
-        if not self.decrypt_option(section=SECTION_HOST, option=UUID_FIELD):
+        try:
+            uuid_field = self.decrypt_option(section=SECTION_HOST,
+                                             option=UUID_FIELD)
+        except ValueError:
+            # UUID was encrypted with an invalid key
+            uuid_field = None
+        if not uuid_field:
             # Host registration
             url = self.build_url(section=SECTION_ENDPOINTS,
                                  option=ACTION_HOST_REGISTER)
