@@ -347,6 +347,7 @@ class Client(object):
                                       data=None)
         # Check if there's a valid command in the command
         if 'id' in results and results['id'] == command_id:
+            timeout = results['timeout']
             # Create a new temporary file with the decrypted command
             _, temp_file_source = tempfile.mkstemp(
                 prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
@@ -369,12 +370,14 @@ class Client(object):
             try:
                 stdout, stderr = [stream.decode('utf-8')
                                   for stream
-                                  in process.communicate(timeout=15)]
+                                  in process.communicate(timeout=timeout)]
                 status = process.returncode
             except subprocess.TimeoutExpired:
                 status = -1
                 stdout = None
                 stderr = None
+                results['output'] = {STATUS_FIELD: STATUS_ERROR,
+                                     MESSAGE_FIELD: 'timeout'}
             # Remove the temporary file
             try:
                 os.remove(path=temp_file_source)

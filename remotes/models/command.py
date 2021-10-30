@@ -43,6 +43,10 @@ class Command(BaseModel):
                                verbose_name=pgettext_lazy(
                                    'Command',
                                    'command'))
+    timeout = models.PositiveIntegerField(default=15,
+                                          verbose_name=pgettext_lazy(
+                                              'Command',
+                                              'timeout'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=pgettext_lazy(
                                         'Command',

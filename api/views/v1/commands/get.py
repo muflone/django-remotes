@@ -31,13 +31,17 @@ class CommandGetSerializer(ModelSerializer):
     Serializer for CommandGetView
     """
     command = SerializerMethodField('get_command')
+    timeout = SerializerMethodField('get_timeout')
 
     class Meta:
         model = CommandsGroupItem
-        fields = ['id', 'name', 'command']
+        fields = ['id', 'name', 'command', 'timeout']
 
     def get_command(self, instance):
         return instance.command.command
+
+    def get_timeout(self, instance):
+        return instance.command.timeout
 
 
 class CommandGetView(RetrieveAPIEncryptedView):
