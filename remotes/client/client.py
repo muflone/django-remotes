@@ -63,7 +63,11 @@ class Client(object):
         self.settings = None
         self.key = None
 
-    def get_command_line(self):
+    def get_command_line(self) -> None:
+        """
+        Parse command line arguments
+        :return: None
+        """
         parser = argparse.ArgumentParser(prog=f'{PRODUCT_NAME}')
         # Action argument
         parser.add_argument('--action',
@@ -129,7 +133,7 @@ class Client(object):
             if not options.command:
                 parser.error('missing command argument')
 
-    def process(self):
+    def process(self) -> tuple[int, dict]:
         """
         Process the command line action
         :return: tuple containing status code and dictionary with results
@@ -180,6 +184,7 @@ class Client(object):
         Execute an API request for the selected URL
         :param method: REST method to execute
         :param url: URL to process
+        :param headers: dictionary with headers to pass
         :param data: dictionary with data to pass
         :return: resulting data response
         """
@@ -191,6 +196,8 @@ class Client(object):
         elif method == METHOD_POST:
             results = api.post(headers=headers,
                                data=data)
+        else:
+            results = None
         return results
 
     def do_get_status(self, url: str) -> tuple[int, dict]:
@@ -230,7 +237,7 @@ class Client(object):
 
     def do_generate_keys(self,
                          private_key_filename: str,
-                         public_key_filename: str) -> tuple[int, dict]:
+                         public_key_filename: str) -> tuple[int, None]:
         """
         Generate private and public keys and save them in two files
         :param private_key_filename: filename where to save the private key
@@ -370,7 +377,7 @@ class Client(object):
             status = 1
         return status, results
 
-    def load(self):
+    def load(self) -> None:
         """
         Load settings
         :return: None
@@ -385,7 +392,7 @@ class Client(object):
             self.key.load_private_key_from_file(filename=priv_key_path)
             self.key.load_public_key_from_private_key()
 
-    def save(self):
+    def save(self) -> None:
         """
         Save settings
         :return: None
@@ -398,6 +405,7 @@ class Client(object):
         Build URL from settings option
         :param section: settings section
         :param option: settings option
+        :param extra: extra arguments for URL
         :return: resulting URL
         """
         return self.settings.build_url(
@@ -428,11 +436,11 @@ if __name__ == '__main__':
     # Load settings
     client.load()
     # Process the arguments
-    status, results = client.process()
-    if results is not None:
+    process_status, process_results = client.process()
+    if process_results is not None:
         # Show the results
-        print(results)
+        print(process_results)
     # Save settings
     client.save()
     # Set exit code accordingly to the executed action
-    sys.exit(status)
+    sys.exit(process_status)
