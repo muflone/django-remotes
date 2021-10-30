@@ -411,16 +411,22 @@ class Client(object):
         # Load private and public keys if available
         if priv_key_path := self.settings.get_value(section=SECTION_HOST,
                                                     option=OPTION_PRIVATE_KEY):
-            self.key = RsaKey()
-            self.key.load_private_key_from_file(filename=priv_key_path)
-            self.key.load_public_key_from_private_key()
-        if self.settings.get_value(section=SECTION_HOST,
-                                   option=UUID_FIELD):
+            try:
+                self.key = RsaKey()
+                self.key.load_private_key_from_file(filename=priv_key_path)
+                self.key.load_public_key_from_private_key()
+            except FileNotFoundError:
+                self.key = None
+        if self.key and self.settings.get_value(section=SECTION_HOST,
+                                                option=UUID_FIELD):
             # Initialize encryptor
-            self.encryptor = FernetEncrypt()
-            self.encryptor.load_key_from_uuid(
-                guid=uuid.UUID(hex=self.decrypt_option(section=SECTION_HOST,
-                                                       option=UUID_FIELD)))
+            try:
+                self.encryptor = FernetEncrypt()
+                self.encryptor.load_key_from_uuid(
+                    guid=uuid.UUID(hex=self.decrypt_option(section=SECTION_HOST,
+                                                           option=UUID_FIELD)))
+            except ValueError:
+                self.encryptor = None
 
     def save(self) -> None:
         """
