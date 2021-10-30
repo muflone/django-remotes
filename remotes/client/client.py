@@ -37,6 +37,7 @@ from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_GENERATE_KEYS,
                                     ACTION_HOST_REGISTER,
                                     ACTION_HOST_VERIFY,
+                                    ACTION_NEW_HOST,
                                     ACTION_STATUS,
                                     ACTIONS)
 from remotes.client.api import Api
@@ -133,6 +134,15 @@ class Client(object):
         elif options.action == ACTION_HOST_VERIFY:
             if not options.token:
                 parser.error('missing token argument')
+        elif options.action == ACTION_NEW_HOST:
+            if not options.url:
+                parser.error('missing URL argument')
+            if not options.token:
+                parser.error('missing token argument')
+            if not options.private_key:
+                parser.error('missing private_key argument')
+            if not options.public_key:
+                parser.error('missing public_key argument')
         elif options.action == ACTION_COMMAND_GET:
             if not options.command:
                 parser.error('missing command argument')
@@ -159,6 +169,20 @@ class Client(object):
             status, results = self.do_host_register(
                 token=self.options.token)
         elif self.options.action == ACTION_HOST_VERIFY:
+            # Host verification
+            status, results = self.do_host_verify(
+                token=self.options.token)
+        elif self.options.action == ACTION_NEW_HOST:
+            # Generate private and public keys and save them in two files
+            self.do_generate_keys(
+                private_key_filename=self.options.private_key,
+                public_key_filename=self.options.public_key)
+            # Get status
+            self.do_get_status(url=self.options.url)
+            # Discover services URLS
+            self.do_discover()
+            # Host registration
+            self.do_host_register(token=self.options.token)
             # Host verification
             status, results = self.do_host_verify(
                 token=self.options.token)

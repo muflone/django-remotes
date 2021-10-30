@@ -25,6 +25,7 @@ ACTION_DISCOVER = 'discover'
 ACTION_GENERATE_KEYS = 'generate_keys'
 ACTION_HOST_REGISTER = 'host_register'
 ACTION_HOST_VERIFY = 'host_verify'
+ACTION_NEW_HOST = 'new_host'
 ACTION_STATUS = 'status'
 
 ACTIONS = (ACTION_COMMAND_GET,
@@ -34,4 +35,5 @@ ACTIONS = (ACTION_COMMAND_GET,
            ACTION_GENERATE_KEYS,
            ACTION_HOST_REGISTER,
            ACTION_HOST_VERIFY,
+           ACTION_NEW_HOST,
            ACTION_STATUS)
