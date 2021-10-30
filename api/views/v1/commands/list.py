@@ -42,10 +42,10 @@ class CommandsListView(ListAPIView):
         results = []
         now = timezone.now()
         # Get all the already executed commands to exclude
-        excluded = CommandsOutput.objects.filter(host__user_id=request.user.id)
+        excluded = CommandsOutput.objects.filter(host__user_id=request.user.pk)
         # Get all the hosts group for the current user host
         hosts_group = Host.objects.filter(
-            user_id=request.user.id,
+            user_id=request.user.pk,
             is_active=True).first().hostsgroup_set.all()
         # Get all the commands group for the hosts groups
         groups = CommandsGroup.objects.filter(is_active=True,
@@ -58,9 +58,9 @@ class CommandsListView(ListAPIView):
                 id__in=excluded.values_list('group_item'))
             for command in items.order_by('order'):
                 # Get each command in the group
-                results.append({ID_FIELD: command.id,
-                                GROUP_FIELD: group.id,
-                                COMMAND_FIELD: command.id})
+                results.append({ID_FIELD: command.pk,
+                                GROUP_FIELD: group.pk,
+                                COMMAND_FIELD: command.pk})
         return Response(
             data={STATUS_FIELD: STATUS_OK,
                   RESULTS_FIELD: results},

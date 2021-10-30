@@ -77,7 +77,7 @@ class CommandPostView(APIView):
         # Find the CommandGroupItem and check if it's in the same host group
         command_group_item = CommandsGroupItem.objects.filter(
             pk=kwargs['pk'],
-            group__hosts__hosts=host.id).first()
+            group__hosts__hosts=host.pk).first()
         if command_group_item:
             serializer = CommandPostSerializer(data=request.data.copy())
             # Add ID to the data from the querystring

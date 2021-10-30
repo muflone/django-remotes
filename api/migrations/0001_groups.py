@@ -32,8 +32,8 @@ def insert_users(apps, schema_editor):
     # Add Group
     Group = apps.get_model('auth', 'Group')
     new_group = Group.objects.create(name=USER_GROUP_REGISTER_HOSTS)
-    new_group.user_set.add(new_user.id)
-    new_group.permissions.add(new_permission.id)
+    new_group.user_set.add(new_user.pk)
+    new_group.permissions.add(new_permission.pk)
     new_group.save()
 
 def delete_users(apps, schema_editor):

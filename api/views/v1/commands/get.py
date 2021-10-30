@@ -55,5 +55,5 @@ class CommandGetView(RetrieveAPIEncryptedView):
         host = Host.objects.get(user=self.request.user)
         # Find the commands group item
         queryset = self.model.objects.filter(pk=self.kwargs['pk'],
-                                             group__hosts__hosts=host.id)
+                                             group__hosts__hosts=host.pk)
         return queryset
