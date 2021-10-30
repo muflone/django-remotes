@@ -418,11 +418,13 @@ class Client(object):
             self.key = RsaKey()
             self.key.load_private_key_from_file(filename=priv_key_path)
             self.key.load_public_key_from_private_key()
-        # Initialize encryptor
-        self.encryptor = FernetEncrypt()
-        self.encryptor.load_key_from_uuid(
-            guid=uuid.UUID(hex=self.decrypt_option(section=SECTION_HOST,
-                                                   option=UUID_FIELD)))
+        if self.settings.get_value(section=SECTION_HOST,
+                                   option=UUID_FIELD):
+            # Initialize encryptor
+            self.encryptor = FernetEncrypt()
+            self.encryptor.load_key_from_uuid(
+                guid=uuid.UUID(hex=self.decrypt_option(section=SECTION_HOST,
+                                                       option=UUID_FIELD)))
 
     def save(self) -> None:
         """
