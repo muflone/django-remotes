@@ -42,6 +42,10 @@ class Variable(BaseModel):
                                  verbose_name=pgettext_lazy(
                                      'Variable',
                                      'value'))
+    timestamp = models.DateTimeField(auto_now=True,
+                                     verbose_name=pgettext_lazy(
+                                         'Variable',
+                                         'timestamp'))
 
     class Meta:
         # Define the database table
@@ -57,4 +61,5 @@ class Variable(BaseModel):
 
 
 class VariableAdmin(BaseModelAdmin):
-    list_display = ('host', 'name')
+    list_display = ('host', 'name', 'timestamp')
+    readonly_fields = ('timestamp',)
