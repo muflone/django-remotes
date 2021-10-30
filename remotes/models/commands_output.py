@@ -35,7 +35,7 @@ class CommandsOutput(BaseModel):
                                        'CommandsOutput',
                                        'group item'))
     host = models.ForeignKey(to='remotes.Host',
-                             on_delete=models.PROTECT,
+                             on_delete=models.CASCADE,
                              verbose_name=pgettext_lazy(
                                  'CommandsOutput',
                                  'host'))
