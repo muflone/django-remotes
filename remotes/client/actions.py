@@ -18,20 +18,20 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-ACTION_DISCOVER = 'discover'
-ACTION_GENERATE_KEYS = 'generate_keys'
-ACTION_STATUS = 'status'
-ACTION_HOST_REGISTER = 'host_register'
-ACTION_HOST_VERIFY = 'host_verify'
-ACTION_COMMANDS_LIST = 'commands_list'
 ACTION_COMMAND_GET = 'command_get'
 ACTION_COMMAND_POST = 'command_post'
+ACTION_COMMANDS_LIST = 'commands_list'
+ACTION_DISCOVER = 'discover'
+ACTION_GENERATE_KEYS = 'generate_keys'
+ACTION_HOST_REGISTER = 'host_register'
+ACTION_HOST_VERIFY = 'host_verify'
+ACTION_STATUS = 'status'
 
 ACTIONS = (ACTION_COMMAND_GET,
            ACTION_COMMAND_POST,
            ACTION_COMMANDS_LIST,
            ACTION_DISCOVER,
            ACTION_GENERATE_KEYS,
-           ACTION_STATUS,
            ACTION_HOST_REGISTER,
-           ACTION_HOST_VERIFY)
+           ACTION_HOST_VERIFY,
+           ACTION_STATUS)

@@ -35,9 +35,9 @@ from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_COMMANDS_LIST,
                                     ACTION_DISCOVER,
                                     ACTION_GENERATE_KEYS,
-                                    ACTION_STATUS,
                                     ACTION_HOST_REGISTER,
                                     ACTION_HOST_VERIFY,
+                                    ACTION_STATUS,
                                     ACTIONS)
 from remotes.client.api import Api
 from remotes.client.settings import (Settings,
