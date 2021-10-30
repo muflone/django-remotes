@@ -57,7 +57,7 @@ class Variable(BaseModel):
                                             'Variables')
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class VariableAdmin(BaseModelAdmin):
