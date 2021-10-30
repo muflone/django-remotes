@@ -248,6 +248,7 @@ class Client(object):
         key.create_new_key(size=4096)
         key.save_private_key(filename=private_key_filename)
         key.save_public_key(filename=public_key_filename)
+        self.key = key
         # Update settings
         self.settings.set_value(section=SECTION_HOST,
                                 option=OPTION_PRIVATE_KEY,
