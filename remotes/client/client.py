@@ -423,9 +423,9 @@ class Client(object):
             # Initialize encryptor
             try:
                 self.encryptor = FernetEncrypt()
-                self.encryptor.load_key_from_uuid(
-                    guid=uuid.UUID(hex=self.decrypt_option(section=SECTION_HOST,
-                                                           option=UUID_FIELD)))
+                self.encryptor.load_key_from_uuid(guid=uuid.UUID(
+                    hex=self.decrypt_option(section=SECTION_HOST,
+                                            option=UUID_FIELD)))
             except ValueError:
                 self.encryptor = None
 
