@@ -67,3 +67,4 @@ class HostsGroup(BaseModel):
 
 class HostsGroupAdmin(BaseModelAdmin):
     list_display = ('name', 'is_active')
+    list_filter = ('is_active', 'hosts')

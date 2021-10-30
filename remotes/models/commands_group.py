@@ -77,3 +77,4 @@ class CommandsGroup(BaseModel):
 
 class CommandsGroupAdmin(BaseModelAdmin):
     list_display = ('order', 'hosts', 'name', 'after', 'before', 'is_active')
+    list_filter = ('hosts', 'is_active')

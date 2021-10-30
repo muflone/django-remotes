@@ -68,3 +68,4 @@ class Setting(BaseModel):
 
 class SettingAdmin(BaseModelAdmin):
     list_display = ('name', 'is_active')
+    list_filter = ('is_active',)

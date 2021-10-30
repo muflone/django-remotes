@@ -75,3 +75,4 @@ class CommandsOutput(BaseModel):
 
 class CommandsOutputAdmin(BaseModelAdmin):
     list_display = ('timestamp', 'group_item', 'host')
+    list_filter = ('group_item', 'host')
