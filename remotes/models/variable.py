@@ -29,7 +29,7 @@ class Variable(BaseModel):
     Variable
     """
     host = models.ForeignKey(to='remotes.Host',
-                             on_delete=models.PROTECT,
+                             on_delete=models.CASCADE,
                              verbose_name=pgettext_lazy(
                                  'Variable',
                                  'host'))
