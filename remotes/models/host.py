@@ -74,7 +74,7 @@ class Host(BaseModel):
                                             'Hosts')
 
     def __str__(self):
-        return self.user.username if self.user else self.uuid
+        return self.user.username if self.user else str(self.uuid)
 
     def encrypt_data(self, data: dict, fields: list) -> None:
         """
