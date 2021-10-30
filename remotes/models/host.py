@@ -99,3 +99,4 @@ class Host(BaseModel):
 
 class HostAdmin(BaseModelAdmin):
     list_display = ('__str__', 'uuid', 'user', 'is_active')
+    readonly_fields = ('uuid',)
