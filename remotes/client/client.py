@@ -130,32 +130,41 @@ class Client(object):
                 parser.error('missing command argument')
 
     def process(self):
-        if self.options.action == ACTION_STATUS:
+        """
+        Process the command line action
+        :return: tuple containing status code and dictionary with results
+        """
+        # actions map with (method, {kwargs for method})
+        actions = {
             # Get status
-            status, results = self.do_get_status(url=self.options.url)
-        elif self.options.action == ACTION_DISCOVER:
+            ACTION_STATUS: (self.do_get_status,
+                            {'url': self.options.url}),
             # Discover services URLS
-            status, results = self.do_discover()
-        elif self.options.action == ACTION_GENERATE_KEYS:
+            ACTION_DISCOVER: (self.do_discover,
+                              {}),
             # Generate private and public keys and save them in two files
-            status, results = self.do_generate_keys(
-                private_key_filename=self.options.private_key,
-                public_key_filename=self.options.public_key)
-        elif self.options.action == ACTION_HOST_REGISTER:
+            ACTION_GENERATE_KEYS: (self.do_generate_keys,
+                                   {'private_key_filename':
+                                    self.options.private_key,
+                                    'public_key_filename':
+                                    self.options.public_key}),
             # Host registration
-            status, results = self.do_host_register(
-                token=self.options.token)
-        elif self.options.action == ACTION_HOST_VERIFY:
+            ACTION_HOST_REGISTER: (self.do_host_register,
+                                   {'token': self.options.token}),
             # Host verification
-            status, results = self.do_host_verify(
-                token=self.options.token)
-        elif self.options.action == ACTION_COMMANDS_LIST:
+            ACTION_HOST_VERIFY: (self.do_host_verify,
+                                 {'token': self.options.token}),
             # List commands
-            status, results = self.do_list_commands()
-        elif self.options.action == ACTION_COMMAND_GET:
+            ACTION_COMMANDS_LIST: (self.do_list_commands,
+                                   {}),
             # Execute command
-            status, results = self.do_get_command(
-                command_id=self.options.command)
+            ACTION_COMMAND_GET: (self.do_get_command,
+                                 {'command_id': self.options.command})
+           }
+        if self.options.action in actions:
+            # Process action and get status and results
+            method, kwargs = actions[self.options.action]
+            status, results = method(**kwargs)
         else:
             # Unexpected action
             status = -1
