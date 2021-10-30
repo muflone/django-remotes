@@ -143,36 +143,32 @@ class Client(object):
         :return: tuple containing status code and dictionary with results
         """
         # actions map with (method, {kwargs for method})
-        actions = {
+        if self.options.action == ACTION_STATUS:
             # Get status
-            ACTION_STATUS: (self.do_get_status,
-                            {'url': self.options.url}),
+            status, results = self.do_get_status(url=self.options.url)
+        elif self.options.action == ACTION_DISCOVER:
             # Discover services URLS
-            ACTION_DISCOVER: (self.do_discover,
-                              {}),
+            status, results = self.do_discover()
+        elif self.options.action == ACTION_GENERATE_KEYS:
             # Generate private and public keys and save them in two files
-            ACTION_GENERATE_KEYS: (self.do_generate_keys,
-                                   {'private_key_filename':
-                                    self.options.private_key,
-                                    'public_key_filename':
-                                    self.options.public_key}),
+            status, results = self.do_generate_keys(
+                private_key_filename=self.options.private_key,
+                public_key_filename=self.options.public_key)
+        elif self.options.action == ACTION_HOST_REGISTER:
             # Host registration
-            ACTION_HOST_REGISTER: (self.do_host_register,
-                                   {'token': self.options.token}),
+            status, results = self.do_host_register(
+                token=self.options.token)
+        elif self.options.action == ACTION_HOST_VERIFY:
             # Host verification
-            ACTION_HOST_VERIFY: (self.do_host_verify,
-                                 {'token': self.options.token}),
+            status, results = self.do_host_verify(
+                token=self.options.token)
+        elif self.options.action == ACTION_COMMANDS_LIST:
             # List commands
-            ACTION_COMMANDS_LIST: (self.do_list_commands,
-                                   {}),
+            status, results = self.do_list_commands()
+        elif self.options.action == ACTION_COMMAND_GET:
             # Execute command
-            ACTION_COMMAND_GET: (self.do_get_command,
-                                 {'command_id': self.options.command})
-           }
-        if self.options.action in actions:
-            # Process action and get status and results
-            method, kwargs = actions[self.options.action]
-            status, results = method(**kwargs)
+            status, results = self.do_get_command(
+                command_id=self.options.command)
         else:
             # Unexpected action
             status = -1
