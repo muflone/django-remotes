@@ -74,7 +74,7 @@ class Host(BaseModel):
                                             'Hosts')
 
     def __str__(self):
-        return f'{self.uuid}'
+        return self.user.username if self.user else self.uuid
 
     def encrypt_data(self, data: dict, fields: list) -> None:
         """
@@ -98,4 +98,4 @@ class Host(BaseModel):
 
 
 class HostAdmin(BaseModelAdmin):
-    list_display = ('uuid', 'user', 'is_active')
+    list_display = ('__str__', 'uuid', 'user', 'is_active')
