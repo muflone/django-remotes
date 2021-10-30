@@ -42,7 +42,7 @@ class CommandsListView(ListAPIView):
         results = []
         now = timezone.now()
         # Get all the already executed commands to exclude
-        excluded = CommandsOutput.objects.all()
+        excluded = CommandsOutput.objects.filter(host__user_id=request.user.id)
         # Get all the hosts group for the current user host
         hosts_group = Host.objects.filter(
             user_id=request.user.id,

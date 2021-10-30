@@ -20,7 +20,10 @@
 
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.serializers import CharField, IntegerField, Serializer
+from rest_framework.serializers import (CharField,
+                                        IntegerField,
+                                        PrimaryKeyRelatedField,
+                                        Serializer)
 
 from rest_framework.views import APIView
 
@@ -41,6 +44,9 @@ class CommandPostSerializer(Serializer):
     Serializer for CommandPostView
     """
     id = IntegerField(required=True)
+    host = PrimaryKeyRelatedField(queryset=Host.objects.all(),
+                                  required=True,
+                                  many=False)
     output = CharField(required=True,
                        allow_blank=True)
     result = CharField(required=True,
@@ -53,6 +59,7 @@ class CommandPostSerializer(Serializer):
         :return: new CommandsOutput object
         """
         results = CommandsOutput.objects.create(group_item_id=data['id'],
+                                                host=data['host'],
                                                 output=data['output'],
                                                 result=data['result'])
         return results
@@ -75,6 +82,7 @@ class CommandPostView(APIView):
             serializer = CommandPostSerializer(data=request.data.copy())
             # Add ID to the data from the querystring
             serializer.initial_data['id'] = kwargs['pk']
+            serializer.initial_data['host'] = host.pk
             # Decrypt data using the host UUID
             decryptor = FernetEncrypt()
             decryptor.load_key_from_uuid(host.uuid)

@@ -34,6 +34,11 @@ class CommandsOutput(BaseModel):
                                    verbose_name=pgettext_lazy(
                                        'CommandsOutput',
                                        'group item'))
+    host = models.ForeignKey(to='remotes.Host',
+                             on_delete=models.PROTECT,
+                             verbose_name=pgettext_lazy(
+                                 'CommandsOutput',
+                                 'host'))
     output = models.TextField(blank=True,
                               null=True,
                               verbose_name=pgettext_lazy(
@@ -69,4 +74,4 @@ class CommandsOutput(BaseModel):
 
 
 class CommandsOutputAdmin(BaseModelAdmin):
-    list_display = ('timestamp', 'group_item')
+    list_display = ('timestamp', 'group_item', 'host')
