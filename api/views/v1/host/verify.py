@@ -71,9 +71,12 @@ class HostVerifyView(APIView):
                 return Response(data={STATUS_FIELD: STATUS_ERROR,
                                       MESSAGE_FIELD: 'Invalid signature'},
                                 status=status.HTTP_400_BAD_REQUEST)
+            # Create and update the user
+            new_user = get_user_model().objects.create(username=host_uuid)
+            new_user.username = str(new_user.pk).zfill(6)
+            new_user.is_active = True
+            new_user.save()
             # Update host with the new user
-            new_user = get_user_model().objects.create(username=host_uuid,
-                                                       is_active=True)
             host.user = new_user
             host.is_active = True
             host.save()
