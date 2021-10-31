@@ -49,9 +49,11 @@ class RsaKey(object):
         :param password: passphrase used to encrypt the private key
         :return: private key content
         """
-        encryption = (serialization.BestAvailableEncryption(password=password)
-                      if password is not None
-                      else serialization.NoEncryption())
+        password_bytes = password.encode('utf-8')
+        encryption = (
+            serialization.BestAvailableEncryption(password=password_bytes)
+            if password is not None
+            else serialization.NoEncryption())
         results = self._private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
@@ -87,6 +89,7 @@ class RsaKey(object):
         """
         Load private key from string using the provided optional password
         :param data: private key content
+        :param password: passphrase used to encrypt the private key
         :return: private key
         """
         self._private_key = serialization.load_pem_private_key(
@@ -98,6 +101,7 @@ class RsaKey(object):
         """
         Load private key from filename using the provided optional password
         :param filename: source filename to load the private key
+        :param password: passphrase used to encrypt the private key
         :return: private key
         """
         with open(file=filename, mode='r') as file:
@@ -177,6 +181,7 @@ class RsaKey(object):
         """
         Sign text using the private key
         :param text: text to be signed
+        :param use_base64: encrypted text is in base64
         :return: signed text
         """
         encrypted = self._private_key.sign(
@@ -192,6 +197,7 @@ class RsaKey(object):
         Verify encrypted text using the public key
         :param data: signature text to verify
         :param text: clear text to verify
+        :param use_base64: encrypted text is in base64
         :return: resulting encrypted text
         """
         try:

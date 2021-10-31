@@ -58,7 +58,6 @@ class Settings(object):
         Get a value from an option
         :param section: section in settings
         :param option: option name
-        :param value: value
         :return: value
         """
         results = None
