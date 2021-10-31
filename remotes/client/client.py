@@ -21,7 +21,6 @@
 import argparse
 import os
 import subprocess
-import sys
 import tempfile
 import uuid
 
@@ -494,20 +493,3 @@ class Client(object):
         else:
             results = None
         return results
-
-
-if __name__ == '__main__':
-    client = Client()
-    # Get command line arguments
-    client.get_command_line()
-    # Load settings
-    client.load()
-    # Process the arguments
-    process_status, process_results = client.process()
-    if process_results is not None:
-        # Show the results
-        print(process_results)
-    # Save settings
-    client.save()
-    # Set exit code accordingly to the executed action
-    sys.exit(process_status)
