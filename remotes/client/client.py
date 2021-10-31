@@ -275,10 +275,10 @@ class Client(object):
         # Update settings
         self.settings.set_value(section=SECTION_HOST,
                                 option=OPTION_PRIVATE_KEY,
-                                value=private_key_filename)
+                                value=os.path.abspath(private_key_filename))
         self.settings.set_value(section=SECTION_HOST,
                                 option=OPTION_PUBLIC_KEY,
-                                value=public_key_filename)
+                                value=os.path.abspath(public_key_filename))
         return 0, None
 
     def do_host_register(self, token: str) -> tuple[int, dict]:
