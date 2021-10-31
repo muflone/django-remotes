@@ -42,7 +42,7 @@ class FernetEncrypt(object):
         :return: None
         """
         with open(file=filename, mode='rb') as file:
-            self.key = file.read()
+            self._key = file.read()
 
     def load_key_from_uuid(self, guid: UUID):
         """
