@@ -49,7 +49,7 @@ class Variable(BaseModel):
 
     class Meta:
         # Define the database table
-        unique_together = (('host', 'name'))
+        unique_together = [('host', 'name')]
         ordering = ['host', 'name']
         verbose_name = pgettext_lazy('Variable',
                                      'Variable')

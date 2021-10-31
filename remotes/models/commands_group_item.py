@@ -71,7 +71,7 @@ class CommandsGroupItem(BaseModel):
     class Meta:
         # Define the database table
         ordering = ['group', 'order', 'name', '-is_active', 'command']
-        unique_together = ['group', 'name']
+        unique_together = [('group', 'name')]
         verbose_name = pgettext_lazy('CommandsGroupItem',
                                      'Commands group item')
         verbose_name_plural = pgettext_lazy('CommandsGroupItem',
