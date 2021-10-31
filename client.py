@@ -20,7 +20,13 @@
 
 import sys
 
-from remotes.client.client import Client
+try:
+    from remotes.client.client import Client                       # noqa: F401
+except ModuleNotFoundError:
+    # Fix module search path adding the current directory
+    # Mostly needed for embedded Python
+    sys.path.append('.')
+    from remotes.client.client import Client
 
 
 if __name__ == '__main__':
