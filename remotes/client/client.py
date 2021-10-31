@@ -32,6 +32,7 @@ from project import PRODUCT_NAME, VERSION
 from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_COMMAND_POST,
                                     ACTION_COMMANDS_LIST,
+                                    ACTION_COMMANDS_PROCESS,
                                     ACTION_DISCOVER,
                                     ACTION_GENERATE_KEYS,
                                     ACTION_HOST_REGISTER,
@@ -47,12 +48,15 @@ from remotes.client.settings import (Settings,
                                      SECTION_ENDPOINTS,
                                      SECTION_HOST,
                                      SECTION_SERVER)
-from remotes.constants import (ENCRYPTED_FIELD,
+from remotes.constants import (COMMAND_FIELD,
+                               COMMANDS_RESULTS_FIELD,
+                               ENCRYPTED_FIELD,
                                ENDPOINTS_FIELD,
                                MESSAGE_FIELD,
                                METHOD_GET,
                                METHOD_POST,
                                PUBLIC_KEY_FIELD,
+                               RESULTS_FIELD,
                                SERVER_URL,
                                STATUS_FIELD,
                                STATUS_ERROR,
@@ -192,6 +196,9 @@ class Client(object):
             # Execute command
             status, results = self.do_get_command(
                 command_id=self.options.command)
+        elif self.options.action == ACTION_COMMANDS_PROCESS:
+            # Process every command
+            status, results = self.do_process_commands()
         else:
             # Unexpected action
             status = -1
@@ -428,6 +435,21 @@ class Client(object):
         else:
             # Invalid command
             status = 1
+        return status, results
+
+    def do_process_commands(self) -> tuple[int, dict]:
+        """
+        Execute every command in list
+        :return: tuple with the status and the resulting data
+        """
+        status, results = self.do_list_commands()
+        commands_results = {}
+        results[COMMANDS_RESULTS_FIELD] = commands_results
+        for command in results[RESULTS_FIELD]:
+            # Process each command
+            command_id = command[COMMAND_FIELD]
+            _, commands_results[command_id] = self.do_get_command(
+                command_id=command_id)
         return status, results
 
     def load(self) -> None:
