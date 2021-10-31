@@ -376,10 +376,10 @@ class Client(object):
         if 'id' in results and results['id'] == command_id:
             timeout = results['timeout']
             # Create a new temporary file with the decrypted command
-            _, temp_file_source = tempfile.mkstemp(
+            temp_file_fd, temp_file_source = tempfile.mkstemp(
                 prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
                 text=True)
-            with open(temp_file_source, 'w') as file:
+            with os.fdopen(temp_file_fd, 'w') as file:
                 file.write('__RESULT__ = ""'
                            '\n'
                            '\n')
