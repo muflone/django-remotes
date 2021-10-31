@@ -49,9 +49,9 @@ class RsaKey(object):
         :param password: passphrase used to encrypt the private key
         :return: private key content
         """
-        password_bytes = password.encode('utf-8')
         encryption = (
-            serialization.BestAvailableEncryption(password=password_bytes)
+            serialization.BestAvailableEncryption(
+                password=password.encode('utf-8'))
             if password is not None
             else serialization.NoEncryption())
         results = self._private_key.private_bytes(
