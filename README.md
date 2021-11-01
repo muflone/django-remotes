@@ -1,4 +1,6 @@
 # Django Remotes
+[![Travis CI Build Status](https://img.shields.io/travis/com/muflone/django-remotes/master.svg)](https://www.travis-ci.com/github/muflone/django-remotes)
+[![CircleCI Build Status](https://img.shields.io/circleci/project/github/muflone/django-remotes/master.svg)](https://circleci.com/gh/muflone/django-remotes)
 
 **Description:** A Django application to execute remote commands 
 
