@@ -189,10 +189,11 @@ class Client(object):
             # Discover services URLS
             self.do_discover()
             # Host registration
-            self.do_host_register(token=self.options.token)
-            # Host verification
-            status, results = self.do_host_verify(
-                token=self.options.token)
+            status, results = self.do_host_register(token=self.options.token)
+            if status == 0:
+                # Host verification
+                status, results = self.do_host_verify(
+                    token=self.options.token)
         elif self.options.action == ACTION_COMMANDS_LIST:
             # List commands
             status, results = self.do_list_commands()
@@ -314,11 +315,16 @@ class Client(object):
                                           url=url,
                                           headers=headers,
                                           data=data)
-            status = 0
-            # Update settings
-            self.settings.set_value(section=SECTION_HOST,
-                                    option=UUID_FIELD,
-                                    value=results[ENCRYPTED_FIELD])
+            # Check response status
+            if STATUS_FIELD in results:
+                status = 0
+                # Update settings
+                self.settings.set_value(section=SECTION_HOST,
+                                        option=UUID_FIELD,
+                                        value=results[ENCRYPTED_FIELD])
+            else:
+                # Unable to register host
+                status = 2
         else:
             # Host already registered
             results = {STATUS_FIELD: STATUS_ERROR,
@@ -530,8 +536,12 @@ class Client(object):
         """
         if encrypted_data := self.settings.get_value(section=section,
                                                      option=option):
-            results = self.key.decrypt(text=encrypted_data,
-                                       use_base64=True)
+            try:
+                results = self.key.decrypt(text=encrypted_data,
+                                           use_base64=True)
+            except ValueError:
+                # Invalid encrypted data
+                results = None
         else:
             results = None
         return results
