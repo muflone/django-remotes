@@ -96,15 +96,16 @@ class Host(BaseModel):
                                           use_base64=True)
                 data[ENCRYPTED_FIELD].append(field)
 
-    def groups_list(self):
-        """
-        Return the HostsGroup names for the current host
-        :return:
-        """
-        return ', '.join(self.hostsgroup_set.values_list('name', flat=True))
-
 
 class HostAdmin(BaseModelAdmin):
     list_display = ('__str__', 'uuid', 'user', 'groups_list', 'is_active')
     list_filter = ('is_active',)
     readonly_fields = ('uuid', 'groups_list')
+
+    def groups_list(self, instance):
+        """
+        Return the HostsGroup names for the current host
+        :return:
+        """
+        return ', '.join(instance.hostsgroup_set.values_list('name',
+                                                             flat=True))
