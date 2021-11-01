@@ -1,0 +1,5 @@
+-r requirements_server.txt
+-r requirements_client.txt
+
+flake8==4.0.1
+pycodestyle==2.8.0

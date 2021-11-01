@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.9"
+install:
+  - pip install -r requirements_travis.txt
+script:
+  - python -m compileall .
+  - pycodestyle .
+  - python -m flake8 .
