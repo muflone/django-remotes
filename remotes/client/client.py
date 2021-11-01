@@ -22,6 +22,7 @@ import argparse
 import os
 import subprocess
 import tempfile
+import urllib.parse
 import uuid
 
 from encryption.fernet_encrypt import FernetEncrypt
@@ -241,8 +242,10 @@ class Client(object):
         :param url: URL to request
         :return: tuple with the status and the resulting data
         """
+        status_url = urllib.parse.urljoin(base=url,
+                                          url='api/status')
         results = self.do_api_request(method=METHOD_GET,
-                                      url=url)
+                                      url=status_url)
         # Update settings
         self.settings.set_value(section=SECTION_SERVER,
                                 option=SERVER_URL,
