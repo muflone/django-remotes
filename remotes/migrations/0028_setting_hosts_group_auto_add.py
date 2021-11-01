@@ -9,11 +9,16 @@ def insert_settings(apps, schema_editor):
     """
     # Don't import the Configuration model directly as it may be a newer
     # version than this migration expects.
+    ALL_HOSTS = 'All hosts'
     Setting = apps.get_model('remotes', 'Setting')
     Setting.objects.create(name=HOSTS_GROUP_AUTO_ADD,
                            description='HostsGroup to automatically add new hosts',
-                           value='',
+                           value=ALL_HOSTS,
                            is_active=True)
+    # Create the All hosts group if it doesn't exist
+    HostsGroup = apps.get_model('remotes', 'HostsGroup')
+    HostsGroup.objects.get_or_create(name=ALL_HOSTS,
+                                     defaults={'is_active': True})
 
 def delete_settings(apps, schema_editor):
     """
