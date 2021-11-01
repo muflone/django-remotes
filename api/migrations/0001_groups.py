@@ -55,6 +55,9 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('remotes', '0027_variable_host_cascade'),
+        ('auth', '0012_alter_user_first_name_max_length'),
+        ('authtoken', '0003_tokenproxy'),
     ]
 
     operations = [
