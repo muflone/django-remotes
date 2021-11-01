@@ -12,7 +12,7 @@ def insert_settings(apps, schema_editor):
     Setting = apps.get_model('remotes', 'Setting')
     Setting.objects.create(name=SERVER_URL,
                            description='Server URL',
-                           value='',
+                           value='http://YOUR_SERVER:8000',
                            is_active=True)
 
 def delete_settings(apps, schema_editor):
