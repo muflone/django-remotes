@@ -24,13 +24,29 @@ from rest_framework.views import APIView
 
 from api.permissions import IsUserWithHost
 
-from remotes.constants import STATUS_FIELD, STATUS_OK
+from remotes.constants import (HOSTS_GROUPS,
+                               ID_FIELD,
+                               STATUS_FIELD,
+                               STATUS_OK,
+                               USER_ID_FIELD,
+                               USER_NAME_FIELD)
+from remotes.models import Host, HostsGroup
 
 
-class PingView(APIView):
+class HostStatusView(APIView):
     permission_classes = (IsUserWithHost, )
 
     def get(self, request):
+        """
+        Show host status information
+        """
+        # Find host matching with the user
+        host = Host.objects.get(user_id=self.request.user.pk)
+        hosts_groups = HostsGroup.objects.filter(hosts=host)
         return Response(
-            data={STATUS_FIELD: STATUS_OK},
+            data={STATUS_FIELD: STATUS_OK,
+                  ID_FIELD: host.pk,
+                  USER_ID_FIELD: host.user.pk,
+                  USER_NAME_FIELD: host.user.username,
+                  HOSTS_GROUPS: hosts_groups.values('id', 'name')},
             status=status.HTTP_200_OK)

@@ -26,7 +26,7 @@ from api.views.v1.commands.post import CommandPostView
 from api.views.v1.discover import DiscoverView
 from api.views.v1.host.register import HostRegisterView
 from api.views.v1.host.verify import HostVerifyView
-from api.views.v1.ping import PingView
+from api.views.v1.host.status import HostStatusView
 
 
 urlpatterns = [
@@ -56,7 +56,7 @@ urlpatterns = [
     path(route='host/verify/',
          view=HostVerifyView.as_view(),
          name='api.v1.host.verify'),
-    path(route='ping/',
-         view=PingView.as_view(),
-         name='api.v1.ping'),
+    path(route='host/status/',
+         view=HostStatusView.as_view(),
+         name='api.v1.host.status'),
 ]
