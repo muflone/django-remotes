@@ -70,5 +70,5 @@ class Command(BaseModel):
 
 
 class CommandAdmin(BaseModelAdmin):
-    list_display = ('name', 'is_active')
+    list_display = ('name', 'timeout', 'is_active')
     list_filter = ('is_active',)
