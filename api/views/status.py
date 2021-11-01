@@ -39,6 +39,9 @@ class StatusView(APIView):
 
     def get(self, request):
         server_url = get_setting_value(name=SERVER_URL)
+        # Auto-detect the server_url if it wasn't configured
+        if not server_url:
+            server_url = f'{request.scheme}://{request.get_host()}'
         separator = '' if server_url.endswith('/') else '/'
         return Response(
             data={STATUS_FIELD: STATUS_OK,
