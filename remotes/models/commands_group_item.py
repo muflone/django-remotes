@@ -18,6 +18,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+from django.contrib.admin import TabularInline
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
@@ -86,6 +87,11 @@ class CommandsGroupItem(BaseModel):
         :return: group order
         """
         return self.group.order
+
+
+class CommandsGroupItemInline(TabularInline):
+    model = CommandsGroupItem
+    fields = ('name', 'command', 'order')
 
 
 class CommandsGroupItemAdmin(BaseModelAdmin):
