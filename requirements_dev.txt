@@ -1,3 +1,4 @@
--r requirements.txt
+-r requirements_client.txt
+-r requirements_server.txt
 django-debug-toolbar==3.2.2
 flake8==4.0.1
