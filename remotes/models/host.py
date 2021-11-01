@@ -103,6 +103,7 @@ class Host(BaseModel):
         """
         return ', '.join(self.hostsgroup_set.values_list('name', flat=True))
 
+
 class HostAdmin(BaseModelAdmin):
     list_display = ('__str__', 'uuid', 'user', 'groups_list', 'is_active')
     list_filter = ('is_active',)
