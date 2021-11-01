@@ -18,6 +18,8 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+import urllib.parse
+
 from django.urls import reverse
 
 from rest_framework import status
@@ -42,11 +44,11 @@ class StatusView(APIView):
         # Auto-detect the server_url if it wasn't configured
         if not server_url:
             server_url = f'{request.scheme}://{request.get_host()}'
-        separator = '' if server_url.endswith('/') else '/'
         return Response(
             data={STATUS_FIELD: STATUS_OK,
                   'app_name': PRODUCT_NAME,
                   'version': VERSION,
-                  SERVER_URL: f'{server_url}{separator}',
+                  SERVER_URL: urllib.parse.urljoin(base=server_url,
+                                                   url='/'),
                   ACTION_DISCOVER: reverse(f'api.{API_VERSION}.discover')},
             status=status.HTTP_200_OK)
