@@ -17,7 +17,7 @@ Django remotes is a Django application to execute remote commands.
 # System Requirements
 
 * Python 3.x
-* Django 3.2.7 (https://pypi.org/project/Django/)
-* Django Rest Framework 3.12.4 (https://pypi.org/project/djangorestframework/)
+* Django 3.2.x (https://pypi.org/project/Django/)
+* Django Rest Framework 3.12.x (https://pypi.org/project/djangorestframework/)
 * Cryptography 35.x (https://pypi.org/project/cryptography/)
 * Requests 2.x (https://pypi.org/project/requests/)
