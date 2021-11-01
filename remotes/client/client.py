@@ -36,6 +36,7 @@ from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_DISCOVER,
                                     ACTION_GENERATE_KEYS,
                                     ACTION_HOST_REGISTER,
+                                    ACTION_HOST_STATUS,
                                     ACTION_HOST_VERIFY,
                                     ACTION_NEW_HOST,
                                     ACTION_STATUS,
@@ -175,6 +176,9 @@ class Client(object):
             # Host verification
             status, results = self.do_host_verify(
                 token=self.options.token)
+        elif self.options.action == ACTION_HOST_STATUS:
+            # Host status
+            status, results = self.do_host_status()
         elif self.options.action == ACTION_NEW_HOST:
             # Generate private and public keys and save them in two files
             self.do_generate_keys(
@@ -321,6 +325,22 @@ class Client(object):
                        MESSAGE_FIELD: 'Host UUID already set'}
             status = 1
         return status, results
+
+    def do_host_status(self) -> tuple[int, dict]:
+        """
+        Host status
+        :return: tuple with the status and the resulting data
+        """
+        url = self.build_url(section=SECTION_ENDPOINTS,
+                             option=ACTION_HOST_STATUS)
+        token = self.decrypt_option(section=SECTION_HOST,
+                                    option=OPTION_TOKEN)
+        headers = {'Authorization': f'Token {token}'}
+        results = self.do_api_request(method=METHOD_GET,
+                                      url=url,
+                                      headers=headers,
+                                      data=None)
+        return 0, results
 
     def do_host_verify(self, token: str) -> tuple[int, dict]:
         """

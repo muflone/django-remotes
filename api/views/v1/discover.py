@@ -29,6 +29,7 @@ from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_COMMAND_POST,
                                     ACTION_COMMANDS_LIST,
                                     ACTION_HOST_REGISTER,
+                                    ACTION_HOST_STATUS,
                                     ACTION_HOST_VERIFY)
 from remotes.constants import ENDPOINTS_FIELD, STATUS_FIELD, STATUS_OK
 
@@ -42,6 +43,7 @@ class DiscoverView(APIView):
             ACTION_COMMAND_POST: reverse('api.v1.command.post.generic'),
             ACTION_COMMANDS_LIST: reverse('api.v1.commands.list'),
             ACTION_HOST_REGISTER: reverse('api.v1.host.register'),
+            ACTION_HOST_STATUS: reverse('api.v1.host.status'),
             ACTION_HOST_VERIFY: reverse('api.v1.host.verify')
         }
         return Response(
