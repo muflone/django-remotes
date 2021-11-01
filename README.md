@@ -131,3 +131,61 @@ be obtained using the following command:
 ```shell
 python manage.py registration_token
 ```
+
+---
+
+# Django Remotes client
+
+To install the Django Remotes server you need to first install the
+system requirements and then following the below installation
+instructions.  
+
+## System Requirements
+
+The Python dependencies for the server part are listed in the
+`requirements_client.txt` file.
+
+* Python 3.x
+* Cryptography 35.x (https://pypi.org/project/cryptography/)
+* Requests 2.x (https://pypi.org/project/requests/)
+
+## Usage
+
+The Django Remotes client usage first requires a host is registered
+on a running Django Remotes server.
+
+The registration can be done by command-line using the following:
+
+```shell
+python client.py \
+  --action new_host \
+  --url <SERVER URL> \
+  --settings <SETTINGS FILE> \
+  --token <HOST REGISTRATION TOKEN> \
+  --private_key <PRIVATE KEY FILE PATH> \
+  --public_key <PUBLIC KEY FILE PATH>
+```
+
+- `<SERVER URL>` argument must point to the server's root URL.
+- `<SETTINGS FILE>` argument must be a file where to save the client
+  settings.
+- `<HOST REGISTRATION TOKEN>` argument must be obtained from the
+  server using the `registration_token` command (see above).
+- `<PRIVATE KEY FILE PATH>` argument must be a file path where to
+  save the private key needed to encrypt the information between
+  client and server. This file must be kept secret.
+- `<PUBLIC KEY FILE PATH>` argument must be a file path where to
+  save the public key needed to encrypt the information between
+  client and server.
+
+An example to register a new host is the following:
+
+```shell
+python client.py \
+  --action new_host \
+  --url http://192.168.1.50/ \
+  --settings '/home/muflone/django-remotes/settings.ini' \
+  --token 'ba1daf3e9d068e77a59cde64dffddcd6cd941f31' \
+  --private_key '/home/muflone/django-remotes/key.pem' \
+  --public_key '/home/muflone/django-remotes/key.pub'
+```
