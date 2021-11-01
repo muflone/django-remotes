@@ -30,7 +30,7 @@ from remotes.constants import (HOSTS_GROUPS,
                                STATUS_OK,
                                USER_ID_FIELD,
                                USER_NAME_FIELD)
-from remotes.models import Host, HostsGroup
+from remotes.models import Host
 
 
 class HostStatusView(APIView):
@@ -42,7 +42,7 @@ class HostStatusView(APIView):
         """
         # Find host matching with the user
         host = Host.objects.get(user_id=self.request.user.pk)
-        hosts_groups = HostsGroup.objects.filter(hosts=host)
+        hosts_groups = host.hostsgroup_set.all()
         return Response(
             data={STATUS_FIELD: STATUS_OK,
                   ID_FIELD: host.pk,
