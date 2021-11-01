@@ -91,4 +91,4 @@ class CommandsGroupItem(BaseModel):
 class CommandsGroupItemAdmin(BaseModelAdmin):
     list_display = ('id', 'group', 'name',
                     'order', 'is_active')
-    list_filter = ('group', 'is_active')
+    list_filter = ('group', 'is_active', 'group__hosts')
