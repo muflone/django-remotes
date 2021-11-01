@@ -38,7 +38,7 @@ instructions.
 The Python dependencies for the server part are listed in the
 `requirements_server.txt` file.
 
-* Python 3.x
+* Python >= 3.9
 * Django 3.2.x (https://pypi.org/project/Django/)
 * Django Rest Framework 3.12.x (https://pypi.org/project/djangorestframework/)
 * Cryptography 35.x (https://pypi.org/project/cryptography/)
@@ -145,7 +145,7 @@ instructions.
 The Python dependencies for the server part are listed in the
 `requirements_client.txt` file.
 
-* Python 3.x
+* Python >= 3.9
 * Cryptography 35.x (https://pypi.org/project/cryptography/)
 * Requests 2.x (https://pypi.org/project/requests/)
 
