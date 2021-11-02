@@ -30,7 +30,7 @@ class CommandsOutput(BaseModel):
     CommandsOutput
     """
     group_item = models.ForeignKey(to='remotes.CommandsGroupItem',
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    verbose_name=pgettext_lazy(
                                        'CommandsOutput',
                                        'group item'))
