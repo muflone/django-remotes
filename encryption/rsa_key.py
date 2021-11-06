@@ -213,3 +213,10 @@ class RsaKey(object):
         except InvalidSignature:
             results = False
         return results
+
+    def get_public_key_length(self) -> int:
+        """
+        Return the public key length in bits
+        :return:
+        """
+        return self._public_key.key_size
