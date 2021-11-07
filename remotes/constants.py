@@ -29,6 +29,7 @@ STATUS_ERROR = 'ERROR'
 
 ENCRYPTED_FIELD = 'encrypted'
 ENDPOINTS_FIELD = 'endpoints'
+ENCRYPTION_KEY_FIELD = 'encryption_key'
 PUBLIC_KEY_FIELD = 'public_key'
 UUID_FIELD = 'uuid'
 

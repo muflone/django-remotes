@@ -53,6 +53,7 @@ from remotes.client.settings import (Settings,
 from remotes.constants import (COMMAND_FIELD,
                                COMMANDS_RESULTS_FIELD,
                                ENCRYPTED_FIELD,
+                               ENCRYPTION_KEY_FIELD,
                                ENDPOINTS_FIELD,
                                MESSAGE_FIELD,
                                METHOD_GET,
@@ -410,6 +411,11 @@ class Client(object):
         # Check if there's a valid command in the command
         if 'id' in results and results['id'] == command_id:
             timeout = results['timeout']
+            # Get the symmetric key used to decrypt the command to process
+            decryptor = FernetEncrypt()
+            decryptor.load_key(key=self.key.decrypt(
+                text=results[ENCRYPTION_KEY_FIELD],
+                use_base64=True))
             # Create a new temporary file with the decrypted command
             temp_file_fd, temp_file_source = tempfile.mkstemp(
                 prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
@@ -418,8 +424,7 @@ class Client(object):
                 file.write('__RESULT__ = ""'
                            '\n'
                            '\n')
-                file.write(self.key.decrypt(text=results['command'],
-                                            use_base64=True))
+                file.write(decryptor.decrypt(text=results['command']))
                 # Write __RESULT__ variable in stderr
                 file.write('\n'
                            '\n'

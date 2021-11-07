@@ -22,9 +22,10 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
+from encryption.fernet_encrypt import FernetEncrypt
 from encryption.rsa_key import RsaKey
 
-from remotes.constants import ENCRYPTED_FIELD
+from remotes.constants import ENCRYPTED_FIELD, ENCRYPTION_KEY_FIELD
 
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
@@ -78,23 +79,31 @@ class Host(BaseModel):
 
     def encrypt_data(self, data: dict, fields: list) -> None:
         """
-        Encrypt some fields in the `data` dictionary using the host public key
+        Encrypt some fields in the `data` dictionary using a new symmetric key
+        The new key will be saved in a field called `ENCRYPTION_KEY_FIELD`
         :param data: initial data to encrypt
         :param fields: fields list to encrypt
         :return: None
         """
-        # Obtain the host public key to encrypt the data
-        key = RsaKey()
-        key.load_public_key(data=self.pubkey)
+        # Create a new symmetric key to encrypt the data
+        encryptor = FernetEncrypt()
+        encryptor.create_new_key()
         # Encrypt any field listed in encrypted_fields
         if fields:
             data[ENCRYPTED_FIELD] = []
         for field in fields:
             if field in data:
-                # Encrypt the data
-                data[field] = key.encrypt(text=data[field],
-                                          use_base64=True)
+                # Encrypt the data using the symmetric key
+                data[field] = encryptor.encrypt(text=data[field])
                 data[ENCRYPTED_FIELD].append(field)
+        # Encrypt the symmetric key using the asymmetric key
+        if data[ENCRYPTED_FIELD]:
+            # Obtain the host public key to encrypt the symmetric key
+            key = RsaKey()
+            key.load_public_key(data=self.pubkey)
+            data[ENCRYPTION_KEY_FIELD] = key.encrypt(
+                text=encryptor.get_key().decode('utf-8'),
+                use_base64=True)
 
 
 class HostAdmin(BaseModelAdmin):
