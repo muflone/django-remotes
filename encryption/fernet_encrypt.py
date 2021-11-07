@@ -35,6 +35,13 @@ class FernetEncrypt(object):
         """
         self._key = Fernet.generate_key()
 
+    def get_key(self) -> bytes:
+        """
+        Return the encryption key
+        :return: encryption key content
+        """
+        return self._key
+
     def load_key_from_file(self, filename: str):
         """
         Load key from file
