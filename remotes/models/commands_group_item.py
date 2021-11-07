@@ -22,6 +22,8 @@ from django.contrib.admin import TabularInline
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
+
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -97,4 +99,7 @@ class CommandsGroupItemInline(TabularInline):
 class CommandsGroupItemAdmin(BaseModelAdmin):
     list_display = ('id', 'group', 'name',
                     'order', 'is_active')
-    list_filter = ('group', 'is_active', 'group__hosts')
+    list_filter = (('group', RelatedDropdownFilter),
+                   ('command', RelatedDropdownFilter),
+                   'is_active',
+                   'group__hosts')

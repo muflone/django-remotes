@@ -43,6 +43,7 @@ The Python dependencies for the server part are listed in the
 * Python >= 3.9
 * Django 3.2.x (https://pypi.org/project/Django/)
 * Django Rest Framework 3.12.x (https://pypi.org/project/djangorestframework/)
+* Django Admin List Filter Dropdown (https://pypi.org/project/django-admin-list-filter-dropdown/)
 * Cryptography 35.x (https://pypi.org/project/cryptography/)
 
 Additional optional dependencies might be needed to use your desired

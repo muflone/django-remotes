@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # Third party applications
     'rest_framework',
     'rest_framework.authtoken',
+    'django_admin_listfilter_dropdown',
     # Local applications
     'remotes',
     'utility',

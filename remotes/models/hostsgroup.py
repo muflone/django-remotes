@@ -21,6 +21,8 @@
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
+
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -67,4 +69,5 @@ class HostsGroup(BaseModel):
 
 class HostsGroupAdmin(BaseModelAdmin):
     list_display = ('name', 'is_active')
-    list_filter = ('is_active', 'hosts')
+    list_filter = ('is_active',
+                   ('hosts', RelatedDropdownFilter))

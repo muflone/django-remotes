@@ -21,6 +21,8 @@
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
+
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -75,7 +77,7 @@ class CommandsOutput(BaseModel):
 
 class CommandsOutputAdmin(BaseModelAdmin):
     list_display = ('timestamp', 'group_item', 'host')
-    list_filter = ('group_item',
-                   'group_item__group',
+    list_filter = (('group_item__group', RelatedDropdownFilter),
+                   ('group_item', RelatedDropdownFilter),
                    'group_item__group__hosts',
-                   'host')
+                   ('host', RelatedDropdownFilter))

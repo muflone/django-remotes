@@ -21,6 +21,9 @@
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
+from django_admin_listfilter_dropdown.filters import (DropdownFilter,
+                                                      RelatedDropdownFilter)
+
 from utility.models import BaseModel, BaseModelAdmin
 
 
@@ -62,5 +65,6 @@ class Variable(BaseModel):
 
 class VariableAdmin(BaseModelAdmin):
     list_display = ('host', 'name', 'raw_value', 'timestamp')
-    list_filter = ('host', 'name')
+    list_filter = (('host', RelatedDropdownFilter),
+                   ('name', DropdownFilter))
     readonly_fields = ('timestamp',)
