@@ -42,6 +42,13 @@ class FernetEncrypt(object):
         """
         return self._key
 
+    def load_key(self, key: bytes) -> None:
+        """
+        Load the encryption key
+        :return: None
+        """
+        self._key = key
+
     def load_key_from_file(self, filename: str):
         """
         Load key from file
@@ -49,7 +56,7 @@ class FernetEncrypt(object):
         :return: None
         """
         with open(file=filename, mode='rb') as file:
-            self._key = file.read()
+            self.load_key(key=file.read())
 
     def load_key_from_uuid(self, guid: UUID):
         """
@@ -57,7 +64,7 @@ class FernetEncrypt(object):
         :param guid: UUID object
         :return: None
         """
-        self._key = base64.b64encode(guid.hex.encode('utf-8'))
+        self.load_key(key=base64.b64encode(guid.hex.encode('utf-8')))
 
     def save_key_to_file(self, filename: str):
         """
