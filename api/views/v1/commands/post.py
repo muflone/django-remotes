@@ -36,7 +36,10 @@ from remotes.constants import (ID_FIELD,
                                STATUS_FIELD,
                                STATUS_OK,
                                STATUS_ERROR)
-from remotes.models import CommandsGroupItem, CommandsOutput, Host, Variable
+from remotes.models import (CommandsGroupItem,
+                            CommandsOutput,
+                            Host,
+                            VariableValue)
 
 
 class CommandPostSerializer(Serializer):
@@ -96,11 +99,11 @@ class CommandPostView(APIView):
                 command_output = serializer.save()
                 if command_output.group_item.variable:
                     # Save result in variable
-                    variable, _ = Variable.objects.get_or_create(
+                    variable_value, _ = VariableValue.objects.get_or_create(
                         host=host,
                         name=command_output.group_item.variable)
-                    variable.raw_value = command_output.result
-                    variable.save()
+                    variable_value.raw_value = command_output.result
+                    variable_value.save()
                 # Show results
                 results = {ID_FIELD: serializer.data['id']}
                 return Response(data={STATUS_FIELD: STATUS_OK,

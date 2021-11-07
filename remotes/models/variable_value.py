@@ -27,43 +27,43 @@ from django_admin_listfilter_dropdown.filters import (DropdownFilter,
 from utility.models import BaseModel, BaseModelAdmin
 
 
-class Variable(BaseModel):
+class VariableValue(BaseModel):
     """
     Variable
     """
     host = models.ForeignKey(to='remotes.Host',
                              on_delete=models.CASCADE,
                              verbose_name=pgettext_lazy(
-                                 'Variable',
+                                 'VariableValue',
                                  'host'))
     name = models.CharField(max_length=255,
                             verbose_name=pgettext_lazy(
-                                'Variable',
+                                'VariableValue',
                                 'name'))
     raw_value = models.TextField(blank=True,
                                  null=False,
                                  verbose_name=pgettext_lazy(
-                                     'Variable',
+                                     'VariableValue',
                                      'value'))
     timestamp = models.DateTimeField(auto_now=True,
                                      verbose_name=pgettext_lazy(
-                                         'Variable',
+                                         'VariableValue',
                                          'timestamp'))
 
     class Meta:
         # Define the database table
         unique_together = [('host', 'name')]
         ordering = ['host', 'name']
-        verbose_name = pgettext_lazy('Variable',
-                                     'Variable')
-        verbose_name_plural = pgettext_lazy('Variable',
-                                            'Variables')
+        verbose_name = pgettext_lazy('VariableValue',
+                                     'Variable value')
+        verbose_name_plural = pgettext_lazy('VariableValue',
+                                            'Variable values')
 
     def __str__(self):
         return self.name
 
 
-class VariableAdmin(BaseModelAdmin):
+class VariableValueAdmin(BaseModelAdmin):
     list_display = ('host', 'name', 'raw_value', 'timestamp')
     list_filter = (('host', RelatedDropdownFilter),
                    ('name', DropdownFilter))
