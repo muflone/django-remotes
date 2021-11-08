@@ -21,8 +21,7 @@
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
-from django_admin_listfilter_dropdown.filters import (DropdownFilter,
-                                                      RelatedDropdownFilter)
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
 from utility.models import BaseModel, BaseModelAdmin
 
@@ -36,10 +35,11 @@ class VariableValue(BaseModel):
                              verbose_name=pgettext_lazy(
                                  'VariableValue',
                                  'host'))
-    name = models.CharField(max_length=255,
-                            verbose_name=pgettext_lazy(
-                                'VariableValue',
-                                'name'))
+    variable = models.ForeignKey(to='remotes.Variable',
+                                 on_delete=models.CASCADE,
+                                 verbose_name=pgettext_lazy(
+                                     'VariableValue',
+                                     'variable'))
     raw_value = models.TextField(blank=True,
                                  null=False,
                                  verbose_name=pgettext_lazy(
@@ -52,19 +52,19 @@ class VariableValue(BaseModel):
 
     class Meta:
         # Define the database table
-        unique_together = [('host', 'name')]
-        ordering = ['host', 'name']
+        unique_together = [('host', 'variable')]
+        ordering = ['host', 'variable']
         verbose_name = pgettext_lazy('VariableValue',
                                      'Variable value')
         verbose_name_plural = pgettext_lazy('VariableValue',
                                             'Variable values')
 
     def __str__(self):
-        return self.name
+        return f'{self.host} - {self.variable}'
 
 
 class VariableValueAdmin(BaseModelAdmin):
-    list_display = ('host', 'name', 'raw_value', 'timestamp')
+    list_display = ('host', 'variable', 'raw_value', 'timestamp')
     list_filter = (('host', RelatedDropdownFilter),
-                   ('name', DropdownFilter))
+                   ('variable', RelatedDropdownFilter))
     readonly_fields = ('timestamp',)

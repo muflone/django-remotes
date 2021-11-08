@@ -101,7 +101,7 @@ class CommandPostView(APIView):
                     # Save result in variable
                     variable_value, _ = VariableValue.objects.get_or_create(
                         host=host,
-                        name=command_output.group_item.variable)
+                        variable=command_output.group_item.variable)
                     variable_value.raw_value = command_output.result
                     variable_value.save()
                 # Show results
