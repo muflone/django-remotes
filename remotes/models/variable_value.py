@@ -66,5 +66,6 @@ class VariableValue(BaseModel):
 class VariableValueAdmin(BaseModelAdmin):
     list_display = ('host', 'variable', 'raw_value', 'timestamp')
     list_filter = (('host', RelatedDropdownFilter),
+                   'variable__category',
                    ('variable', RelatedDropdownFilter))
     readonly_fields = ('timestamp',)

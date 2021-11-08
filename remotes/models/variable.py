@@ -29,6 +29,13 @@ class Variable(BaseModel):
     """
     Variables for hosts
     """
+    category = models.CharField(max_length=255,
+                                blank=True,
+                                null=False,
+                                default='',
+                                verbose_name=pgettext_lazy(
+                                    'Variable',
+                                    'category'))
     name = models.CharField(max_length=255,
                             unique=True,
                             verbose_name=pgettext_lazy(
@@ -57,4 +64,5 @@ class Variable(BaseModel):
 
 
 class VariableAdmin(BaseModelAdmin):
-    list_display = ('name', )
+    list_display = ('name', 'category')
+    list_filter = (('category', ))
