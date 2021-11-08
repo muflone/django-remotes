@@ -93,8 +93,19 @@ class Host(BaseModel):
             data[ENCRYPTED_FIELD] = []
         for field in fields:
             if field in data:
-                # Encrypt the data using the symmetric key
-                data[field] = encryptor.encrypt(text=data[field])
+                if isinstance(data[field], list):
+                    # Encrypt each value in list
+                    for index, value in enumerate(data[field]):
+                        if data[field][index] is not None:
+                            data[field][index] = encryptor.encrypt(text=value)
+                elif isinstance(data[field], dict):
+                    # Encrypt each value in dict
+                    for key, value in data[field].items():
+                        if data[field][key] is not None:
+                            data[field][key] = encryptor.encrypt(text=value)
+                elif data[field] is not None:
+                    # Encrypt other types field
+                    data[field] = encryptor.encrypt(text=str(data[field]))
                 data[ENCRYPTED_FIELD].append(field)
         # Encrypt the symmetric key using the asymmetric key
         if data[ENCRYPTED_FIELD]:
