@@ -421,9 +421,10 @@ class Client(object):
                 prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
                 text=True)
             with os.fdopen(temp_file_fd, 'w') as file:
-                file.write('__RESULT__ = ""'
-                           '\n'
-                           '\n')
+                # Initialize __RESULT__ variable
+                file.write('__RESULT__ = ""\n')
+                file.write('\n')
+                # Write command
                 file.write(decryptor.decrypt(text=results['command']))
                 # Write __RESULT__ variable in stderr
                 file.write('\n'
