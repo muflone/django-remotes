@@ -30,12 +30,17 @@ class CommandGetSerializer(ModelSerializer):
     """
     Serializer for CommandGetView
     """
+    settings = SerializerMethodField('get_settings')
     command = SerializerMethodField('get_command')
     timeout = SerializerMethodField('get_timeout')
 
     class Meta:
         model = CommandsGroupItem
-        fields = ['id', 'name', 'command', 'timeout']
+        fields = ['id', 'name', 'settings', 'command', 'timeout']
+
+    def get_settings(self, instance):
+        return {item.name: item.value
+                for item in instance.command.settings.all()}
 
     def get_command(self, instance):
         return instance.command.command
@@ -48,7 +53,7 @@ class CommandGetView(RetrieveAPIEncryptedView):
     model = CommandsGroupItem
     permission_classes = (IsUserWithHost, )
     serializer_class = CommandGetSerializer
-    encrypted_fields = ['name', 'command']
+    encrypted_fields = ['name', 'settings', 'command']
 
     def get_queryset(self):
         # Find host matching with the user
