@@ -23,7 +23,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from api.permissions import IsUserWithHost
 from api.views.retrieve_api_encrypted import RetrieveAPIEncryptedView
 
-from remotes.models import CommandsGroupItem, Host
+from remotes.models import CommandsGroupItem, Host, VariableValue
 
 
 class CommandGetSerializer(ModelSerializer):
@@ -31,16 +31,31 @@ class CommandGetSerializer(ModelSerializer):
     Serializer for CommandGetView
     """
     settings = SerializerMethodField('get_settings')
+    variables = SerializerMethodField('get_variables')
     command = SerializerMethodField('get_command')
     timeout = SerializerMethodField('get_timeout')
 
     class Meta:
         model = CommandsGroupItem
-        fields = ['id', 'name', 'settings', 'command', 'timeout']
+        fields = ['id', 'name', 'settings', 'variables', 'command', 'timeout']
 
     def get_settings(self, instance):
         return {item.name: item.value
                 for item in instance.command.settings.all()}
+
+    def get_variables(self, instance):
+        # Initialize variable values to None
+        variables = instance.command.variables.all()
+        result = {item.name: None
+                  for item in variables}
+        # Find host matching with the user
+        host = Host.objects.get(user=self.context['request'].user)
+        # Update variable values
+        variables_values = VariableValue.objects.filter(host=host,
+                                                        variable__in=variables)
+        for item in variables_values:
+            result[item.variable.name] = item.raw_value
+        return result
 
     def get_command(self, instance):
         return instance.command.command
@@ -53,7 +68,7 @@ class CommandGetView(RetrieveAPIEncryptedView):
     model = CommandsGroupItem
     permission_classes = (IsUserWithHost, )
     serializer_class = CommandGetSerializer
-    encrypted_fields = ['name', 'settings', 'command']
+    encrypted_fields = ['name', 'settings', 'variables', 'command']
 
     def get_queryset(self):
         # Find host matching with the user
