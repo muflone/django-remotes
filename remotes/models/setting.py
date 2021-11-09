@@ -38,8 +38,7 @@ class Setting(BaseModel):
                                    verbose_name=pgettext_lazy(
                                        'Setting',
                                        'description'))
-    value = models.CharField(max_length=255,
-                             blank=True,
+    value = models.TextField(blank=True,
                              null=True,
                              verbose_name=pgettext_lazy(
                                  'Setting',
