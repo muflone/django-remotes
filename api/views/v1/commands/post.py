@@ -102,7 +102,7 @@ class CommandPostView(APIView):
                     variable_value, _ = VariableValue.objects.get_or_create(
                         host=host,
                         variable=command_output.group_item.variable)
-                    variable_value.raw_value = command_output.result
+                    variable_value.value = command_output.result
                     variable_value.save()
                 # Show results
                 results = {ID_FIELD: serializer.data['id']}

@@ -54,7 +54,7 @@ class CommandGetSerializer(ModelSerializer):
         variables_values = VariableValue.objects.filter(host=host,
                                                         variable__in=variables)
         for item in variables_values:
-            result[item.variable.name] = item.raw_value
+            result[item.variable.name] = item.value
         return result
 
     def get_command(self, instance):

@@ -40,11 +40,11 @@ class VariableValue(BaseModel):
                                  verbose_name=pgettext_lazy(
                                      'VariableValue',
                                      'variable'))
-    raw_value = models.TextField(blank=True,
-                                 null=False,
-                                 verbose_name=pgettext_lazy(
-                                     'VariableValue',
-                                     'value'))
+    value = models.TextField(blank=True,
+                             null=False,
+                             verbose_name=pgettext_lazy(
+                                 'VariableValue',
+                                 'value'))
     timestamp = models.DateTimeField(auto_now=True,
                                      verbose_name=pgettext_lazy(
                                          'VariableValue',
@@ -64,7 +64,7 @@ class VariableValue(BaseModel):
 
 
 class VariableValueAdmin(BaseModelAdmin):
-    list_display = ('host', 'variable', 'raw_value', 'timestamp')
+    list_display = ('host', 'variable', 'value', 'timestamp')
     list_filter = (('host', RelatedDropdownFilter),
                    'variable__category',
                    ('variable', RelatedDropdownFilter))
