@@ -427,6 +427,11 @@ class Client(object):
                 items = {key: decryptor.decrypt(text=value)
                          for key, value in results['settings'].items()}
                 file.write(f'__SETTINGS__ = {items}\n')
+                # Save variables
+                items = {key: decryptor.decrypt(text=value) if value
+                         else None
+                         for key, value in results['variables'].items()}
+                file.write(f'__VARIABLES__ = {items}\n')
                 file.write('\n')
                 # Write command
                 file.write(decryptor.decrypt(text=results['command']))
