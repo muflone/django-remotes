@@ -423,6 +423,10 @@ class Client(object):
             with os.fdopen(temp_file_fd, 'w') as file:
                 # Initialize __RESULT__ variable
                 file.write('__RESULT__ = ""\n')
+                # Save settings
+                items = {key: decryptor.decrypt(text=value)
+                         for key, value in results['settings'].items()}
+                file.write(f'__SETTINGS__ = {items}\n')
                 file.write('\n')
                 # Write command
                 file.write(decryptor.decrypt(text=results['command']))
