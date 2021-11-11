@@ -18,6 +18,8 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+import json
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.serializers import (CharField,
@@ -97,12 +99,18 @@ class CommandPostView(APIView):
             if serializer.is_valid():
                 # Save data creating a new CommandOutput object
                 command_output = serializer.save()
-                if command_output.group_item.variable:
+                # Save the output result into VariableValue objects
+                command_output_result = json.loads(s=command_output.result)
+                variables = command_output.group_item.variables.all()
+                for index, variable in enumerate(variables):
                     # Save result in variable
                     variable_value, _ = VariableValue.objects.get_or_create(
                         host=host,
-                        variable=command_output.group_item.variable)
-                    variable_value.value = command_output.result
+                        variable=variable)
+                    variable_value.value = (
+                        command_output_result[index]
+                        if len(command_output_result) > index
+                        else '')
                     variable_value.save()
                 # Show results
                 results = {ID_FIELD: serializer.data['id']}
