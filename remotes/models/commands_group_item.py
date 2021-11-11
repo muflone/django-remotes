@@ -51,13 +51,13 @@ class CommandsGroupItem(BaseModel):
                                 verbose_name=pgettext_lazy(
                                     'CommandsGroupItem',
                                     'command'))
-    variable = models.ForeignKey(to='remotes.Variable',
-                                 on_delete=models.PROTECT,
-                                 blank=True,
-                                 null=True,
-                                 verbose_name=pgettext_lazy(
-                                     'CommandsGroupItem',
-                                     'variable'))
+    variables = models.ManyToManyField(
+        to='remotes.Variable',
+        through='remotes.CommandsGroupItemVariable',
+        blank=True,
+        verbose_name=pgettext_lazy(
+            'CommandsGroupItem',
+            'variables'))
     order = models.PositiveIntegerField(default=1,
                                         verbose_name=pgettext_lazy(
                                             'CommandsGroupItem',
@@ -94,12 +94,12 @@ class CommandsGroupItem(BaseModel):
 
 class CommandsGroupItemInline(TabularInline):
     model = CommandsGroupItem
-    fields = ('name', 'command', 'variable', 'order')
+    fields = ('name', 'command', 'order')
 
 
 class CommandsGroupItemAdmin(BaseModelAdmin):
     list_display = ('id', 'group', 'name',
-                    'order', 'variable', 'is_active')
+                    'order', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    ('command', RelatedDropdownFilter),
                    'is_active',

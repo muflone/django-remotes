@@ -27,4 +27,7 @@ from .host import Host, HostAdmin                                  # noqa: F401
 from .hostsgroup import HostsGroup, HostsGroupAdmin                # noqa: F401
 from .setting import Setting, SettingAdmin                         # noqa: F401
 from .variable import Variable, VariableAdmin                      # noqa: F401
+from .command_group_item_variable import (                         # noqa: F401
+    CommandsGroupItemVariable,                                     # noqa: F401
+    CommandsGroupItemVariableAdmin)                                # noqa: F401
 from .variable_value import VariableValue, VariableValueAdmin      # noqa: F401
