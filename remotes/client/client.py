@@ -435,11 +435,16 @@ class Client(object):
                 file.write('\n')
                 # Write command
                 file.write(decryptor.decrypt(text=results['command']))
-                # Write __RESULT__ variable in stderr
+                # Convert __RESULT__ in list if it's not a list and
+                # write __RESULT__ in JSON format in stderr
                 file.write('\n'
                            '\n'
+                           'import json\n'
                            'import sys\n'
-                           'sys.stderr.write(__RESULT__)\n')
+                           'if not isinstance(__RESULT__, list):\n'
+                           '    __RESULT__ = [__RESULT__]\n'
+                           'sys.stderr.write(json.dumps(obj=__RESULT__,\n'
+                           '                            indent=2))\n')
             # Execute the source code in a Python process
             process = subprocess.Popen(args=['python', temp_file_source],
                                        stdout=subprocess.PIPE,
