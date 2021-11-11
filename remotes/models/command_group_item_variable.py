@@ -30,12 +30,12 @@ class CommandsGroupItemVariable(BaseModel):
     Variables with order for hosts
     """
     command_group_item = models.ForeignKey('remotes.CommandsGroupItem',
-                                           on_delete=models.PROTECT,
+                                           on_delete=models.CASCADE,
                                            verbose_name=pgettext_lazy(
                                                'CommandsGroupItemVariable',
                                                'command group item'))
     variable = models.ForeignKey('remotes.Variable',
-                                 on_delete=models.PROTECT,
+                                 on_delete=models.CASCADE,
                                  verbose_name=pgettext_lazy(
                                      'CommandsGroupItemVariable',
                                      'variable'))
