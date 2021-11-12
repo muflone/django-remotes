@@ -94,7 +94,7 @@ class CommandsGroupItem(BaseModel):
 
 class CommandsGroupItemInline(TabularInline):
     model = CommandsGroupItem
-    fields = ('name', 'command', 'order')
+    fields = ('name', 'command', 'order', 'is_active')
 
 
 class CommandsGroupItemAdmin(BaseModelAdmin):
