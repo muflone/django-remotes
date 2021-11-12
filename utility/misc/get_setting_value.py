@@ -28,6 +28,5 @@ def get_setting_value(name: str, default_value: str = None) -> str:
     :param default_value: default value if no setting is found
     :return:
     """
-    setting = Setting.objects_enabled.filter(name=name,
-                                             is_active=True).first()
+    setting = Setting.objects_enabled.filter(name=name).first()
     return setting.value if setting else default_value

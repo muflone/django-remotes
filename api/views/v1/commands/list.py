@@ -44,14 +44,12 @@ class CommandsListView(ListAPIView):
         # Get all the already executed commands to exclude
         excluded = CommandsOutput.objects.filter(host__user_id=request.user.pk)
         # Get all the hosts group for the current user host
-        hosts_group = Host.objects.filter(
-            user_id=request.user.pk,
-            is_active=True).first().hostsgroup_set.all()
+        hosts_group = Host.objects_enabled.filter(
+            user_id=request.user.pk).first().hostsgroup_set.all()
         # Get all the commands group for the hosts groups
-        groups = CommandsGroup.objects.filter(is_active=True,
-                                              hosts__in=hosts_group,
-                                              after__lt=now,
-                                              before__gt=now)
+        groups = CommandsGroup.objects_enabled.filter(hosts__in=hosts_group,
+                                                      after__lt=now,
+                                                      before__gt=now)
         for group in groups.order_by('order'):
             # Check each group and exclude items already processed
             items = group.commandsgroupitem_set.exclude(
