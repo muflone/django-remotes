@@ -53,7 +53,8 @@ class CommandsListView(ListAPIView):
         for group in groups.order_by('order'):
             # Check each group and exclude items already processed
             items = group.commandsgroupitem_set.exclude(
-                id__in=excluded.values_list('group_item'))
+                id__in=excluded.values_list('group_item')).exclude(
+                is_active=False)
             for command in items.order_by('order'):
                 # Get each command in the group
                 results.append({ID_FIELD: command.pk,
