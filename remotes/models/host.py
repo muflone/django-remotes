@@ -120,6 +120,7 @@ class Host(BaseModel):
 class HostAdmin(BaseModelAdmin):
     list_display = ('__str__', 'uuid', 'user', 'groups_list', 'is_active')
     list_filter = ('is_active',)
+    ordering = ['user']
     readonly_fields = ('uuid', 'groups_list')
 
     def groups_list(self, instance):
