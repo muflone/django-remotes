@@ -98,8 +98,7 @@ class CommandsGroupItemInline(TabularInline):
 
 
 class CommandsGroupItemAdmin(BaseModelAdmin):
-    list_display = ('id', 'group', 'name',
-                    'order', 'is_active')
+    list_display = ('id', 'group', 'name', 'order', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    ('command', RelatedDropdownFilter),
                    'is_active',
