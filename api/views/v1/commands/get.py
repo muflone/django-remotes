@@ -74,6 +74,9 @@ class CommandGetView(RetrieveAPIEncryptedView):
         # Find host matching with the user
         host = Host.objects.get(user=self.request.user)
         # Find the commands group item
-        queryset = self.model.objects.filter(pk=self.kwargs['pk'],
-                                             group__hosts__hosts=host.pk)
+        queryset = self.model.objects_enabled.filter(
+            pk=self.kwargs['pk'],
+            group__is_active=True,
+            group__hosts__hosts=host.pk,
+            group__hosts__is_active=True)
         return queryset

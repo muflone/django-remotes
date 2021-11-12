@@ -45,7 +45,8 @@ class CommandsListView(ListAPIView):
         excluded = CommandsOutput.objects.filter(host__user_id=request.user.pk)
         # Get all the hosts group for the current user host
         hosts_group = Host.objects_enabled.filter(
-            user_id=request.user.pk).first().hostsgroup_set.all()
+            user_id=request.user.pk).first().hostsgroup_set.filter(
+            is_active=True)
         # Get all the commands group for the hosts groups
         groups = CommandsGroup.objects_enabled.filter(hosts__in=hosts_group,
                                                       after__lt=now,
