@@ -57,10 +57,6 @@ class Command(BaseModel):
                                           verbose_name=pgettext_lazy(
                                               'Command',
                                               'timeout'))
-    is_active = models.BooleanField(default=True,
-                                    verbose_name=pgettext_lazy(
-                                        'Command',
-                                        'active'))
 
     # Set the managers for the model
     objects = models.Manager()
@@ -69,7 +65,7 @@ class Command(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['-is_active', 'name']
+        ordering = ['name']
         verbose_name = pgettext_lazy('Command',
                                      'Command')
         verbose_name_plural = pgettext_lazy('Command',
@@ -80,6 +76,5 @@ class Command(BaseModel):
 
 
 class CommandAdmin(BaseModelAdmin):
-    list_display = ('name', 'timeout', 'is_active')
-    list_filter = ('is_active',)
+    list_display = ('name', 'timeout')
     ordering = ['name']
