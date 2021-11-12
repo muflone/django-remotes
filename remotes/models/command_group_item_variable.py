@@ -63,5 +63,5 @@ class CommandsGroupItemVariable(BaseModel):
 
 
 class CommandsGroupItemVariableAdmin(BaseModelAdmin):
-    list_display = ('command_group_item', 'variable', 'order')
+    list_display = ('command_group_item', 'order', 'variable')
     list_filter = (('variable', ))
