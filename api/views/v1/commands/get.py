@@ -33,11 +33,13 @@ class CommandGetSerializer(ModelSerializer):
     settings = SerializerMethodField('get_settings')
     variables = SerializerMethodField('get_variables')
     command = SerializerMethodField('get_command')
+    command_name = SerializerMethodField('get_command_name')
     timeout = SerializerMethodField('get_timeout')
 
     class Meta:
         model = CommandsGroupItem
-        fields = ['id', 'name', 'settings', 'variables', 'command', 'timeout']
+        fields = ['id', 'settings', 'variables', 'command', 'command_name',
+                  'timeout']
 
     def get_settings(self, instance):
         return {item.name: item.value
@@ -59,6 +61,9 @@ class CommandGetSerializer(ModelSerializer):
 
     def get_command(self, instance):
         return instance.command.command
+
+    def get_command_name(self, instance):
+        return instance.command.name
 
     def get_timeout(self, instance):
         return instance.command.timeout
