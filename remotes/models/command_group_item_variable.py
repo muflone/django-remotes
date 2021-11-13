@@ -92,7 +92,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
         """
         return instance.command_group_item.order
 
-    def group(self, instance) -> 'remotes.models.CommandsGroup':
+    def group(self, instance) -> 'models.CommandsGroup':
         """
         Return the associated command group item group
         :param instance: CommandgsGroupItemVariable instance
@@ -100,7 +100,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
         """
         return instance.command_group_item.group
 
-    def command(self, instance) -> 'remotes.models.Command':
+    def command(self, instance) -> 'models.Command':
         """
         Return the associated command group item group
         :param instance: CommandgsGroupItemVariable instance
