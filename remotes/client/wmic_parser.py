@@ -26,6 +26,20 @@ class WmicParser(object):
     def __init__(self, timeout: int = 10):
         self.timeout = timeout
 
+    def get(self,
+            role: str,
+            field: str,
+            condition: str = None) -> Optional[str]:
+        """
+        Get a single string item from wmic for the specified role
+        :param role: WMI role alias to use
+        :param field: single field to return
+        :param condition: a condition to filter results
+        :return: a single resulting value
+        """
+        values = self.get_values(role=role, fields=field, condition=condition)
+        return values[0][field] if values else None
+
     def get_values(self,
                    role: str,
                    fields: Optional[Union[str, list, tuple]] = None,
