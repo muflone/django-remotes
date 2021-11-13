@@ -37,10 +37,6 @@ class CommandsGroupItem(BaseModel):
                               verbose_name=pgettext_lazy(
                                   'CommandsGroupItem',
                                   'group'))
-    name = models.CharField(max_length=255,
-                            verbose_name=pgettext_lazy(
-                                'CommandsGroupItem',
-                                'name'))
     description = models.TextField(blank=True,
                                    null=True,
                                    verbose_name=pgettext_lazy(
@@ -74,15 +70,14 @@ class CommandsGroupItem(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['group', 'order', 'name', '-is_active', 'command']
-        unique_together = [('group', 'name')]
+        ordering = ['group', 'order', '-is_active', 'command']
         verbose_name = pgettext_lazy('CommandsGroupItem',
                                      'Commands group item')
         verbose_name_plural = pgettext_lazy('CommandsGroupItem',
                                             'Commands group items')
 
     def __str__(self):
-        return f'{self.group_id} - {self.group} - {self.name}'
+        return f'{self.group_id} - {self.group} - {self.command}'
 
     def group_order(self):
         """
@@ -94,11 +89,11 @@ class CommandsGroupItem(BaseModel):
 
 class CommandsGroupItemInline(TabularInline):
     model = CommandsGroupItem
-    fields = ('name', 'command', 'order', 'is_active')
+    fields = ('command', 'order', 'is_active')
 
 
 class CommandsGroupItemAdmin(BaseModelAdmin):
-    list_display = ('id', 'group', 'name', 'order', 'is_active')
+    list_display = ('id', 'group', 'command', 'order', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    ('command', RelatedDropdownFilter),
                    'is_active',
