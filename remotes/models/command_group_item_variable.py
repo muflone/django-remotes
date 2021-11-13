@@ -21,6 +21,8 @@
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
+
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -69,7 +71,10 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
                     'item_order',
                     'order',
                     'variable')
-    list_filter = (('variable', ))
+    list_filter = (('command_group_item__group', RelatedDropdownFilter),
+                   ('command_group_item__command', RelatedDropdownFilter),
+                   ('variable', RelatedDropdownFilter),
+                   ('command_group_item__group__hosts', RelatedDropdownFilter))
 
     def item_id(self, instance) -> int:
         """
