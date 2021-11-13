@@ -101,12 +101,14 @@ class CommandPostView(APIView):
                 command_output = serializer.save()
                 # Save the output result into VariableValue objects
                 command_output_result = json.loads(s=command_output.result)
-                variables = command_output.group_item.variables.all()
+                group_item = command_output.group_item
+                variables = group_item.commandsgroupitemvariable_set.order_by(
+                    'order')
                 for index, variable in enumerate(variables):
                     # Save result in variable
                     variable_value, _ = VariableValue.objects.get_or_create(
                         host=host,
-                        variable=variable)
+                        variable=variable.variable)
                     variable_value.value = (
                         command_output_result[index]
                         if len(command_output_result) > index
