@@ -65,4 +65,4 @@ class Variable(BaseModel):
 
 class VariableAdmin(BaseModelAdmin):
     list_display = ('name', 'category')
-    list_filter = (('category', ))
+    list_filter = ('category', )
