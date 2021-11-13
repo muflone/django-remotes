@@ -27,6 +27,7 @@ from encryption.rsa_key import RsaKey
 
 from remotes.constants import ENCRYPTED_FIELD, ENCRYPTION_KEY_FIELD
 
+from utility.actions import ActionSetActive, ActionSetInactive
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -117,7 +118,10 @@ class Host(BaseModel):
                 use_base64=True)
 
 
-class HostAdmin(BaseModelAdmin):
+class HostAdmin(BaseModelAdmin,
+                ActionSetActive,
+                ActionSetInactive):
+    actions = ['set_active', 'set_inactive']
     list_display = ('__str__', 'uuid', 'user', 'groups_list', 'is_active')
     list_filter = ('is_active',)
     ordering = ['user']

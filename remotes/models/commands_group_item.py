@@ -24,6 +24,7 @@ from django.utils.translation import pgettext_lazy
 
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
+from utility.actions import ActionSetActive, ActionSetInactive
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -92,7 +93,10 @@ class CommandsGroupItemInline(TabularInline):
     fields = ('command', 'order', 'is_active')
 
 
-class CommandsGroupItemAdmin(BaseModelAdmin):
+class CommandsGroupItemAdmin(BaseModelAdmin,
+                             ActionSetActive,
+                             ActionSetInactive):
+    actions = ['set_active', 'set_inactive']
     list_display = ('id', 'group', 'command', 'order', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    ('command', RelatedDropdownFilter),
