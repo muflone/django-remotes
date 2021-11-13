@@ -20,6 +20,7 @@
 
 import argparse
 import os
+import pathlib
 import subprocess
 import tempfile
 import urllib.parse
@@ -30,6 +31,7 @@ from encryption.rsa_key import RsaKey
 
 from project import PRODUCT_NAME, VERSION
 
+import remotes
 from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_COMMAND_POST,
                                     ACTION_COMMANDS_LIST,
@@ -421,6 +423,10 @@ class Client(object):
                 prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
                 text=True)
             with os.fdopen(temp_file_fd, 'w') as file:
+                # Initialize modules path
+                remotes_path = pathlib.Path(remotes.__path__[0])
+                file.write('import sys\n'
+                           f'sys.path.append(r"{remotes_path.parent}")\n')
                 # Initialize __RESULT__ variable
                 file.write('__RESULT__ = ""\n')
                 # Save settings
