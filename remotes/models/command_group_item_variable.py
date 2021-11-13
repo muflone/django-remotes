@@ -63,5 +63,42 @@ class CommandsGroupItemVariable(BaseModel):
 
 
 class CommandsGroupItemVariableAdmin(BaseModelAdmin):
-    list_display = ('command_group_item', 'order', 'variable')
+    list_display = ('item_id',
+                    'group',
+                    'command',
+                    'item_order',
+                    'order',
+                    'variable')
     list_filter = (('variable', ))
+
+    def item_id(self, instance) -> int:
+        """
+        Return the associated command group item ID
+        :param instance: CommandgsGroupItemVariable instance
+        :return: command group item ID
+        """
+        return instance.command_group_item.id
+
+    def item_order(self, instance) -> int:
+        """
+        Return the associated command group item order
+        :param instance: CommandgsGroupItemVariable instance
+        :return: command group item order
+        """
+        return instance.command_group_item.order
+
+    def group(self, instance) -> 'remotes.models.CommandsGroup':
+        """
+        Return the associated command group item group
+        :param instance: CommandgsGroupItemVariable instance
+        :return: CommandsGroup object
+        """
+        return instance.command_group_item.group
+
+    def command(self, instance) -> 'remotes.models.Command':
+        """
+        Return the associated command group item group
+        :param instance: CommandgsGroupItemVariable instance
+        :return: Command object
+        """
+        return instance.command_group_item.command
