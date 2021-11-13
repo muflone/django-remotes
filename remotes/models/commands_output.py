@@ -76,8 +76,32 @@ class CommandsOutput(BaseModel):
 
 
 class CommandsOutputAdmin(BaseModelAdmin):
-    list_display = ('timestamp', 'group_item', 'host')
+    list_display = ('timestamp', 'item_id', 'group', 'command', 'host')
     list_filter = (('group_item__group', RelatedDropdownFilter),
                    ('group_item', RelatedDropdownFilter),
                    'group_item__group__hosts',
                    ('host', RelatedDropdownFilter))
+
+    def item_id(self, instance) -> int:
+        """
+        Return the associated command group item ID
+        :param instance: CommandsGroupItemVariable instance
+        :return: command group item ID
+        """
+        return instance.group_item.id
+
+    def group(self, instance) -> 'models.CommandsGroup':
+        """
+        Return the associated command group item group
+        :param instance: CommandsGroupItemVariable instance
+        :return: CommandsGroup object
+        """
+        return instance.group_item.group
+
+    def command(self, instance) -> 'models.Command':
+        """
+        Return the associated command group item group
+        :param instance: CommandsGroupItemVariable instance
+        :return: Command object
+        """
+        return instance.group_item.command
