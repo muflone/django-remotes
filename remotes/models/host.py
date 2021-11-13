@@ -123,10 +123,11 @@ class HostAdmin(BaseModelAdmin):
     ordering = ['user']
     readonly_fields = ('uuid', 'groups_list')
 
-    def groups_list(self, instance):
+    def groups_list(self, instance) -> str:
         """
         Return the HostsGroup names for the current host
-        :return:
+        :param instance: Host instance
+        :return: a comma separated list of groups
         """
         return ', '.join(instance.hostsgroup_set.values_list('name',
                                                              flat=True))
