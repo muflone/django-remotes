@@ -32,11 +32,11 @@ class CommandGetSerializer(ModelSerializer):
     """
     settings = SerializerMethodField('get_settings')
     variables = SerializerMethodField('get_variables')
-    command = SerializerMethodField('get_command')
 
     class Meta:
         model = CommandsGroupItem
-        fields = ['id', 'name', 'settings', 'variables', 'command', 'timeout']
+        fields = ['id', 'name', 'settings', 'variables', 'command_text',
+                  'timeout']
 
     # noinspection PyMethodMayBeStatic
     def get_settings(self, instance):
@@ -56,10 +56,6 @@ class CommandGetSerializer(ModelSerializer):
         for item in variables_values:
             result[item.variable.name] = item.value
         return result
-
-    # noinspection PyMethodMayBeStatic
-    def get_command(self, instance):
-        return instance.command.command
 
 
 class CommandGetView(RetrieveAPIEncryptedView):

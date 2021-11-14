@@ -59,11 +59,11 @@ class CommandsGroupItem(BaseModel):
                                        verbose_name=pgettext_lazy(
                                            'CommandsGroupItem',
                                            'variables'))
-    command = models.ForeignKey(to='remotes.Command',
-                                on_delete=models.PROTECT,
-                                verbose_name=pgettext_lazy(
-                                    'CommandsGroupItem',
-                                    'command'))
+    command_text = models.TextField(null=True,
+                                    blank=False,
+                                    verbose_name=pgettext_lazy(
+                                        'CommandsGroupItem',
+                                        'command text'))
     output_variables = models.ManyToManyField(
         to='remotes.Variable',
         related_name='output_variables_set',
@@ -92,14 +92,14 @@ class CommandsGroupItem(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['group', 'order', '-is_active', 'command']
+        ordering = ['group', 'order', '-is_active', 'command_text']
         verbose_name = pgettext_lazy('CommandsGroupItem',
                                      'Commands group item')
         verbose_name_plural = pgettext_lazy('CommandsGroupItem',
                                             'Commands group items')
 
     def __str__(self):
-        return f'{self.group_id} - {self.group} - {self.command}'
+        return f'{self.group_id} - {self.group} - {self.command_text}'
 
     def group_order(self):
         """
@@ -111,16 +111,14 @@ class CommandsGroupItem(BaseModel):
 
 class CommandsGroupItemInline(TabularInline):
     model = CommandsGroupItem
-    fields = ('command', 'order', 'is_active')
+    fields = ('command_text', 'order', 'is_active')
 
 
 class CommandsGroupItemAdmin(BaseModelAdmin,
                              ActionSetActive,
                              ActionSetInactive):
     actions = ['set_active', 'set_inactive']
-    list_display = ('id', 'name', 'group', 'command', 'order', 'timeout',
-                    'is_active')
+    list_display = ('id', 'name', 'group', 'order', 'timeout', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
-                   ('command', RelatedDropdownFilter),
                    'is_active',
                    'group__hosts')
