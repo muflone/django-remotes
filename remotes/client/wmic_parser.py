@@ -96,7 +96,9 @@ class WmicParser(object):
         :param condition: a condition to filter results
         :return: a single resulting value
         """
-        values = self.get_values(alias=alias, fields=field, condition=condition)
+        values = self.get_values(alias=alias,
+                                 fields=field,
+                                 condition=condition)
         return values[0][field] if values else None
 
     def get_list(self,
