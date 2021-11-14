@@ -21,10 +21,51 @@
 import subprocess
 from typing import Optional, Union
 
+WMI_ACTION_GET = 'GET'
+
 
 class WmicParser(object):
     def __init__(self, timeout: int = 10):
         self.timeout = timeout
+
+
+    def execute_wmic(self,
+                     action: str,
+                     alias: str,
+                     condition: str = None,
+                     fields: Optional[Union[str, list, tuple]] = None) -> str:
+        """
+        Execute an action for a method from wmic for the specified role alias
+
+        :param action: action to execute
+        :param alias: WMI role alias to use
+        :param condition: a condition to filter results
+        :param fields: field list to return during GET request
+        :return: resulting string from wmic output
+        """
+        # Prepare arguments
+        arguments = ['wmic', alias]
+        # Get condition
+        if condition:
+            arguments.append('WHERE')
+            arguments.append(condition)
+        arguments.append(action)
+        if action == WMI_ACTION_GET:
+            # Get fields
+            if not fields:
+                # Get all fields
+                arguments.append('*')
+            elif isinstance(fields, list) or isinstance(fields, tuple):
+                # Fields list or tuple
+                arguments.append(','.join(fields))
+            else:
+                # Field list as a string
+                arguments.append(fields)
+            arguments.append('/VALUE')
+        process = subprocess.run(args=arguments,
+                                 capture_output=True,
+                                 timeout=self.timeout)
+        return process.stdout.decode('utf-8')
 
     def get(self,
             alias: str,
@@ -83,29 +124,12 @@ class WmicParser(object):
         :return: a list of dictionary with items
         """
         results = []
-        # Prepare arguments
-        arguments = ['wmic', alias]
-        # Get condition
-        if condition:
-            arguments.append('WHERE')
-            arguments.append(condition)
-        arguments.append('GET')
-        # Get fields
-        if not fields:
-            # Get all fields
-            arguments.append('*')
-        elif isinstance(fields, list) or isinstance(fields, tuple):
-            # Fields list or tuple
-            arguments.append(','.join(fields))
-        else:
-            # Field list as a string
-            arguments.append(fields)
-        arguments.append('/VALUE')
-        process = subprocess.run(args=arguments,
-                                 capture_output=True,
-                                 timeout=self.timeout)
         item = {}
-        for line in process.stdout.decode('utf-8').split('\n'):
+        wmic_output = self.execute_wmic(action=WMI_ACTION_GET,
+                                        alias=alias,
+                                        condition=condition,
+                                        fields=fields)
+        for line in wmic_output.split('\n'):
             line = line.strip()
             # New item for empty lines
             if not line:
