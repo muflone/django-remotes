@@ -38,11 +38,6 @@ class Command(BaseModel):
                                    verbose_name=pgettext_lazy(
                                        'Command',
                                        'description'))
-    settings = models.ManyToManyField(blank=True,
-                                      to='remotes.Setting',
-                                      verbose_name=pgettext_lazy(
-                                          'Command',
-                                          'settings'))
     variables = models.ManyToManyField(blank=True,
                                        to='remotes.Variable',
                                        verbose_name=pgettext_lazy(

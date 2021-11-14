@@ -43,7 +43,7 @@ class CommandGetSerializer(ModelSerializer):
     # noinspection PyMethodMayBeStatic
     def get_settings(self, instance):
         return {item.name: item.value
-                for item in instance.command.settings.all()}
+                for item in instance.settings.all()}
 
     def get_variables(self, instance):
         # Initialize variable values to None
