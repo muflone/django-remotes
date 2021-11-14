@@ -34,7 +34,6 @@ class CommandGetSerializer(ModelSerializer):
     variables = SerializerMethodField('get_variables')
     command = SerializerMethodField('get_command')
     command_name = SerializerMethodField('get_command_name')
-    timeout = SerializerMethodField('get_timeout')
 
     class Meta:
         model = CommandsGroupItem
@@ -67,10 +66,6 @@ class CommandGetSerializer(ModelSerializer):
     # noinspection PyMethodMayBeStatic
     def get_command_name(self, instance):
         return instance.command.name
-
-    # noinspection PyMethodMayBeStatic
-    def get_timeout(self, instance):
-        return instance.command.timeout
 
 
 class CommandGetView(RetrieveAPIEncryptedView):

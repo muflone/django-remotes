@@ -55,6 +55,10 @@ class CommandsGroupItem(BaseModel):
         verbose_name=pgettext_lazy(
             'CommandsGroupItem',
             'variables'))
+    timeout = models.PositiveIntegerField(default=15,
+                                          verbose_name=pgettext_lazy(
+                                              'CommandsGroupItem',
+                                              'timeout'))
     order = models.PositiveIntegerField(default=1,
                                         verbose_name=pgettext_lazy(
                                             'CommandsGroupItem',
@@ -97,7 +101,7 @@ class CommandsGroupItemAdmin(BaseModelAdmin,
                              ActionSetActive,
                              ActionSetInactive):
     actions = ['set_active', 'set_inactive']
-    list_display = ('id', 'group', 'command', 'order', 'is_active')
+    list_display = ('id', 'group', 'command', 'order', 'timeout', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    ('command', RelatedDropdownFilter),
                    'is_active',

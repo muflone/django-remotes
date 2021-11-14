@@ -53,10 +53,6 @@ class Command(BaseModel):
                                verbose_name=pgettext_lazy(
                                    'Command',
                                    'command'))
-    timeout = models.PositiveIntegerField(default=15,
-                                          verbose_name=pgettext_lazy(
-                                              'Command',
-                                              'timeout'))
 
     # Set the managers for the model
     objects = models.Manager()
@@ -76,5 +72,5 @@ class Command(BaseModel):
 
 
 class CommandAdmin(BaseModelAdmin):
-    list_display = ('name', 'timeout')
+    list_display = ('name', )
     ordering = ['name']
