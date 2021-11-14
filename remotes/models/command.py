@@ -29,11 +29,6 @@ class Command(BaseModel):
     """
     Command
     """
-    name = models.CharField(max_length=255,
-                            unique=True,
-                            verbose_name=pgettext_lazy(
-                                'Command',
-                                'name'))
     description = models.TextField(blank=True,
                                    verbose_name=pgettext_lazy(
                                        'Command',
@@ -51,16 +46,14 @@ class Command(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['name']
         verbose_name = pgettext_lazy('Command',
                                      'Command')
         verbose_name_plural = pgettext_lazy('Command',
                                             'Commands')
 
     def __str__(self):
-        return self.name
+        return str(self.id)
 
 
 class CommandAdmin(BaseModelAdmin):
-    list_display = ('name', )
-    ordering = ['name']
+    pass

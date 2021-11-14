@@ -33,6 +33,12 @@ class CommandsGroupItem(BaseModel):
     """
     CommandsGroupItem
     """
+    name = models.CharField(max_length=255,
+                            blank=True,
+                            null=False,
+                            verbose_name=pgettext_lazy(
+                                'CommandsGroupItem',
+                                'name'))
     group = models.ForeignKey(to='remotes.CommandsGroup',
                               on_delete=models.PROTECT,
                               verbose_name=pgettext_lazy(
@@ -112,7 +118,8 @@ class CommandsGroupItemAdmin(BaseModelAdmin,
                              ActionSetActive,
                              ActionSetInactive):
     actions = ['set_active', 'set_inactive']
-    list_display = ('id', 'group', 'command', 'order', 'timeout', 'is_active')
+    list_display = ('id', 'name', 'group', 'command', 'order', 'timeout',
+                    'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    ('command', RelatedDropdownFilter),
                    'is_active',
