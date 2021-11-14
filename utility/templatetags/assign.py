@@ -28,6 +28,7 @@ register = template.Library()
 def assign(value):
     """
     Return the passed value (I wonder why Django lacks this)
+
     :param value: any value
     :return: the initial value
     """

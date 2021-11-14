@@ -40,6 +40,7 @@ class Settings(object):
     def load(self, filename: str):
         """
         Load the settings file
+
         :param filename: file to load settings from
         :return: None
         """
@@ -56,6 +57,7 @@ class Settings(object):
     def get_value(self, section: str, option: str):
         """
         Get a value from an option
+
         :param section: section in settings
         :param option: option name
         :return: value
@@ -70,6 +72,7 @@ class Settings(object):
     def set_value(self, section: str, option: str, value: str):
         """
         Save a value to an option
+
         :param section: section in settings
         :param option: option name
         :param value: value
@@ -84,6 +87,7 @@ class Settings(object):
     def build_url(self, url: str, extra: str = None) -> str:
         """
         Build URL using the server_url and the url
+
         :param url: additional URL
         :param extra: additional URL path
         :return: full URL

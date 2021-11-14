@@ -24,6 +24,7 @@ from remotes.models import Setting
 def get_setting_value(name: str, default_value: str = None) -> str:
     """
     Get a value from settings
+
     :param name: setting name
     :param default_value: default value if no setting is found
     :return:

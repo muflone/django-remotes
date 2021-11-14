@@ -31,6 +31,7 @@ class Api(object):
                 data: dict = None):
         """
         Process a request using the requested method
+
         :param method: REST method to execute
         :param headers: HTTP headers to include
         :param data: JSON data to send in the request

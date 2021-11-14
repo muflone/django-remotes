@@ -23,6 +23,7 @@ class ActionSetActive(object):
     def set_active(self, request, queryset) -> None:
         """
         Set is_active field for each record in queryset
+
         :param request: request page
         :param queryset: data to update
         :return: None

@@ -222,6 +222,7 @@ class Client(object):
                        data: dict = None) -> dict:
         """
         Execute an API request for the selected URL
+
         :param method: REST method to execute
         :param url: URL to process
         :param headers: dictionary with headers to pass
@@ -243,6 +244,7 @@ class Client(object):
     def do_get_status(self, url: str) -> tuple[int, dict]:
         """
         Get status
+
         :param url: URL to request
         :return: tuple with the status and the resulting data
         """
@@ -262,6 +264,7 @@ class Client(object):
     def do_discover(self) -> tuple[int, dict]:
         """
         Discover services URLS
+
         :return: tuple with the status and the resulting data
         """
         url = self.build_url(section=SECTION_ENDPOINTS,
@@ -282,6 +285,7 @@ class Client(object):
                          public_key_filename: str) -> tuple[int, None]:
         """
         Generate private and public keys and save them in two files
+
         :param private_key_filename: filename where to save the private key
         :param public_key_filename: filename where to save the public key
         :return: tuple with the status and the resulting data
@@ -303,6 +307,7 @@ class Client(object):
     def do_host_register(self, token: str) -> tuple[int, dict]:
         """
         Discover services URLS
+
         :param token: authorization token
         :return: tuple with the status and the resulting data
         """
@@ -342,6 +347,7 @@ class Client(object):
     def do_host_status(self) -> tuple[int, dict]:
         """
         Host status
+
         :return: tuple with the status and the resulting data
         """
         url = self.build_url(section=SECTION_ENDPOINTS,
@@ -358,6 +364,7 @@ class Client(object):
     def do_host_verify(self, token: str) -> tuple[int, dict]:
         """
         Host verification
+
         :param token: authorization token
         :return: tuple with the status and the resulting data
         """
@@ -382,6 +389,7 @@ class Client(object):
     def do_list_commands(self) -> tuple[int, dict]:
         """
         List commands
+
         :return: tuple with the status and the resulting data
         """
         url = self.build_url(section=SECTION_ENDPOINTS,
@@ -398,6 +406,7 @@ class Client(object):
     def do_get_command(self, command_id: int) -> tuple[int, dict]:
         """
         Execute command
+
         :param command_id: command ID to execute
         :return: tuple with the status and the resulting data
         """
@@ -496,6 +505,7 @@ class Client(object):
     def do_process_commands(self) -> tuple[int, dict]:
         """
         Execute every command in list
+
         :return: tuple with the status and the resulting data
         """
         status, results = self.do_list_commands()
@@ -511,6 +521,7 @@ class Client(object):
     def load(self) -> None:
         """
         Load settings
+
         :return: None
         """
         self.settings = Settings()
@@ -547,6 +558,7 @@ class Client(object):
     def build_url(self, section: str, option: str, extra: str = None) -> str:
         """
         Build URL from settings option
+
         :param section: settings section
         :param option: settings option
         :param extra: extra arguments for URL
@@ -560,6 +572,7 @@ class Client(object):
     def decrypt_option(self, section: str, option: str) -> str:
         """
         Load UUID from settings
+
         :param section: setting section
         :param option: setting option
         :return: host UUID

@@ -52,6 +52,7 @@ class FernetEncrypt(object):
     def load_key_from_file(self, filename: str):
         """
         Load key from file
+
         :param filename: source filename from where to load the key
         :return: None
         """
@@ -61,6 +62,7 @@ class FernetEncrypt(object):
     def load_key_from_uuid(self, guid: UUID):
         """
         Load key from UUID
+
         :param guid: UUID object
         :return: None
         """
@@ -69,6 +71,7 @@ class FernetEncrypt(object):
     def save_key_to_file(self, filename: str):
         """
         Save the key to file
+
         :param filename: destination filename where to save the key
         :return: None
         """
@@ -78,6 +81,7 @@ class FernetEncrypt(object):
     def encrypt(self, text: str) -> str:
         """
         Encrypt the input text using the key
+
         :param text: text to be encrypted
         :return: resulting encrypted text
         """
@@ -87,6 +91,7 @@ class FernetEncrypt(object):
     def decrypt(self, text: str) -> str:
         """
         Decrypt the input text using the key
+
         :param text: encrypted text to decrypt
         :return: resulting plain text
         """

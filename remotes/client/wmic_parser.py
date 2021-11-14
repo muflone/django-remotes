@@ -32,6 +32,7 @@ class WmicParser(object):
             condition: str = None) -> Optional[str]:
         """
         Get a single string item from wmic for the specified role
+
         :param role: WMI role alias to use
         :param field: single field to return
         :param condition: a condition to filter results
@@ -48,6 +49,7 @@ class WmicParser(object):
                  strip: str = None) -> list[str]:
         """
         Get a list of strings from wmic for the specified role
+
         :param role: WMI role alias to use
         :param field: single field to return
         :param condition: a condition to filter results
@@ -74,6 +76,7 @@ class WmicParser(object):
                    ) -> list[dict[str]]:
         """
         Get a list of items from wmic for the specified role
+
         :param role: WMI role alias to use
         :param fields: field list to return
         :param condition: a condition to filter results

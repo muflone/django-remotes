@@ -80,6 +80,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
     def item_id(self, instance) -> int:
         """
         Return the associated command group item ID
+
         :param instance: CommandsGroupItemVariable instance
         :return: command group item ID
         """
@@ -89,6 +90,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
     def item_order(self, instance) -> int:
         """
         Return the associated command group item order
+
         :param instance: CommandsGroupItemVariable instance
         :return: command group item order
         """
@@ -98,6 +100,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
     def group(self, instance) -> 'models.CommandsGroup':
         """
         Return the associated command group item group
+
         :param instance: CommandsGroupItemVariable instance
         :return: CommandsGroup object
         """
@@ -107,6 +110,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
     def command(self, instance) -> 'models.Command':
         """
         Return the associated command group item group
+
         :param instance: CommandsGroupItemVariable instance
         :return: Command object
         """

@@ -83,6 +83,7 @@ class Host(BaseModel):
         """
         Encrypt some fields in the `data` dictionary using a new symmetric key
         The new key will be saved in a field called `ENCRYPTION_KEY_FIELD`
+
         :param data: initial data to encrypt
         :param fields: fields list to encrypt
         :return: None
@@ -132,6 +133,7 @@ class HostAdmin(BaseModelAdmin,
     def groups_list(self, instance) -> str:
         """
         Return the HostsGroup names for the current host
+
         :param instance: Host instance
         :return: a comma separated list of groups
         """

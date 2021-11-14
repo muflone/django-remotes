@@ -61,6 +61,7 @@ class CommandPostSerializer(Serializer):
     def create(self, data) -> CommandsOutput:
         """
         Create new CommandsOutput object
+
         :param data: data to save
         :return: new CommandsOutput object
         """

@@ -33,6 +33,7 @@ class RsaKey(object):
     def create_new_key(self, size: int):
         """
         Generate new private and public keys
+
         :param size: key size in bytes
         :return: None
         """
@@ -46,6 +47,7 @@ class RsaKey(object):
     def get_private_key_bytes(self, password: str = None) -> bytes:
         """
         Get the private key content in bytes
+
         :param password: passphrase used to encrypt the private key
         :return: private key content
         """
@@ -63,6 +65,7 @@ class RsaKey(object):
     def get_private_key_content(self, password: str = None) -> str:
         """
         Get the private key content
+
         :param password: passphrase used to encrypt the private key
         :return: private key content
         """
@@ -71,6 +74,7 @@ class RsaKey(object):
     def get_public_key_bytes(self) -> bytes:
         """
         Get the public key content in bytes
+
         :return: public key content
         """
         results = self._public_key.public_bytes(
@@ -81,6 +85,7 @@ class RsaKey(object):
     def get_public_key_content(self) -> str:
         """
         Get the public key content
+
         :return: public key content
         """
         return self.get_public_key_bytes().decode('utf-8')
@@ -88,6 +93,7 @@ class RsaKey(object):
     def load_private_key(self, data: str, password: str = None):
         """
         Load private key from string using the provided optional password
+
         :param data: private key content
         :param password: passphrase used to encrypt the private key
         :return: private key
@@ -100,6 +106,7 @@ class RsaKey(object):
     def load_private_key_from_file(self, filename: str, password: str = None):
         """
         Load private key from filename using the provided optional password
+
         :param filename: source filename to load the private key
         :param password: passphrase used to encrypt the private key
         :return: private key
@@ -112,6 +119,7 @@ class RsaKey(object):
     def load_public_key(self, data: str):
         """
         Load public key from a string
+
         :param data: public key content
         :return: public key
         """
@@ -122,6 +130,7 @@ class RsaKey(object):
     def load_public_key_from_file(self, filename: str):
         """
         Load public key from filename
+
         :param filename: source filename to load the public key
         :return: public key
         """
@@ -132,6 +141,7 @@ class RsaKey(object):
     def save_private_key(self, filename: str, password: str = None):
         """
         Save the private key to file
+
         :param filename: destination filename to save the private key
         :param password: passphrase used to encrypt the private key
         :return: None
@@ -142,6 +152,7 @@ class RsaKey(object):
     def save_public_key(self, filename: str):
         """
         Save the public key to file
+
         :param filename: destination filename to save the public key
         :return: None
         """
@@ -151,6 +162,7 @@ class RsaKey(object):
     def encrypt(self, text: str, use_base64: bool) -> str:
         """
         Encrypt text using the public key
+
         :param text: text to be encrypted
         :param use_base64: encode encrypted text in base64
         :return: resulting encrypted text
@@ -166,6 +178,7 @@ class RsaKey(object):
     def decrypt(self, text: str, use_base64: bool) -> str:
         """
         Decrypt text using the private key
+
         :param text: encrypted text to decrypt
         :param use_base64: encrypted text is in base64
         :return: resulting plain text
@@ -180,6 +193,7 @@ class RsaKey(object):
     def sign(self, text: str, use_base64: bool) -> str:
         """
         Sign text using the private key
+
         :param text: text to be signed
         :param use_base64: encrypted text is in base64
         :return: signed text
@@ -195,6 +209,7 @@ class RsaKey(object):
     def verify(self, data: str, text: str, use_base64: bool) -> bool:
         """
         Verify encrypted text using the public key
+
         :param data: signature text to verify
         :param text: clear text to verify
         :param use_base64: encrypted text is in base64
@@ -217,6 +232,7 @@ class RsaKey(object):
     def get_public_key_length(self) -> int:
         """
         Return the public key length in bits
-        :return:
+
+        :return: key length in bit
         """
         return self._public_key.key_size
