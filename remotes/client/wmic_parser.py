@@ -27,37 +27,37 @@ class WmicParser(object):
         self.timeout = timeout
 
     def get(self,
-            role: str,
+            alias: str,
             field: str,
             condition: str = None) -> Optional[str]:
         """
-        Get a single string item from wmic for the specified role
+        Get a single string item from wmic for the specified role alias
 
-        :param role: WMI role alias to use
+        :param alias: WMI role alias to use
         :param field: single field to return
         :param condition: a condition to filter results
         :return: a single resulting value
         """
-        values = self.get_values(role=role, fields=field, condition=condition)
+        values = self.get_values(alias=alias, fields=field, condition=condition)
         return values[0][field] if values else None
 
     def get_list(self,
-                 role: str,
+                 alias: str,
                  field: str,
                  condition: str = None,
                  separator: str = ',',
                  strip: str = None) -> list[str]:
         """
-        Get a list of strings from wmic for the specified role
+        Get a list of strings from wmic for the specified role alias
 
-        :param role: WMI role alias to use
+        :param alias: WMI role alias to use
         :param field: single field to return
         :param condition: a condition to filter results
         :param separator: a string separator between the items
         :param strip: a string to remove used to surround each item
         :return: a list of resulting values
         """
-        if values := self.get_values(role=role,
+        if values := self.get_values(alias=alias,
                                      fields=field,
                                      condition=condition):
             results = values[0][field][1:-1].split(separator)
@@ -70,21 +70,21 @@ class WmicParser(object):
         return results
 
     def get_values(self,
-                   role: str,
+                   alias: str,
                    fields: Optional[Union[str, list, tuple]] = None,
                    condition: str = None
                    ) -> list[dict[str]]:
         """
-        Get a list of items from wmic for the specified role
+        Get a list of items from wmic for the specified role alias
 
-        :param role: WMI role alias to use
+        :param alias: WMI role alias to use
         :param fields: field list to return
         :param condition: a condition to filter results
         :return: a list of dictionary with items
         """
         results = []
         # Prepare arguments
-        arguments = ['wmic', role]
+        arguments = ['wmic', alias]
         # Get condition
         if condition:
             arguments.append('WHERE')
