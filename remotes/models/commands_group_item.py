@@ -59,11 +59,9 @@ class CommandsGroupItem(BaseModel):
                                        verbose_name=pgettext_lazy(
                                            'CommandsGroupItem',
                                            'variables'))
-    command_text = models.TextField(null=True,
-                                    blank=False,
-                                    verbose_name=pgettext_lazy(
-                                        'CommandsGroupItem',
-                                        'command text'))
+    command = models.TextField(verbose_name=pgettext_lazy(
+                                   'CommandsGroupItem',
+                                   'command'))
     output_variables = models.ManyToManyField(
         to='remotes.Variable',
         related_name='output_variables_set',
@@ -92,14 +90,14 @@ class CommandsGroupItem(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['group', 'order', '-is_active', 'command_text']
+        ordering = ['group', 'order', '-is_active']
         verbose_name = pgettext_lazy('CommandsGroupItem',
                                      'Commands group item')
         verbose_name_plural = pgettext_lazy('CommandsGroupItem',
                                             'Commands group items')
 
     def __str__(self):
-        return f'{self.group_id} - {self.group} - {self.command_text}'
+        return f'{self.group_id} - {self.group} - {self.name}'
 
     def group_order(self):
         """
@@ -111,7 +109,7 @@ class CommandsGroupItem(BaseModel):
 
 class CommandsGroupItemInline(TabularInline):
     model = CommandsGroupItem
-    fields = ('command_text', 'order', 'is_active')
+    fields = ('name', 'order', 'command', 'is_active')
 
 
 class CommandsGroupItemAdmin(BaseModelAdmin,

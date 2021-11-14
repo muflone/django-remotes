@@ -67,12 +67,10 @@ class CommandsGroupItemVariable(BaseModel):
 class CommandsGroupItemVariableAdmin(BaseModelAdmin):
     list_display = ('item_id',
                     'group',
-                    'command',
                     'item_order',
                     'order',
                     'variable')
     list_filter = (('command_group_item__group', RelatedDropdownFilter),
-                   ('command_group_item__command', RelatedDropdownFilter),
                    ('variable', RelatedDropdownFilter),
                    ('command_group_item__group__hosts', RelatedDropdownFilter))
 
