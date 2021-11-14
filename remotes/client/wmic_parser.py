@@ -44,19 +44,24 @@ class WmicParser(object):
                  role: str,
                  field: str,
                  condition: str = None,
-                 separator: str = ',') -> list[str]:
+                 separator: str = ',',
+                 strip: str = None) -> list[str]:
         """
         Get a list of strings from wmic for the specified role
         :param role: WMI role alias to use
         :param field: single field to return
         :param condition: a condition to filter results
         :param separator: a string separator between the items
+        :param strip: a string to remove used to surround each item
         :return: a list of resulting values
         """
         if values := self.get_values(role=role,
                                      fields=field,
                                      condition=condition):
             results = values[0][field][1:-1].split(separator)
+            # Apply strip to each item
+            if strip:
+                results = [item.strip(strip) for item in results]
         else:
             results = None
 
