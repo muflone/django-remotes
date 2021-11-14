@@ -50,10 +50,17 @@ class WmicParser(object):
         :param role: WMI role alias to use
         :param field: single field to return
         :param condition: a condition to filter results
+        :param separator: a string separator between the items
         :return: a list of resulting values
         """
-        values = self.get_values(role=role, fields=field, condition=condition)
-        return values[0][field][1:-1].split(separator) if values else None
+        if values := self.get_values(role=role,
+                                     fields=field,
+                                     condition=condition):
+            results = values[0][field][1:-1].split(separator)
+        else:
+            results = None
+
+        return results
 
     def get_values(self,
                    role: str,
