@@ -76,6 +76,7 @@ class Host(BaseModel):
                                             'Hosts')
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return self.user.username if self.user else str(self.uuid)
 
     def encrypt_data(self, data: dict, fields: list) -> None:
@@ -127,6 +128,7 @@ class HostAdmin(BaseModelAdmin,
     ordering = ['user']
     readonly_fields = ('uuid', 'groups_list')
 
+    # noinspection PyMethodMayBeStatic
     def groups_list(self, instance) -> str:
         """
         Return the HostsGroup names for the current host

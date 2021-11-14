@@ -44,6 +44,7 @@ from utility.misc.get_setting_value import get_setting_value
 class HostVerifyView(APIView):
     permission_classes = (CanUserRegisterHosts, )
 
+    # noinspection PyMethodMayBeStatic
     def post(self, request):
         # Get host UUID
         try:

@@ -214,6 +214,7 @@ class Client(object):
             results = None
         return status, results
 
+    # noinspection PyMethodMayBeStatic
     def do_api_request(self,
                        method: str,
                        url: str,

@@ -37,4 +37,5 @@ class BaseModelAdmin(admin.ModelAdmin):
         super().__init__(model, admin_site)
         # If ModelAdmin ordering is missing apply the ordering of the model
         if not self.ordering:
+            # noinspection PyProtectedMember
             self.ordering = model._meta.ordering

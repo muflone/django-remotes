@@ -76,6 +76,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
                    ('variable', RelatedDropdownFilter),
                    ('command_group_item__group__hosts', RelatedDropdownFilter))
 
+    # noinspection PyMethodMayBeStatic
     def item_id(self, instance) -> int:
         """
         Return the associated command group item ID
@@ -84,6 +85,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
         """
         return instance.command_group_item.id
 
+    # noinspection PyMethodMayBeStatic
     def item_order(self, instance) -> int:
         """
         Return the associated command group item order
@@ -92,6 +94,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
         """
         return instance.command_group_item.order
 
+    # noinspection PyMethodMayBeStatic
     def group(self, instance) -> 'models.CommandsGroup':
         """
         Return the associated command group item group
@@ -100,6 +103,7 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
         """
         return instance.command_group_item.group
 
+    # noinspection PyMethodMayBeStatic
     def command(self, instance) -> 'models.Command':
         """
         Return the associated command group item group

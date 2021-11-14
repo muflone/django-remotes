@@ -44,6 +44,7 @@ from remotes.models import (CommandsGroupItem,
                             VariableValue)
 
 
+# noinspection PyAbstractClass
 class CommandPostSerializer(Serializer):
     """
     Serializer for CommandPostView

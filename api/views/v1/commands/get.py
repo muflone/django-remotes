@@ -41,6 +41,7 @@ class CommandGetSerializer(ModelSerializer):
         fields = ['id', 'settings', 'variables', 'command', 'command_name',
                   'timeout']
 
+    # noinspection PyMethodMayBeStatic
     def get_settings(self, instance):
         return {item.name: item.value
                 for item in instance.command.settings.all()}
@@ -59,12 +60,15 @@ class CommandGetSerializer(ModelSerializer):
             result[item.variable.name] = item.value
         return result
 
+    # noinspection PyMethodMayBeStatic
     def get_command(self, instance):
         return instance.command.command
 
+    # noinspection PyMethodMayBeStatic
     def get_command_name(self, instance):
         return instance.command.name
 
+    # noinspection PyMethodMayBeStatic
     def get_timeout(self, instance):
         return instance.command.timeout
 

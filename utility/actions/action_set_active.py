@@ -19,6 +19,7 @@
 ##
 
 class ActionSetActive(object):
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def set_active(self, request, queryset) -> None:
         """
         Set is_active field for each record in queryset

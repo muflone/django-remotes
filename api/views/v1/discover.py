@@ -37,6 +37,7 @@ from remotes.constants import ENDPOINTS_FIELD, STATUS_FIELD, STATUS_OK
 class DiscoverView(APIView):
     permission_classes = (AllowAny, )
 
+    # noinspection PyMethodMayBeStatic
     def get(self, request):
         endpoints = {
             ACTION_COMMAND_GET: reverse('api.v1.command.get.generic'),

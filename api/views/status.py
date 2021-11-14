@@ -39,6 +39,7 @@ from utility.misc.get_setting_value import get_setting_value
 class StatusView(APIView):
     permission_classes = (AllowAny, )
 
+    # noinspection PyMethodMayBeStatic
     def get(self, request):
         server_url = get_setting_value(name=SERVER_URL)
         # Auto-detect the server_url if it wasn't configured

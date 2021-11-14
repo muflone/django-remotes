@@ -21,10 +21,10 @@ in order to configure the enabled hosts and the commands to execute
 for each group of host.
 
 The other part is called **Client** which will need to be installed
-in your client hosts, registered and then it will be able to receive
-orders from the server side.
+in your client hosts and after being registered it will be able to
+receive orders from the server side.
 
-Containers or virtual environments usage is **highly encouraged** to
+Containers or virtual environments' usage is **highly encouraged** to
 isolate from any other Python package installed in your system.
 
 ---
@@ -51,7 +51,7 @@ database.
 
 ## Settings file
 
-You can setup your desired settings by editing the `project/settings.py`
+You can set up your desired settings by editing the `project/settings.py`
 file or by creating a new file into the `project` directory with the
 following:
 
@@ -73,7 +73,7 @@ export DJANGO_SETTINGS_MODULE=project.my_settings
 You can use any database that is supported by Django and setup it
 in a settings file.
 
-For example to setup a SQLite database you can use the following:
+For example to set up a SQLite database you can use the following:
 
 ```python
 DATABASES = {
@@ -123,7 +123,7 @@ server to run Python applications.
 ## Usage
 
 When you're ready open a web browser and navigate the page you set
-during the server startup (eg http://localhost:8000/admin)
+during the server startup (e.g. http://localhost:8000/admin)
 
 ## Host registration token
 

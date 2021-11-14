@@ -82,6 +82,7 @@ class CommandsOutputAdmin(BaseModelAdmin):
                    'group_item__group__hosts',
                    ('host', RelatedDropdownFilter))
 
+    # noinspection PyMethodMayBeStatic
     def item_id(self, instance) -> int:
         """
         Return the associated command group item ID
@@ -90,6 +91,7 @@ class CommandsOutputAdmin(BaseModelAdmin):
         """
         return instance.group_item.id
 
+    # noinspection PyMethodMayBeStatic
     def group(self, instance) -> 'models.CommandsGroup':
         """
         Return the associated command group item group
@@ -98,6 +100,7 @@ class CommandsOutputAdmin(BaseModelAdmin):
         """
         return instance.group_item.group
 
+    # noinspection PyMethodMayBeStatic
     def command(self, instance) -> 'models.Command':
         """
         Return the associated command group item group

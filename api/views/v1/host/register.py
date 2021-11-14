@@ -40,6 +40,7 @@ from remotes.models import Host
 class HostRegisterView(APIView):
     permission_classes = (CanUserRegisterHosts,)
 
+    # noinspection PyMethodMayBeStatic
     def post(self, request):
         # Get host public key
         try:
