@@ -29,38 +29,38 @@ from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
 
-class CommandsGroupItem(BaseModel):
+class Command(BaseModel):
     """
-    CommandsGroupItem
+    Command
     """
     name = models.CharField(max_length=255,
                             blank=True,
                             null=False,
                             verbose_name=pgettext_lazy(
-                                'CommandsGroupItem',
+                                'Command',
                                 'name'))
     group = models.ForeignKey(to='remotes.CommandsGroup',
                               on_delete=models.PROTECT,
                               verbose_name=pgettext_lazy(
-                                  'CommandsGroupItem',
+                                  'Command',
                                   'group'))
     description = models.TextField(blank=True,
                                    null=True,
                                    verbose_name=pgettext_lazy(
-                                       'CommandsGroupItem',
+                                       'Command',
                                        'description'))
     settings = models.ManyToManyField(blank=True,
                                       to='remotes.Setting',
                                       verbose_name=pgettext_lazy(
-                                          'CommandsGroupItem',
+                                          'Command',
                                           'settings'))
     variables = models.ManyToManyField(blank=True,
                                        to='remotes.Variable',
                                        verbose_name=pgettext_lazy(
-                                           'CommandsGroupItem',
+                                           'Command',
                                            'variables'))
     command = models.TextField(verbose_name=pgettext_lazy(
-                                   'CommandsGroupItem',
+                                   'Command',
                                    'command'))
     output_variables = models.ManyToManyField(
         to='remotes.Variable',
@@ -72,15 +72,15 @@ class CommandsGroupItem(BaseModel):
             'output variables'))
     timeout = models.PositiveIntegerField(default=15,
                                           verbose_name=pgettext_lazy(
-                                              'CommandsGroupItem',
+                                              'Command',
                                               'timeout'))
     order = models.PositiveIntegerField(default=1,
                                         verbose_name=pgettext_lazy(
-                                            'CommandsGroupItem',
+                                            'Command',
                                             'order'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=pgettext_lazy(
-                                        'CommandsGroupItem',
+                                        'Command',
                                         'active'))
 
     # Set the managers for the model
@@ -91,13 +91,13 @@ class CommandsGroupItem(BaseModel):
     class Meta:
         # Define the database table
         ordering = ['group', 'order', '-is_active']
-        verbose_name = pgettext_lazy('CommandsGroupItem',
-                                     'Commands group item')
-        verbose_name_plural = pgettext_lazy('CommandsGroupItem',
-                                            'Commands group items')
+        verbose_name = pgettext_lazy('Command',
+                                     'Command')
+        verbose_name_plural = pgettext_lazy('Command',
+                                            'Commands')
 
     def __str__(self):
-        return f'{self.group_id} - {self.group} - {self.name}'
+        return self.name
 
     def group_order(self):
         """
@@ -107,14 +107,14 @@ class CommandsGroupItem(BaseModel):
         return self.group.order
 
 
-class CommandsGroupItemInline(TabularInline):
-    model = CommandsGroupItem
+class CommandInline(TabularInline):
+    model = Command
     fields = ('name', 'order', 'command', 'is_active')
 
 
-class CommandsGroupItemAdmin(BaseModelAdmin,
-                             ActionSetActive,
-                             ActionSetInactive):
+class CommandAdmin(BaseModelAdmin,
+                   ActionSetActive,
+                   ActionSetInactive):
     actions = ['set_active', 'set_inactive']
     list_display = ('id', 'name', 'group', 'order', 'timeout', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),

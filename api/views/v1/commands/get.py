@@ -23,7 +23,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from api.permissions import IsUserWithHost
 from api.views.retrieve_api_encrypted import RetrieveAPIEncryptedView
 
-from remotes.models import CommandsGroupItem, Host, VariableValue
+from remotes.models import Command, Host, VariableValue
 
 
 class CommandGetSerializer(ModelSerializer):
@@ -34,7 +34,7 @@ class CommandGetSerializer(ModelSerializer):
     variables = SerializerMethodField('get_variables')
 
     class Meta:
-        model = CommandsGroupItem
+        model = Command
         fields = ['id', 'name', 'settings', 'variables', 'command', 'timeout']
 
     # noinspection PyMethodMayBeStatic
@@ -58,7 +58,7 @@ class CommandGetSerializer(ModelSerializer):
 
 
 class CommandGetView(RetrieveAPIEncryptedView):
-    model = CommandsGroupItem
+    model = Command
     permission_classes = (IsUserWithHost, )
     serializer_class = CommandGetSerializer
     encrypted_fields = ['name', 'settings', 'variables', 'command']

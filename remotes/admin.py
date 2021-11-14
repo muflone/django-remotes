@@ -20,8 +20,8 @@
 
 from django.contrib import admin
 
-from .models import (CommandsGroup, CommandsGroupAdmin,
-                     CommandsGroupItem, CommandsGroupItemAdmin,
+from .models import (Command, CommandAdmin,
+                     CommandsGroup, CommandsGroupAdmin,
                      CommandsGroupItemVariable, CommandsGroupItemVariableAdmin,
                      CommandsOutput, CommandsOutputAdmin,
                      Host, HostAdmin,
@@ -31,8 +31,8 @@ from .models import (CommandsGroup, CommandsGroupAdmin,
                      VariableValue, VariableValueAdmin)
 
 
+admin.site.register(Command, CommandAdmin)
 admin.site.register(CommandsGroup, CommandsGroupAdmin)
-admin.site.register(CommandsGroupItem, CommandsGroupItemAdmin)
 admin.site.register(CommandsGroupItemVariable, CommandsGroupItemVariableAdmin)
 admin.site.register(CommandsOutput, CommandsOutputAdmin)
 admin.site.register(Host, HostAdmin)

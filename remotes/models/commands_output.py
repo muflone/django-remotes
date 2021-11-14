@@ -31,11 +31,11 @@ class CommandsOutput(BaseModel):
     """
     CommandsOutput
     """
-    group_item = models.ForeignKey(to='remotes.CommandsGroupItem',
-                                   on_delete=models.CASCADE,
-                                   verbose_name=pgettext_lazy(
-                                       'CommandsOutput',
-                                       'group item'))
+    command = models.ForeignKey(to='remotes.Command',
+                                on_delete=models.CASCADE,
+                                verbose_name=pgettext_lazy(
+                                    'CommandsOutput',
+                                    'command'))
     host = models.ForeignKey(to='remotes.Host',
                              on_delete=models.CASCADE,
                              verbose_name=pgettext_lazy(
@@ -65,7 +65,7 @@ class CommandsOutput(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['timestamp', 'group_item_id']
+        ordering = ['timestamp', 'command_id']
         verbose_name = pgettext_lazy('CommandsOutput',
                                      'Commands output')
         verbose_name_plural = pgettext_lazy('CommandsOutput',
@@ -76,21 +76,21 @@ class CommandsOutput(BaseModel):
 
 
 class CommandsOutputAdmin(BaseModelAdmin):
-    list_display = ('timestamp', 'item_id', 'group', 'host')
-    list_filter = (('group_item__group', RelatedDropdownFilter),
-                   ('group_item', RelatedDropdownFilter),
-                   'group_item__group__hosts',
+    list_display = ('timestamp', 'command_name', 'group', 'host')
+    list_filter = (('command__group', RelatedDropdownFilter),
+                   ('command', RelatedDropdownFilter),
+                   'command__group__hosts',
                    ('host', RelatedDropdownFilter))
 
     # noinspection PyMethodMayBeStatic
-    def item_id(self, instance) -> int:
+    def command_name(self, instance) -> int:
         """
-        Return the associated command group item ID
+        Return the associated command name
 
         :param instance: CommandsGroupItemVariable instance
-        :return: command group item ID
+        :return: command name
         """
-        return instance.group_item.id
+        return instance.command.name
 
     # noinspection PyMethodMayBeStatic
     def group(self, instance) -> 'models.CommandsGroup':
@@ -100,4 +100,4 @@ class CommandsOutputAdmin(BaseModelAdmin):
         :param instance: CommandsGroupItemVariable instance
         :return: CommandsGroup object
         """
-        return instance.group_item.group
+        return instance.command.group

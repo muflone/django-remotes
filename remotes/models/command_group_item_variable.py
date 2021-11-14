@@ -31,11 +31,11 @@ class CommandsGroupItemVariable(BaseModel):
     """
     Variables with order for hosts
     """
-    command_group_item = models.ForeignKey('remotes.CommandsGroupItem',
+    command_group_item = models.ForeignKey('remotes.Command',
                                            on_delete=models.CASCADE,
                                            verbose_name=pgettext_lazy(
                                                'CommandsGroupItemVariable',
-                                               'command group item'))
+                                               'command'))
     variable = models.ForeignKey('remotes.Variable',
                                  on_delete=models.CASCADE,
                                  verbose_name=pgettext_lazy(
@@ -67,6 +67,7 @@ class CommandsGroupItemVariable(BaseModel):
 class CommandsGroupItemVariableAdmin(BaseModelAdmin):
     list_display = ('item_id',
                     'group',
+                    'command_group_item',
                     'item_order',
                     'order',
                     'variable')
@@ -103,13 +104,3 @@ class CommandsGroupItemVariableAdmin(BaseModelAdmin):
         :return: CommandsGroup object
         """
         return instance.command_group_item.group
-
-    # noinspection PyMethodMayBeStatic
-    def command(self, instance) -> 'models.Command':
-        """
-        Return the associated command group item group
-
-        :param instance: CommandsGroupItemVariable instance
-        :return: Command object
-        """
-        return instance.command_group_item.command

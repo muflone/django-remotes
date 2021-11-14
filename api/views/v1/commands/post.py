@@ -38,7 +38,7 @@ from remotes.constants import (ID_FIELD,
                                STATUS_FIELD,
                                STATUS_OK,
                                STATUS_ERROR)
-from remotes.models import (CommandsGroupItem,
+from remotes.models import (Command,
                             CommandsOutput,
                             Host,
                             VariableValue)
@@ -65,7 +65,7 @@ class CommandPostSerializer(Serializer):
         :param data: data to save
         :return: new CommandsOutput object
         """
-        results = CommandsOutput.objects.create(group_item_id=data['id'],
+        results = CommandsOutput.objects.create(command_id=data['id'],
                                                 host=data['host'],
                                                 output=data['output'],
                                                 result=data['result'])
@@ -82,10 +82,9 @@ class CommandPostView(APIView):
         # Find host matching with the user
         host = Host.objects.get(user=self.request.user)
         # Find the CommandGroupItem and check if it's in the same host group
-        command_group_item = CommandsGroupItem.objects.filter(
-            pk=kwargs['pk'],
-            group__hosts__hosts=host.pk).first()
-        if command_group_item:
+        command = Command.objects.filter(pk=kwargs['pk'],
+                                         group__hosts__hosts=host.pk).first()
+        if command:
             serializer = CommandPostSerializer(data=request.data.copy())
             # Add ID to the data from the querystring
             serializer.initial_data['id'] = kwargs['pk']
@@ -103,8 +102,8 @@ class CommandPostView(APIView):
                 command_output = serializer.save()
                 # Save the output result into VariableValue objects
                 command_output_result = json.loads(s=command_output.result)
-                group_item = command_output.group_item
-                variables = group_item.commandsgroupitemvariable_set.order_by(
+                command = command_output.command
+                variables = command.commandsgroupitemvariable_set.order_by(
                     'order')
                 for index, variable in enumerate(variables):
                     # Save result in variable
