@@ -47,7 +47,7 @@ class CommandGetSerializer(ModelSerializer):
 
     def get_variables(self, instance):
         # Initialize variable values to None
-        variables = instance.command.variables.all()
+        variables = instance.variables.all()
         result = {item.name: None
                   for item in variables}
         # Find host matching with the user

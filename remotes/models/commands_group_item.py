@@ -48,6 +48,11 @@ class CommandsGroupItem(BaseModel):
                                       verbose_name=pgettext_lazy(
                                           'CommandsGroupItem',
                                           'settings'))
+    variables = models.ManyToManyField(blank=True,
+                                       to='remotes.Variable',
+                                       verbose_name=pgettext_lazy(
+                                           'CommandsGroupItem',
+                                           'variables'))
     command = models.ForeignKey(to='remotes.Command',
                                 on_delete=models.PROTECT,
                                 verbose_name=pgettext_lazy(
