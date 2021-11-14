@@ -48,13 +48,14 @@ class CommandsGroupItem(BaseModel):
                                 verbose_name=pgettext_lazy(
                                     'CommandsGroupItem',
                                     'command'))
-    variables = models.ManyToManyField(
+    output_variables = models.ManyToManyField(
         to='remotes.Variable',
+        related_name='output_variables_set',
         through='remotes.CommandsGroupItemVariable',
         blank=True,
         verbose_name=pgettext_lazy(
             'CommandsGroupItem',
-            'variables'))
+            'output variables'))
     timeout = models.PositiveIntegerField(default=15,
                                           verbose_name=pgettext_lazy(
                                               'CommandsGroupItem',
