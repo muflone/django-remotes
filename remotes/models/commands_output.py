@@ -87,7 +87,7 @@ class CommandsOutputAdmin(BaseModelAdmin):
         """
         Return the associated command name
 
-        :param instance: CommandsGroupItemVariable instance
+        :param instance: CommandsOutput instance
         :return: command name
         """
         return instance.command.name
@@ -97,7 +97,7 @@ class CommandsOutputAdmin(BaseModelAdmin):
         """
         Return the associated command group item group
 
-        :param instance: CommandsGroupItemVariable instance
+        :param instance: CommandsOutput instance
         :return: CommandsGroup object
         """
         return instance.command.group

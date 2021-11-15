@@ -67,9 +67,8 @@ class Command(BaseModel):
         related_name='output_variables_set',
         through='remotes.CommandsGroupItemVariable',
         blank=True,
-        verbose_name=pgettext_lazy(
-            'CommandsGroupItem',
-            'output variables'))
+        verbose_name=pgettext_lazy('Command',
+                                   'output variables'))
     timeout = models.PositiveIntegerField(default=15,
                                           verbose_name=pgettext_lazy(
                                               'Command',

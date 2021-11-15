@@ -174,7 +174,6 @@ class WmicParser(object):
         Call a method from wmic for the specified role alias
 
         :param alias: WMI role alias to use
-        :param field: single field to return
         :param condition: a condition to filter results
         :param method: method name to execute
         :param parameters: list of arguments passed to the method
