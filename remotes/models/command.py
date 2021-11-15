@@ -34,7 +34,7 @@ class Command(BaseModel):
     Command
     """
     name = models.CharField(max_length=255,
-                            blank=True,
+                            blank=False,
                             null=False,
                             verbose_name=pgettext_lazy(
                                 'Command',
@@ -90,6 +90,7 @@ class Command(BaseModel):
     class Meta:
         # Define the database table
         ordering = ['group', 'order', '-is_active']
+        unique_together = (('name', 'group'))
         verbose_name = pgettext_lazy('Command',
                                      'Command')
         verbose_name_plural = pgettext_lazy('Command',
