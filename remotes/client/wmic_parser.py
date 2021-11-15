@@ -192,7 +192,7 @@ class WmicParser(object):
             line = line.strip('\n')
             # Begin of arguments block
             if line == 'instance of __PARAMETERS':
-                results_arguments_block
+                results_arguments_block = True
             elif results_arguments_block and line == '};':
                 # End of arguments block
                 break
