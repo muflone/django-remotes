@@ -19,13 +19,12 @@
 ##
 
 from .command import Command, CommandAdmin                         # noqa: F401
+from .command_variable import (CommandVariable,                    # noqa: F401
+                               CommandVariableAdmin)               # noqa: F401
 from .commands_group import CommandsGroup, CommandsGroupAdmin      # noqa: F401
 from .commands_output import CommandsOutput, CommandsOutputAdmin   # noqa: F401
 from .host import Host, HostAdmin                                  # noqa: F401
 from .hostsgroup import HostsGroup, HostsGroupAdmin                # noqa: F401
 from .setting import Setting, SettingAdmin                         # noqa: F401
 from .variable import Variable, VariableAdmin                      # noqa: F401
-from .command_group_item_variable import (                         # noqa: F401
-    CommandsGroupItemVariable,                                     # noqa: F401
-    CommandsGroupItemVariableAdmin)                                # noqa: F401
 from .variable_value import VariableValue, VariableValueAdmin      # noqa: F401

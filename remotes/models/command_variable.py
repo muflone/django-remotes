@@ -27,23 +27,23 @@ from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
 
-class CommandsGroupItemVariable(BaseModel):
+class CommandVariable(BaseModel):
     """
     Variables with order for hosts
     """
-    command_group_item = models.ForeignKey('remotes.Command',
-                                           on_delete=models.CASCADE,
-                                           verbose_name=pgettext_lazy(
-                                               'CommandsGroupItemVariable',
-                                               'command'))
+    command = models.ForeignKey('remotes.Command',
+                                on_delete=models.CASCADE,
+                                verbose_name=pgettext_lazy(
+                                    'CommandVariable',
+                                    'command'))
     variable = models.ForeignKey('remotes.Variable',
                                  on_delete=models.CASCADE,
                                  verbose_name=pgettext_lazy(
-                                     'CommandsGroupItemVariable',
+                                     'CommandVariable',
                                      'variable'))
     order = models.PositiveIntegerField(default=1,
                                         verbose_name=pgettext_lazy(
-                                            'CommandsGroupItemVariable',
+                                            'CommandVariable',
                                             'order'))
 
     # Set the managers for the model
@@ -53,54 +53,54 @@ class CommandsGroupItemVariable(BaseModel):
 
     class Meta:
         # Define the database table
-        ordering = ['command_group_item', 'order', 'variable']
-        unique_together = ('command_group_item', 'order')
-        verbose_name = pgettext_lazy('CommandsGroupItemVariable',
-                                     'Command group items variable')
-        verbose_name_plural = pgettext_lazy('CommandsGroupItemVariable',
-                                            'Commands group items variables')
+        ordering = ['command', 'order', 'variable']
+        unique_together = ('command', 'order')
+        verbose_name = pgettext_lazy('CommandVariable',
+                                     'Command variable')
+        verbose_name_plural = pgettext_lazy('CommandVariable',
+                                            'Commands variables')
 
     def __str__(self):
-        return f'{self.command_group_item} - {self.order} - {self.variable}'
+        return f'{self.command} - {self.order} - {self.variable}'
 
 
-class CommandsGroupItemVariableAdmin(BaseModelAdmin):
-    list_display = ('item_id',
+class CommandVariableAdmin(BaseModelAdmin):
+    list_display = ('command_id',
                     'group',
-                    'command_group_item',
-                    'item_order',
+                    'command',
+                    'command_order',
                     'order',
                     'variable')
-    list_filter = (('command_group_item__group', RelatedDropdownFilter),
+    list_filter = (('command__group', RelatedDropdownFilter),
                    ('variable', RelatedDropdownFilter),
-                   ('command_group_item__group__hosts', RelatedDropdownFilter))
+                   ('command__group__hosts', RelatedDropdownFilter))
 
     # noinspection PyMethodMayBeStatic
-    def item_id(self, instance) -> int:
+    def command_id(self, instance) -> int:
         """
-        Return the associated command group item ID
+        Return the associated command ID
 
-        :param instance: CommandsGroupItemVariable instance
-        :return: command group item ID
+        :param instance: CommandVariable instance
+        :return: command ID
         """
-        return instance.command_group_item.id
+        return instance.command.id
 
     # noinspection PyMethodMayBeStatic
-    def item_order(self, instance) -> int:
+    def command_order(self, instance) -> int:
         """
-        Return the associated command group item order
+        Return the associated command order
 
-        :param instance: CommandsGroupItemVariable instance
-        :return: command group item order
+        :param instance: CommandVariable instance
+        :return: command order
         """
-        return instance.command_group_item.order
+        return instance.command.order
 
     # noinspection PyMethodMayBeStatic
     def group(self, instance) -> 'models.CommandsGroup':
         """
-        Return the associated command group item group
+        Return the associated command group
 
-        :param instance: CommandsGroupItemVariable instance
+        :param instance: CommandVariable instance
         :return: CommandsGroup object
         """
-        return instance.command_group_item.group
+        return instance.command.group

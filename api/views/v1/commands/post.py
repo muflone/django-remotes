@@ -103,8 +103,7 @@ class CommandPostView(APIView):
                 # Save the output result into VariableValue objects
                 command_output_result = json.loads(s=command_output.result)
                 command = command_output.command
-                variables = command.commandsgroupitemvariable_set.order_by(
-                    'order')
+                variables = command.commandvariable_set.order_by('order')
                 for index, variable in enumerate(variables):
                     # Save result in variable
                     variable_value, _ = VariableValue.objects.get_or_create(

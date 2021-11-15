@@ -65,7 +65,7 @@ class Command(BaseModel):
     output_variables = models.ManyToManyField(
         to='remotes.Variable',
         related_name='output_variables_set',
-        through='remotes.CommandsGroupItemVariable',
+        through='remotes.CommandVariable',
         blank=True,
         verbose_name=pgettext_lazy('Command',
                                    'output variables'))
