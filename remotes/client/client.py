@@ -35,6 +35,7 @@ import remotes
 from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_COMMAND_POST,
                                     ACTION_COMMANDS_LIST,
+                                    ACTION_COMMANDS_MONITOR,
                                     ACTION_COMMANDS_PROCESS,
                                     ACTION_DISCOVER,
                                     ACTION_GENERATE_KEYS,
@@ -45,6 +46,7 @@ from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_STATUS,
                                     ACTIONS)
 from remotes.client.api import Api
+from remotes.client.recurring_job import RecurringJob
 from remotes.client.settings import (Settings,
                                      OPTION_PRIVATE_KEY,
                                      OPTION_PUBLIC_KEY,
@@ -124,6 +126,10 @@ class Client(object):
                            type=int,
                            required=False,
                            help='command ID')
+        group.add_argument('--interval',
+                           type=int,
+                           required=False,
+                           help='interval in seconds for commands monitoring')
         # Process options
         options = parser.parse_args()
         self.options = options
@@ -154,6 +160,9 @@ class Client(object):
         elif options.action == ACTION_COMMAND_GET:
             if not options.command:
                 parser.error('missing command argument')
+        elif options.action == ACTION_COMMANDS_MONITOR:
+            if not options.interval:
+                parser.error('missing monitoring interval')
 
     def process(self) -> tuple[int, dict]:
         """
@@ -205,6 +214,10 @@ class Client(object):
             # Execute command
             status, results = self.do_get_command(
                 command_id=self.options.command)
+        elif self.options.action == ACTION_COMMANDS_MONITOR:
+            # Monitor for commands to execute
+            status, results = self.do_monitor_commands(
+                interval=self.options.interval)
         elif self.options.action == ACTION_COMMANDS_PROCESS:
             # Process every command
             status, results = self.do_process_commands()
@@ -517,6 +530,29 @@ class Client(object):
             _, commands_results[command_id] = self.do_get_command(
                 command_id=command_id)
         return status, results
+
+    def do_monitor_commands(self, interval: int) -> tuple[int, None]:
+        """
+        Monitor pending commands
+
+        :param interval: interval in seconds to watch for commands to process
+        :return: None
+        """
+        def monitor_process_commands() -> bool:
+            """
+            Process commands and always return True in order to continue with
+            monitoring for new commands
+
+            :return: True
+            """
+            self.do_process_commands()
+            return True
+
+        recurring = RecurringJob()
+        recurring.add_job(delay=interval,
+                          action=monitor_process_commands)
+        recurring.run()
+        return 0, None
 
     def load(self) -> None:
         """

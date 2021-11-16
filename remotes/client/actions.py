@@ -21,6 +21,7 @@
 ACTION_COMMAND_GET = 'command_get'
 ACTION_COMMAND_POST = 'command_post'
 ACTION_COMMANDS_LIST = 'commands_list'
+ACTION_COMMANDS_MONITOR = 'commands_monitor'
 ACTION_COMMANDS_PROCESS = 'commands_process'
 ACTION_DISCOVER = 'discover'
 ACTION_GENERATE_KEYS = 'generate_keys'
@@ -33,6 +34,7 @@ ACTION_STATUS = 'status'
 ACTIONS = (ACTION_COMMAND_GET,
            ACTION_COMMAND_POST,
            ACTION_COMMANDS_LIST,
+           ACTION_COMMANDS_MONITOR,
            ACTION_COMMANDS_PROCESS,
            ACTION_DISCOVER,
            ACTION_GENERATE_KEYS,
