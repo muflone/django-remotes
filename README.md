@@ -242,3 +242,46 @@ get a list of awaiting commands with their ID, for example:
 ```
 
 From this example you have 3 commands to execute with the IDs 2 and 4.
+
+You can execute a single command using the following syntax:
+
+```shell
+python client.py \
+  --action command_get \
+  --settings <SETTINGS FILE> \
+  --command <COMMAND ID>
+```
+
+Executing the command you'll get a similar response:
+
+```
+{
+  "id": 1,
+  "name": "<ENCRYPTED NAME>",
+  "settings": {},
+  "variables": {},
+  "command": "<ENCRYPTED COMMAND>",
+  "timeout": 15,
+  "encrypted": [
+    "name",
+    "settings",
+    "variables",
+    "command"
+  ],
+  "encryption_key": "<ENCRYPTION KEY>",
+  "stdout": "Platform: linux\n",
+  "stderr": "[\n  \"linux\"\n]",
+  "output": {
+    "status": "OK",
+    "results": {
+      "id": 23
+    }
+  }
+}
+```
+
+The first part contains the command details encrypted using an
+encryption key.
+
+The final part of the response will contain details about the last
+executed command and with the data sent back to the server.
