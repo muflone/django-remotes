@@ -18,6 +18,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+import json
 import sys
 
 try:
@@ -39,7 +40,9 @@ if __name__ == '__main__':
     process_status, process_results = client.process()
     if process_results is not None:
         # Show the results
-        print(process_results)
+        print(json.dumps(process_results, indent=2)
+              if process_results
+              else None)
     # Save settings
     client.save()
     # Set exit code accordingly to the executed action
