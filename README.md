@@ -295,3 +295,17 @@ python client.py \
   --action commands_process \
   --settings <SETTINGS FILE>
 ```
+
+The command `commands_monitor` will process every commands using the
+previous command and then it will await for some seconds before
+trying again to process every pending commands.
+
+```shell
+python client.py \
+  --action commands_process \
+  --settings <SETTINGS FILE> \
+  --interval <SECONDS>
+```
+
+You can setup the server to await forever and listening for new
+commands and process them when they become available to the client.
