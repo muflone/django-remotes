@@ -192,3 +192,14 @@ python client.py \
   --private_key '/home/muflone/django-remotes/key.pem' \
   --public_key '/home/muflone/django-remotes/key.pub'
 ```
+
+After the registration you can test the registered host using:
+
+```shell
+python client.py \
+  --action host_status \
+  --settings <SETTINGS FILE>
+```
+
+If everything was set up properly you'll get a JSON response with
+some information and hosts groups.
