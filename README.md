@@ -285,3 +285,13 @@ encryption key.
 
 The final part of the response will contain details about the last
 executed command and with the data sent back to the server.
+
+The command `commands_process` will execute every pending commands
+prior terminating, you can use it to execute any command at once and
+transmit all the responses to the server.
+
+```shell
+python client.py \
+  --action commands_process \
+  --settings <SETTINGS FILE>
+```
