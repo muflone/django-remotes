@@ -241,5 +241,4 @@ get a list of awaiting commands with their ID, for example:
 }
 ```
 
-From this example you have 3 commands to execute with the IDs
-1, 2 and 4.
+From this example you have 3 commands to execute with the IDs 2 and 4.
