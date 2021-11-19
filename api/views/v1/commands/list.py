@@ -28,7 +28,6 @@ from api.permissions import IsUserWithHost
 
 from remotes.constants import (COMMAND_FIELD,
                                GROUP_FIELD,
-                               ID_FIELD,
                                RESULTS_FIELD,
                                STATUS_FIELD,
                                STATUS_OK)
@@ -58,8 +57,7 @@ class CommandsListView(ListAPIView):
                 is_active=False)
             for command in items.order_by('order'):
                 # Get each command in the group
-                results.append({ID_FIELD: command.pk,
-                                GROUP_FIELD: group.pk,
+                results.append({GROUP_FIELD: group.pk,
                                 COMMAND_FIELD: command.pk})
         return Response(
             data={STATUS_FIELD: STATUS_OK,
