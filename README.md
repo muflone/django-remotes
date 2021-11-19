@@ -203,3 +203,43 @@ python client.py \
 
 If everything was set up properly you'll get a JSON response with
 some information and hosts groups.
+
+Now you're ready to get enabled awaiting commands to be executed
+from the client using:
+
+```shell
+python client.py \
+  --action commands_list \
+  --settings <SETTINGS FILE>
+```
+
+If you get the following output:
+
+```
+{
+  "status": "OK",
+  "results": []
+}
+```
+
+Then you don't have any awaiting commands to execute else you'll
+get a list of awaiting commands with their ID, for example:
+
+```
+{
+  "status": "OK",
+  "results": [
+    {
+      "group": 1,
+      "command": 2
+    },
+    {
+      "group": 1,
+      "command": 4
+    }
+  ]
+}
+```
+
+From this example you have 3 commands to execute with the IDs
+1, 2 and 4.
