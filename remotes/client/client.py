@@ -70,6 +70,8 @@ from remotes.constants import (COMMAND_FIELD,
                                STATUS_OK,
                                UUID_FIELD)
 
+from utility.misc.python_version_action import PythonVersionAction
+
 
 class Client(object):
     def __init__(self):
@@ -95,6 +97,9 @@ class Client(object):
                             action='version',
                             version=f'{PRODUCT_NAME} v{VERSION}',
                             help='show version')
+        parser.add_argument('--python', '-P',
+                            action=PythonVersionAction,
+                            help='show Python version')
         # Settings argument
         parser.add_argument('--settings', '-S',
                             type=str,
