@@ -30,7 +30,7 @@ except ModuleNotFoundError:
     from remotes.client.client import Client
 
 
-if __name__ == '__main__':
+def main():
     client = Client()
     # Get command line arguments
     client.get_command_line()
@@ -47,3 +47,7 @@ if __name__ == '__main__':
     client.save()
     # Set exit code accordingly to the executed action
     sys.exit(process_status)
+
+
+if __name__ == '__main__':
+    main()
