@@ -124,7 +124,8 @@ class HostAdmin(BaseModelAdmin,
                 ActionSetActive,
                 ActionSetInactive):
     actions = ['set_active', 'set_inactive']
-    list_display = ('__str__', 'uuid', 'user', 'groups_list', 'is_active')
+    list_display = ('__str__', 'uuid', 'user', 'groups_list', 'description',
+                    'is_active')
     list_filter = ('is_active',)
     ordering = ['user']
     readonly_fields = ('uuid', 'groups_list')
