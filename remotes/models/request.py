@@ -18,7 +18,6 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
@@ -33,14 +32,13 @@ class Request(BaseModel):
                                      verbose_name=pgettext_lazy(
                                          'Request',
                                          'timestamp'))
-    user = models.ForeignKey(to=get_user_model(),
-                             on_delete=models.CASCADE,
-                             blank=True,
-                             null=True,
-                             default=None,
-                             verbose_name=pgettext_lazy(
-                                 'Request',
-                                 'user'))
+    username = models.CharField(max_length=255,
+                                blank=True,
+                                null=True,
+                                default=None,
+                                verbose_name=pgettext_lazy(
+                                    'Request',
+                                    'username'))
     remote_address = models.CharField(max_length=255,
                                       verbose_name=pgettext_lazy(
                                           'Request',
@@ -71,7 +69,7 @@ class Request(BaseModel):
 
 
 class RequestAdmin(BaseModelAdmin):
-    list_display = ('timestamp', 'user', 'remote_address', 'method',
+    list_display = ('timestamp', 'username', 'remote_address', 'method',
                     'path_info')
-    list_filter = ('user', 'remote_address', 'method', 'path_info')
+    list_filter = ('username', 'remote_address', 'method', 'path_info')
     ordering = ['timestamp']

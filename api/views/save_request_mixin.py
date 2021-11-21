@@ -24,7 +24,7 @@ from remotes.models.request import Request
 class SaveRequestMixin(object):
     def save_request(self, request, *args, **kwargs) -> None:
         Request.objects.create(
-            user=request.user if request.user.pk else None,
+            username=request.user.username if request.user.pk else None,
             remote_address=request.META['REMOTE_ADDR'],
             method=request.META['REQUEST_METHOD'],
             path_info=request.META['PATH_INFO'],
