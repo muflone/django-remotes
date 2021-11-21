@@ -50,3 +50,5 @@ COMMANDS_RESULTS_FIELD = 'commands_results'
 
 METHOD_GET = 'get'
 METHOD_POST = 'post'
+
+APILOG_ENABLE_LOGGING = 'apilog_enable_logging'

@@ -21,29 +21,34 @@
 import datetime
 import json
 
+from remotes.constants import APILOG_ENABLE_LOGGING
 from remotes.models.api_log import ApiLog
+
+from utility.misc.get_setting_value import get_setting_value
 
 
 class SaveRequestMixin(object):
     def save_request(self, request, *args, **kwargs) -> None:
-        ApiLog.objects.create(
-            date=datetime.date.today(),
-            time=datetime.datetime.now().replace(microsecond=0),
-            message_level=0,
-            method=request.method,
-            path=request.path,
-            raw_uri=request.get_raw_uri(),
-            url_name=request.resolver_match.url_name,
-            func_name=request.resolver_match.func.__name__,
-            remote_addr=request.META.get('REMOTE_ADDR', ''),
-            forwarded_for=request.META.get('HTTP_X_FORWARDED_FOR', ''),
-            user_agent=request.META.get('HTTP_USER_AGENT', ''),
-            client_agent=request.META.get('HTTP_CLIENT_AGENT', ''),
-            client_version=request.META.get('HTTP_CLIENT_VERSION', ''),
-            username=request.user,
-            args=self.json_prettify(args),
-            kwargs=self.json_prettify(kwargs),
-            extra='')
+        # Check if Api logging is enabled
+        if get_setting_value(name=APILOG_ENABLE_LOGGING) == '1':
+            ApiLog.objects.create(
+                date=datetime.date.today(),
+                time=datetime.datetime.now().replace(microsecond=0),
+                message_level=0,
+                method=request.method,
+                path=request.path,
+                raw_uri=request.get_raw_uri(),
+                url_name=request.resolver_match.url_name,
+                func_name=request.resolver_match.func.__name__,
+                remote_addr=request.META.get('REMOTE_ADDR', ''),
+                forwarded_for=request.META.get('HTTP_X_FORWARDED_FOR', ''),
+                user_agent=request.META.get('HTTP_USER_AGENT', ''),
+                client_agent=request.META.get('HTTP_CLIENT_AGENT', ''),
+                client_version=request.META.get('HTTP_CLIENT_VERSION', ''),
+                username=request.user,
+                args=self.json_prettify(args),
+                kwargs=self.json_prettify(kwargs),
+                extra='')
 
     def json_prettify(self, arguments):
         """Format the arguments in JSON formatted style"""
