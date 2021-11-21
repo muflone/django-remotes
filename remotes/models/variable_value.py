@@ -64,8 +64,19 @@ class VariableValue(BaseModel):
 
 
 class VariableValueAdmin(BaseModelAdmin):
-    list_display = ('host', 'variable', 'value', 'timestamp')
+    list_display = ('host', 'variable', 'variable_description', 'value',
+                    'timestamp')
     list_filter = (('host', RelatedDropdownFilter),
                    'variable__category',
                    ('variable', RelatedDropdownFilter))
     readonly_fields = ('timestamp',)
+
+    # noinspection PyMethodMayBeStatic
+    def variable_description(self, instance) -> str:
+        """
+        Return the associated variable description
+
+        :param instance: Variable instance
+        :return: variable description
+        """
+        return instance.variable.description
