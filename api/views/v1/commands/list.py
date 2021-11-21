@@ -25,6 +25,7 @@ from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 
 from api.permissions import IsUserWithHost
+from api.views.save_request_mixin import SaveRequestMixin
 
 from remotes.constants import (COMMAND_FIELD,
                                GROUP_FIELD,
@@ -34,10 +35,12 @@ from remotes.constants import (COMMAND_FIELD,
 from remotes.models import CommandsGroup, CommandsOutput, Host
 
 
-class CommandsListView(ListAPIView):
+class CommandsListView(ListAPIView, SaveRequestMixin):
     permission_classes = (IsUserWithHost, )
 
     def get(self, request, *args, **kwargs):
+        # Save request
+        self.save_request(request, args, kwargs)
         results = []
         now = timezone.now()
         # Get all the already executed commands to exclude

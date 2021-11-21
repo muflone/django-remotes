@@ -23,6 +23,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.permissions import IsUserWithHost
+from api.views.save_request_mixin import SaveRequestMixin
 
 from remotes.constants import (HOSTS_GROUPS,
                                ID_FIELD,
@@ -33,13 +34,15 @@ from remotes.constants import (HOSTS_GROUPS,
 from remotes.models import Host
 
 
-class HostStatusView(APIView):
+class HostStatusView(APIView, SaveRequestMixin):
     permission_classes = (IsUserWithHost, )
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         """
         Show host status information
         """
+        # Save request
+        self.save_request(request, args, kwargs)
         # Find host matching with the user
         host = Host.objects.get(user_id=self.request.user.pk)
         hosts_groups = host.hostsgroup_set.all()

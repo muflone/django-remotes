@@ -25,6 +25,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.permissions import CanUserRegisterHosts
+from api.views.save_request_mixin import SaveRequestMixin
 
 from encryption.rsa_key import RsaKey
 
@@ -37,11 +38,13 @@ from remotes.constants import (ENCRYPTED_FIELD,
 from remotes.models import Host
 
 
-class HostRegisterView(APIView):
+class HostRegisterView(APIView, SaveRequestMixin):
     permission_classes = (CanUserRegisterHosts,)
 
     # noinspection PyMethodMayBeStatic
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
+        # Save request
+        self.save_request(request, args, kwargs)
         # Get host public key
         try:
             host_key = request.data[PUBLIC_KEY_FIELD]

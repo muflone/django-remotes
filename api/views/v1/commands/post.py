@@ -30,6 +30,7 @@ from rest_framework.serializers import (CharField,
 from rest_framework.views import APIView
 
 from api.permissions import IsUserWithHost
+from api.views.save_request_mixin import SaveRequestMixin
 
 from encryption.fernet_encrypt import FernetEncrypt
 
@@ -72,13 +73,15 @@ class CommandPostSerializer(Serializer):
         return results
 
 
-class CommandPostView(APIView):
+class CommandPostView(APIView, SaveRequestMixin):
     permission_classes = (IsUserWithHost, )
 
     def post(self, request, *args, **kwargs):
         """
         Create new object
         """
+        # Save request
+        self.save_request(request, args, kwargs)
         # Find host matching with the user
         host = Host.objects.get(user=self.request.user)
         # Find the CommandGroupItem and check if it's in the same host group

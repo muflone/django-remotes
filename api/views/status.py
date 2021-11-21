@@ -27,6 +27,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.views.save_request_mixin import SaveRequestMixin
+
 from project import PRODUCT_NAME, VERSION
 
 from remotes.client.actions import ACTION_DISCOVER
@@ -36,11 +38,13 @@ from remotes.constants import (API_VERSION, SERVER_URL,
 from utility.misc.get_setting_value import get_setting_value
 
 
-class StatusView(APIView):
+class StatusView(APIView, SaveRequestMixin):
     permission_classes = (AllowAny, )
 
     # noinspection PyMethodMayBeStatic
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
+        # Save request
+        self.save_request(request, args, kwargs)
         server_url = get_setting_value(name=SERVER_URL)
         # Auto-detect the server_url if it wasn't configured
         if not server_url:

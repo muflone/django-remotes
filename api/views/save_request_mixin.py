@@ -18,25 +18,14 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from rest_framework.generics import RetrieveAPIView
-
-from api.views.save_request_mixin import SaveRequestMixin
-
-from remotes.models import Host
+from remotes.models.request import Request
 
 
-class RetrieveAPIEncryptedView(RetrieveAPIView, SaveRequestMixin):
-    """
-    RetrieveAPI implementation which encrypts the fields listed in
-    `encrypted_fields` using the host public key
-    """
-    encrypted_fields = []
-
-    def get(self, request, *args, **kwargs):
-        # Save request
-        self.save_request(request, args, kwargs)
-        results = super().get(request, *args, **kwargs)
-        # Get host for the current user
-        host = Host.objects.get(user=self.request.user)
-        host.encrypt_data(data=results.data, fields=self.encrypted_fields)
-        return results
+class SaveRequestMixin(object):
+    def save_request(self, request, *args, **kwargs) -> None:
+        Request.objects.create(
+            user=request.user if request.user.pk else None,
+            remote_address=request.META['REMOTE_ADDR'],
+            method=request.META['REQUEST_METHOD'],
+            path_info=request.META['PATH_INFO'],
+            querystring=request.META['QUERY_STRING'])

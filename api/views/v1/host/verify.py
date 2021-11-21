@@ -26,6 +26,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.permissions import CanUserRegisterHosts
+from api.views.save_request_mixin import SaveRequestMixin
 
 from encryption.rsa_key import RsaKey
 
@@ -41,11 +42,13 @@ from remotes.models import Host, HostsGroup
 from utility.misc.get_setting_value import get_setting_value
 
 
-class HostVerifyView(APIView):
+class HostVerifyView(APIView, SaveRequestMixin):
     permission_classes = (CanUserRegisterHosts, )
 
     # noinspection PyMethodMayBeStatic
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
+        # Save request
+        self.save_request(request, args, kwargs)
         # Get host UUID
         try:
             host_uuid = request.data[UUID_FIELD]

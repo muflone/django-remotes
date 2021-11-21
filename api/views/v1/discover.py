@@ -25,6 +25,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.views.save_request_mixin import SaveRequestMixin
+
 from remotes.client.actions import (ACTION_COMMAND_GET,
                                     ACTION_COMMAND_POST,
                                     ACTION_COMMANDS_LIST,
@@ -34,11 +36,13 @@ from remotes.client.actions import (ACTION_COMMAND_GET,
 from remotes.constants import ENDPOINTS_FIELD, STATUS_FIELD, STATUS_OK
 
 
-class DiscoverView(APIView):
+class DiscoverView(APIView, SaveRequestMixin):
     permission_classes = (AllowAny, )
 
     # noinspection PyMethodMayBeStatic
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
+        # Save request
+        self.save_request(request, args, kwargs)
         endpoints = {
             ACTION_COMMAND_GET: reverse('api.v1.command.get.generic'),
             ACTION_COMMAND_POST: reverse('api.v1.command.post.generic'),
