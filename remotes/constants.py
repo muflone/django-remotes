@@ -52,3 +52,4 @@ METHOD_GET = 'get'
 METHOD_POST = 'post'
 
 APILOG_ENABLE_LOGGING = 'apilog_enable_logging'
+APILOG_INCLUDE_ARGS = 'apilog_include_arguments'

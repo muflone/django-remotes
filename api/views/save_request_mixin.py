@@ -21,7 +21,7 @@
 import datetime
 import json
 
-from remotes.constants import APILOG_ENABLE_LOGGING
+from remotes.constants import APILOG_ENABLE_LOGGING, APILOG_INCLUDE_ARGS
 from remotes.models.api_log import ApiLog
 
 from utility.misc.get_setting_value import get_setting_value
@@ -30,7 +30,9 @@ from utility.misc.get_setting_value import get_setting_value
 class SaveRequestMixin(object):
     def save_request(self, request, *args, **kwargs) -> None:
         # Check if Api logging is enabled
-        if get_setting_value(name=APILOG_ENABLE_LOGGING) == '1':
+        log_enabled = get_setting_value(name=APILOG_ENABLE_LOGGING) == '1'
+        log_arguments = get_setting_value(name=APILOG_INCLUDE_ARGS) == '1'
+        if log_enabled:
             ApiLog.objects.create(
                 date=datetime.date.today(),
                 time=datetime.datetime.now().replace(microsecond=0),
@@ -46,8 +48,8 @@ class SaveRequestMixin(object):
                 client_agent=request.META.get('HTTP_CLIENT_AGENT', ''),
                 client_version=request.META.get('HTTP_CLIENT_VERSION', ''),
                 username=request.user,
-                args=self.json_prettify(args),
-                kwargs=self.json_prettify(kwargs),
+                args=self.json_prettify(args) if log_arguments else '',
+                kwargs=self.json_prettify(kwargs) if log_arguments else '',
                 extra='')
 
     def json_prettify(self, arguments):
