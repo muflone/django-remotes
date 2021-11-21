@@ -106,7 +106,9 @@ class ApiLogAdmin(BaseModelAdmin):
     list_filter = (('username', DropdownFilter),
                    ('remote_addr', DropdownFilter),
                    'method',
-                   ('url_name', DropdownFilter))
+                   ('url_name', DropdownFilter),
+                   'client_agent',
+                   'client_version')
     ordering = ['date', 'time', 'id']
 
     def timestamp(self, instance):

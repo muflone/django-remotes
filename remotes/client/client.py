@@ -249,6 +249,9 @@ class Client(object):
         """
         if headers is None:
             headers = {}
+        # Add client headers
+        headers['CLIENT-AGENT'] = PRODUCT_NAME
+        headers['CLIENT-VERSION'] = VERSION
         api = Api(url=url)
         if method == METHOD_GET:
             results = api.get(headers=headers)
