@@ -72,7 +72,7 @@ class HostsGroupAdmin(BaseModelAdmin,
                       ActionSetActive,
                       ActionSetInactive):
     actions = ['set_active', 'set_inactive']
-    list_display = ('name', 'is_active')
+    list_display = ('name', 'description', 'is_active')
     list_filter = ('is_active',
                    ('hosts', RelatedDropdownFilter))
     ordering = ['name']
