@@ -72,6 +72,7 @@ class CommandVariableAdmin(BaseModelAdmin):
                     'order',
                     'variable')
     list_filter = (('command__group', RelatedDropdownFilter),
+                   ('command', RelatedDropdownFilter),
                    ('variable', RelatedDropdownFilter),
                    ('command__group__hosts', RelatedDropdownFilter))
 
