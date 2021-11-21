@@ -20,25 +20,25 @@
 
 from django.contrib import admin
 
-from .models import (Command, CommandAdmin,
+from .models import (ApiLog, ApiLogAdmin,
+                     Command, CommandAdmin,
                      CommandVariable, CommandVariableAdmin,
                      CommandsGroup, CommandsGroupAdmin,
                      CommandsOutput, CommandsOutputAdmin,
                      Host, HostAdmin,
                      HostsGroup, HostsGroupAdmin,
-                     Request, RequestAdmin,
                      Setting, SettingAdmin,
                      Variable, VariableAdmin,
                      VariableValue, VariableValueAdmin)
 
 
+admin.site.register(ApiLog, ApiLogAdmin)
 admin.site.register(Command, CommandAdmin)
 admin.site.register(CommandVariable, CommandVariableAdmin)
 admin.site.register(CommandsGroup, CommandsGroupAdmin)
 admin.site.register(CommandsOutput, CommandsOutputAdmin)
 admin.site.register(Host, HostAdmin)
 admin.site.register(HostsGroup, HostsGroupAdmin)
-admin.site.register(Request, RequestAdmin)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(Variable, VariableAdmin)
 admin.site.register(VariableValue, VariableValueAdmin)

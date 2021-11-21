@@ -95,9 +95,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'api_logs': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'api_logs.sqlite3',
     }
 }
 
+DATABASE_ROUTERS = ['project.dbrouter.DBRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -133,6 +138,7 @@ USE_TZ = True
 
 DATETIME_FORMAT = 'Y-m-d H:i:s'
 DATE_FORMAT = 'Y-m-d'
+TIME_FORMAT = 'H:i:s'
 
 
 # Static files (CSS, JavaScript, Images)
