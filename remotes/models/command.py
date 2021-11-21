@@ -116,7 +116,7 @@ class CommandAdmin(BaseModelAdmin,
                    ActionSetActive,
                    ActionSetInactive):
     actions = ['set_active', 'set_inactive']
-    list_display = ('id', 'name', 'group', 'order', 'timeout', 'is_active')
+    list_display = ('id', 'name', 'group', 'order', 'description', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    'is_active',
                    'group__hosts')
