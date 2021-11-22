@@ -47,7 +47,7 @@ class SaveRequestMixin(object):
                 user_agent=request.META.get('HTTP_USER_AGENT', ''),
                 client_agent=request.META.get('HTTP_CLIENT_AGENT', ''),
                 client_version=request.META.get('HTTP_CLIENT_VERSION', ''),
-                username=request.user,
+                username=request.user.username,
                 args=self.json_prettify(args) if log_arguments else '',
                 kwargs=self.json_prettify(kwargs) if log_arguments else '',
                 extra='')
