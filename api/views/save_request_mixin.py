@@ -21,7 +21,9 @@
 import datetime
 import json
 
-from remotes.constants import APILOG_ENABLE_LOGGING, APILOG_INCLUDE_ARGS
+from remotes.constants import (APILOG_ENABLE_LOGGING,
+                               APILOG_FILTER_USERS,
+                               APILOG_INCLUDE_ARGS)
 from remotes.models.api_log import ApiLog
 
 from utility.misc.get_setting_value import get_setting_value
@@ -32,7 +34,11 @@ class SaveRequestMixin(object):
         # Check if Api logging is enabled
         log_enabled = get_setting_value(name=APILOG_ENABLE_LOGGING) == '1'
         log_arguments = get_setting_value(name=APILOG_INCLUDE_ARGS) == '1'
-        if log_enabled:
+        # Check if the user is in the filter users list
+        log_filters = get_setting_value(name=APILOG_FILTER_USERS,
+                                        default_value='').split(',')
+        log_is_filtered = request.user.username in log_filters
+        if log_enabled and not log_is_filtered:
             ApiLog.objects.create(
                 date=datetime.date.today(),
                 time=datetime.datetime.now().replace(microsecond=0),
