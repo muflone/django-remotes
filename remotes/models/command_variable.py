@@ -84,7 +84,7 @@ class CommandVariableAdmin(BaseModelAdmin):
         :param instance: CommandVariable instance
         :return: command ID
         """
-        return instance.command.id
+        return instance.command.pk
 
     # noinspection PyMethodMayBeStatic
     def command_order(self, instance) -> int:

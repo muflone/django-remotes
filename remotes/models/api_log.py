@@ -97,7 +97,7 @@ class ApiLog(BaseModel):
                                             'Api logs')
 
     def __str__(self):
-        return str(self.id)
+        return str(self.pk)
 
 
 class ApiLogAdmin(BaseModelAdmin):

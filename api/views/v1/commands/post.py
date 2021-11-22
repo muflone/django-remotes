@@ -83,7 +83,7 @@ class CommandPostView(APIView, SaveRequestMixin):
         # Save request
         self.save_request(request, args, kwargs)
         # Find host matching with the user
-        host = Host.objects.get(user=self.request.user)
+        host = Host.objects.get(user_id=self.request.user.pk)
         # Find the CommandGroupItem and check if it's in the same host group
         command = Command.objects.filter(pk=kwargs['pk'],
                                          group__hosts__hosts=host.pk).first()

@@ -37,6 +37,6 @@ class RetrieveAPIEncryptedView(RetrieveAPIView, SaveRequestMixin):
         self.save_request(request, args, kwargs)
         results = super().get(request, *args, **kwargs)
         # Get host for the current user
-        host = Host.objects.get(user=self.request.user)
+        host = Host.objects.get(user_id=self.request.user.pk)
         host.encrypt_data(data=results.data, fields=self.encrypted_fields)
         return results
