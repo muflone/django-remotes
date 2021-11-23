@@ -80,6 +80,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': '/path/to/your-database.sqlite3',
+    },
+    'api_logs': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/path/to/your-logs.sqlite3',
     }
 }
 ```
@@ -89,6 +93,7 @@ required tables and data using the following command:
 
 ```shell
 python manage.py migrate
+python manage.py migrate --database api_logs
 ```
 
 ## Create a new Administrator account
