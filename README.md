@@ -302,7 +302,7 @@ trying again to process every pending commands.
 
 ```shell
 python client.py \
-  --action commands_process \
+  --action commands_monitor \
   --settings <SETTINGS FILE> \
   --interval <SECONDS>
 ```
