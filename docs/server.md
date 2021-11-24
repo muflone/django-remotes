@@ -220,3 +220,8 @@ saved host IP address saved into a variable).
 
 The variables can be created in the `Variables` section. Feel free
 to assign any category to each variable and an unique name.
+
+From the `Variable values` section you can review or assign new
+values to each variable for each host. This configuration can be
+made by hand or you can create a command and save a part of the
+results into one or more variables.
