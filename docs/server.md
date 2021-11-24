@@ -139,3 +139,37 @@ the API requests arguments (its data) in the Api logs data
 
 - `apilog_filter_users` - a list of comma separated user names to
 exclude from the logging
+
+---
+
+## Registration token
+
+To register new hosts you need to use a registration token which
+will be automatically generated during the first start.
+
+You can see or create the registration token again using the
+`Tokens` section.
+
+In the `Users` section you'll find two initial users:
+
+- the administrator account created in the previous steps
+- the `user_register_hosts` user which can be used to register new
+hosts.
+
+The `user_register_hosts` (or an alternative user) must be in the
+`user_register_hosts` group (from the `Groups` section).
+
+In the `Tokens` section you'll find the tokens created for the users
+API requests, including the `user_register_hosts` user.
+
+To find out the automatically created token for hosts registration
+you can use the command: `python manage.py registration_token`.
+
+In the case of a running container you can execute the command this
+way:
+
+```
+docker exec -it django-remotes_backend \
+  python /app/manage.py registration_token \
+  --settings project.settings_container
+```
