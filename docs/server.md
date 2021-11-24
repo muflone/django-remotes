@@ -45,6 +45,8 @@ server {
 
 ### Create the containers stack
 
+Create a new `docker-compose.yaml` file with the following:
+
 ```
 version: '3'
 
@@ -79,7 +81,7 @@ be populated during the first container startup.
 
 At the same way you could move your database outside of the container
 by mapping the two files `django-remotes.sqlite` and
-`django-remotes-logs.sqlite` thus those files initially can be empty
+`django-remotes-logs.sqlite` thus those files can initially be empty
 and they will be populated during the first startup.
 
 Finally create the containers using the command `docker-compose up -d`
