@@ -83,3 +83,27 @@ by mapping the two files `django-remotes.sqlite` and
 and they will be populated during the first startup.
 
 Finally create the containers using the command `docker-compose up -d`
+
+---
+
+## Administrator configuration
+
+With the container running you can create a new administrator account
+using the command:
+
+```
+docker exec -it django-remotes_backend \
+  python /app/manage.py createsuperuser \
+  --settings project.settings_container
+```
+
+When asked fill the requested data to create a new administrator
+account:
+
+```
+Username (leave blank to use 'root'): admin  
+Email address: admin@localhost
+Password: 
+Password (again): 
+Superuser created successfully.
+```
