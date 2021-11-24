@@ -117,3 +117,25 @@ Superuser created successfully.
 You can now access to the server page http://localhost:8001/admin/
 
 The port number 8001 was set in the docker-compose.yaml file.
+
+---
+
+## Server settings
+
+In the `Settings` configuration section you can configure some
+server setting.
+
+- `server_url` - the server address used for the API request,
+for example: `http://localhost:8001/`
+
+- `hosts_group_auto_add` - a HostsGroup name to automatically add
+the new hosts after the client registration
+
+- `apilog_enable_logging` - a boolean value to enable or disable the
+API requests logging (use 0 to disable, 1 to enable logging)
+
+- `apilog_include_arguments` - a boolean value to include or exclude
+the API requests arguments (its data) in the Api logs data
+
+- `apilog_filter_users` - a list of comma separated user names to
+exclude from the logging
