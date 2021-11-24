@@ -202,6 +202,9 @@ authenticate during the requests
 The new host will be automatically added to the `All hosts` Hosts
 Groups, accordingly to the `hosts_group_auto_add` setting (see above).
 
+From the `Hosts groups` section you can assign each host to any
+group you prefer (Windows hosts, Linux hosts, client hosts).
+
 ---
 
 ## Host variables
