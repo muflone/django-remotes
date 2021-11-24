@@ -201,3 +201,19 @@ authenticate during the requests
 
 The new host will be automatically added to the `All hosts` Hosts
 Groups, accordingly to the `hosts_group_auto_add` setting (see above).
+
+---
+
+## Host variables
+
+You can configure many hosts variables that can be used to get
+values from the hosts and save answers in the server application.
+
+These values can be kept for internal reference (operating system,
+system name, paths) or they can be passed to other commands to
+apply some changes using the host data (imagine you first get the
+host IP address and then reconfigure the host network using the
+saved host IP address saved into a variable).
+
+The variables can be created in the `Variables` section. Feel free
+to assign any category to each variable and an unique name.
