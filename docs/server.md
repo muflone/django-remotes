@@ -109,3 +109,11 @@ Password:
 Password (again): 
 Superuser created successfully.
 ```
+
+---
+
+## Server usage
+
+You can now access to the server page http://localhost:8001/admin/
+
+The port number 8001 was set in the docker-compose.yaml file.
