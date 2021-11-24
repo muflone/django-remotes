@@ -173,3 +173,31 @@ docker exec -it django-remotes_backend \
   python /app/manage.py registration_token \
   --settings project.settings_container
 ```
+
+---
+
+## Client registration
+
+For the client registration please refer to the README file with
+the basic instructions.
+
+```shell
+python client.py \
+  --action new_host \
+  --url http://192.168.1.50/ \
+  --settings '/home/muflone/django-remotes/settings.ini' \
+  --token 'ba1daf3e9d068e77a59cde64dffddcd6cd941f31' \
+  --private_key '/home/muflone/django-remotes/key.pem' \
+  --public_key '/home/muflone/django-remotes/key.pub'
+```
+
+After a host registration some records will be automatically created:
+
+- a new host in the `Hosts` section with the host public key used to
+encrypt the data between the server and the client
+- a new user in the `Users` section
+- a new token in the `Tokens` section with the API token used to
+authenticate during the requests
+
+The new host will be automatically added to the `All hosts` Hosts
+Groups, accordingly to the `hosts_group_auto_add` setting (see above).
