@@ -107,14 +107,18 @@ class CommandPostView(APIView, SaveRequestMixin):
                 command_output_result = json.loads(s=command_output.result)
                 command = command_output.command
                 variables = command.commandvariable_set.order_by('order')
-                for index, variable in enumerate(variables):
+                # Save results in variables
+                # Assign the items in the results to the variables matching
+                # the variable order, so the variable with the order 0 will
+                # get the first value in the results list
+                for variable in variables:
                     # Save result in variable
                     variable_value, _ = VariableValue.objects.get_or_create(
                         host=host,
                         variable=variable.variable)
                     variable_value.value = (
-                        command_output_result[index]
-                        if len(command_output_result) > index
+                        command_output_result[variable.order]
+                        if len(command_output_result) > variable.order
                         else '')
                     variable_value.save()
                 # Show results
