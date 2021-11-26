@@ -18,5 +18,5 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-VERSION = '0.2.2'
+VERSION = '0.3.0'
 PRODUCT_NAME = 'Django Remotes'
