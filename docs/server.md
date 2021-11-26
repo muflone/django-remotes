@@ -249,3 +249,15 @@ Each command can receive one or more general settings values or one
 or more host variables. This data will be passed to the command to
 customize the command behavior using some general data or specific
 host data.
+
+---
+## Commands results variables
+
+The `__RESULT__` list from the commands can return one or more
+data from the command to the server. This data can be saved into
+one or more host variables.
+
+The returned data from `__RESULT__` will be assigned to the host
+variables using the defined order. The first result item will be
+saved into the variables with order zero. Data with no variables
+order matching will not be saved at all.
