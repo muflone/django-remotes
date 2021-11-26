@@ -225,3 +225,27 @@ From the `Variable values` section you can review or assign new
 values to each variable for each host. This configuration can be
 made by hand or you can create a command and save a part of the
 results into one or more variables.
+
+---
+## Commands configuration
+
+You can finally configure the commands to run on each hosts group.
+
+Each command must be assigned to a `Commands group` which defines
+what hosts can access to the commands and the validity times for
+each commands group.
+
+After defining the commands groups you can define the commands to
+be assigned to the group.
+
+Each command can process any Python instruction and also print
+some data which could be returned to the server.
+
+Additionally each command can return one or more values in a  special
+list variable called `__RESULT__`. Simply append each result to the
+`__RESULT__` list.
+
+Each command can receive one or more general settings values or one
+or more host variables. This data will be passed to the command to
+customize the command behavior using some general data or specific
+host data.
