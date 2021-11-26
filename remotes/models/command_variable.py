@@ -41,7 +41,7 @@ class CommandVariable(BaseModel):
                                  verbose_name=pgettext_lazy(
                                      'CommandVariable',
                                      'variable'))
-    order = models.PositiveIntegerField(default=1,
+    order = models.PositiveIntegerField(default=0,
                                         verbose_name=pgettext_lazy(
                                             'CommandVariable',
                                             'order'))
@@ -54,7 +54,7 @@ class CommandVariable(BaseModel):
     class Meta:
         # Define the database table
         ordering = ['command', 'order', 'variable']
-        unique_together = ('command', 'order')
+        unique_together = ('command', 'order', 'variable')
         verbose_name = pgettext_lazy('CommandVariable',
                                      'Command variable')
         verbose_name_plural = pgettext_lazy('CommandVariable',
