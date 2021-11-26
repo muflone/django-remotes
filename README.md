@@ -314,3 +314,10 @@ python client.py \
 
 You can setup the server to await forever and listening for new
 commands and process them when they become available to the client.
+
+---
+
+# Documentation and examples
+
+Please refer to the `docs` directory for documentation and some usage
+examples.
