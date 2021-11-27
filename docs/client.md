@@ -163,3 +163,38 @@ python client.py \
 
 A new keys pair will be created and the host will be registered and immediately
 confirmed to be activated from the server side.
+
+---
+
+## Host status check
+
+After a host was registered you can check its status using the following
+command:
+
+```shell
+python client.py \
+  --action=host_status \
+  --settings <SETTINGS FILE>
+```
+
+The answer will contain some details about the host and the assigned hosts
+groups:
+
+```json
+{
+  "status": "OK",
+  "id": 165,
+  "user_id": 147,
+  "user_name": "000147",
+  "hosts_groups": [
+    {
+      "id": 3,
+      "name": "All hosts"
+    },
+    {
+      "id": 2,
+      "name": "Linux hosts"
+    }
+  ]
+}
+```
