@@ -220,7 +220,7 @@ python client.py \
 
 If you get the following output:
 
-```
+```json
 {
   "status": "OK",
   "results": []
@@ -230,7 +230,7 @@ If you get the following output:
 Then you don't have any awaiting commands to execute else you'll
 get a list of awaiting commands with their ID, for example:
 
-```
+```json
 {
   "status": "OK",
   "results": [
@@ -259,7 +259,7 @@ python client.py \
 
 Executing the command you'll get a similar response:
 
-```
+```json
 {
   "id": 1,
   "name": "<ENCRYPTED NAME>",

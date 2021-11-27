@@ -47,7 +47,7 @@ server {
 
 Create a new `docker-compose.yaml` file with the following:
 
-```
+```yaml
 version: '3'
 
 services:
@@ -93,7 +93,7 @@ Finally create the containers using the command `docker-compose up -d`
 With the container running you can create a new administrator account
 using the command:
 
-```
+```shell
 docker exec -it django-remotes_backend \
   python /app/manage.py createsuperuser \
   --settings project.settings_container
@@ -168,7 +168,7 @@ you can use the command: `python manage.py registration_token`.
 In the case of a running container you can execute the command this
 way:
 
-```
+```shell
 docker exec -it django-remotes_backend \
   python /app/manage.py registration_token \
   --settings project.settings_container
