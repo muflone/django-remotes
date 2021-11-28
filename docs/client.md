@@ -198,3 +198,86 @@ groups:
   ]
 }
 ```
+
+---
+
+## Commands list
+
+A registered host can request the commands to execute with the following command:
+
+```shell
+python client.py \
+  --action=commands_list \
+  --settings <SETTINGS FILE>
+```
+
+The reply from the server will contains the commands to execute:
+
+```json
+{
+  "status": "OK",
+  "results": [
+    {
+      "group": 4,
+      "command": 23
+    },
+    {
+      "group": 6,
+      "command": 18
+    }
+  ]
+}
+```
+
+The client will be informed it needs to execute the previous commands, along
+with their command group ID.
+
+---
+
+## Command execution
+
+```shell
+python client.py \
+  --action=command_get \
+  --settings <SETTINGS FILE> \
+  --command <COMMAND ID>
+```
+
+The client can execute a single command by its ID and transmit to the server
+the command reply and results.
+
+---
+
+## Commands processing
+
+The commands processing will list all the commands to execute using
+`commands_list` command and then will execute each one of them with the
+`command_get` command.
+
+```shell
+python client.py \
+  --action=commands_process \
+  --settings <SETTINGS FILE>
+```
+
+This is most frequent command to use, the process any waiting command to be
+executed. It will process every item in the commands list, sending back to the
+server each command reply.
+
+---
+
+## Commands monitoring
+
+The commands monitoring is used to set the client in a repeating loop which
+will await a predefined number of seconds before processing every command in
+list and repeat the await again.
+
+```shell
+python client.py \
+  --action=commands_monitor \
+  --settings <SETTINGS FILE>
+  --interval=<SECONDS>
+```
+
+A client in service mode will typically use this command, putting it in an
+awaiting loop and processing every command on each iteration.
