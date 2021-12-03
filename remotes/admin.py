@@ -20,6 +20,9 @@
 
 from django.contrib import admin
 
+from .constants import (ADMIN_SITE_HEADER,
+                        ADMIN_SITE_INDEX_TITLE,
+                        ADMIN_SITE_TITLE)
 from .models import (ApiLog, ApiLogAdmin,
                      Command, CommandAdmin,
                      CommandVariable, CommandVariableAdmin,
@@ -31,6 +34,9 @@ from .models import (ApiLog, ApiLogAdmin,
                      Variable, VariableAdmin,
                      VariableValue, VariableValueAdmin)
 
+admin.site.site_header = ADMIN_SITE_HEADER
+admin.site.site_title = ADMIN_SITE_TITLE
+admin.site.index_title = ADMIN_SITE_INDEX_TITLE
 
 admin.site.register(ApiLog, ApiLogAdmin)
 admin.site.register(Command, CommandAdmin)
