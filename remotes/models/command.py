@@ -58,7 +58,7 @@ class Command(BaseModel):
                                        to='remotes.Variable',
                                        verbose_name=pgettext_lazy(
                                            'Command',
-                                           'variables'))
+                                           'input variables'))
     command = models.TextField(verbose_name=pgettext_lazy(
                                    'Command',
                                    'command'))
