@@ -34,8 +34,8 @@ section.
 Edit the **server_url** setting by setting its value to the host url
 `http://192.168.1.5:8001/`
 
-An useful setting to setup is **hosts_group_auto_add** which defines the default
-group to add hosts to. The default group is called `All hosts`.
+A useful setting to set up is **hosts_group_auto_add** which defines the
+default group to add hosts to. The default group is called `All hosts`.
 
 Please make sure a hosts group with the specified name exists.
 
@@ -80,9 +80,9 @@ complete before getting killed.
 Commands are grouped into **Commands Groups** and each group has a hosts group
 entitled to use it, a time range for execution and a list of commands.
 
-For example you can define a group for executing something on all the hosts for
-a group, until the 1st of the month, after that date, the command group expires
-and cannot be used it anymore.
+For example, you can define a group for executing something on all the hosts
+for a group, until the 1st of the month, after that date, the command group
+expires and cannot be used it anymore.
 
 You can also disable an entire commands group to make it unavailable to the
 clients.
@@ -103,7 +103,7 @@ For our example we'll define a new Commands group called
 - **Before**: choose an ending date, like 2099-01-01 23:59:59
 - **Active**: be sure to make the commands group active
 
-You can define commands from the commands group configuration or you can use
+You can define commands from the commands group configuration, or you can use
 the **Commands** section.
 
 ---
@@ -148,7 +148,7 @@ group we created before:
 - **Order**: set the priority 2
 - **Active**: leave it checked
 - **Command**: set the command
-```
+```python
 import time
 
 __RESULT__ = []
@@ -158,7 +158,7 @@ for counter in range(1, 11):
     time.sleep(1)
 ```
 
-This command will count from 1 to 10, awaiting 1 second for each iteration and
+This command will count from 1 to 10, awaiting 1 second for each iteration, and
 it will save the results in the special variable **\_\_RESULT\_\_** which holds
 the returning values from the command.
 
@@ -176,7 +176,7 @@ You can check out the client execution from the **Commands Outputs** section:
 
 **WARNING**: If you had set the previous command timeout to 10 or lower seconds
 the command will fail for a timeout, as it cannot be completed in the maximum
-allowed time. As a result, the command will not be completed and it  will be
+allowed time. As a result, the command will not be completed, and it will be
 tried again during the next check. Always avoid to set commands that cannot be
 completed in the allowed time as the process may continue to try to process the
 same command forever, until it will be completed.
