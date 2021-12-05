@@ -180,3 +180,80 @@ allowed time. As a result, the command will not be completed, and it will be
 tried again during the next check. Always avoid to set commands that cannot be
 completed in the allowed time as the process may continue to try to process the
 same command forever, until it will be completed.
+
+---
+### A command with results and variables
+
+You can also configure some variables to hold some result for a command with
+results, like the previous command.
+
+Before creating a new command we have to define some variable from the
+**Variables** section:
+
+- **Category**: you can categorize the variables like you prefer, for this
+  example set the category to `Python`
+- **Name**: set the variable name like `version`
+- **Description**: add a description like `Running Python version`
+
+Create also another variable in the same way:
+
+- **Category**: you can categorize the variables like you prefer, for this
+  example set the category to `System`
+- **Name**: set the variable name like `platform`
+- **Description**: add a description like `System platform in use`
+
+Now we'll create a command which will get some information from the client and
+save the result in the two variables set before.
+
+Create a new command like before with the following information:
+
+- **Name**: set the name `Get system information`
+- **Order**: set the priority 3
+- **Active**: leave it checked
+- **Command**: set the following command
+```python
+import sys
+
+__RESULT__ = [
+    sys.platform,
+    sys.version
+]
+print(__RESULT__)
+```
+
+This command will get the platform information and the Python version, and it
+will return both to the server.
+
+Now we want to capture those values into the two variables set before. Let's
+open the **Commands variables** section and assign two variables:
+
+- **Command**: choose the `Get system information` command
+- **Variable**: choose the `platform` variable
+- **Order**: set the order 0, to point to the first result in the `__RESULT__`
+  variable
+
+Create another assignment to the comand variable:
+
+- **Command**: choose the `Get system information` command
+- **Variable**: choose the `version` variable
+- **Order**: set the order 1, to point to the second result in the `__RESULT__`
+  variable
+
+**NOTE**: The `order` attribute refers to the item in the `__RESULT__` list, so
+the command results must return enough values to be saved in the variables.
+
+Executing the command from a Microsoft Windows host you can see the following
+results in the **Commands outputs** section:
+
+**Command**: will show the `Get system information` command
+- **Host**: will show the host name which executed the command
+- **Output**: will show the results as a printed list
+- **Result**: will contain a list with two values: `win32` for the platform and
+  `3.9.9 ...` for the Python version
+
+If you access to the **Variable values** section you'll find two variables set
+for the host that executed the command with the value `win32` for the platform
+variable and `3.9.9 ...` for the version variable.
+
+In this way we saved the data in a customized variable for each host running
+the command. You can define as many variables you need.
