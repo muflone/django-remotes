@@ -257,3 +257,58 @@ variable and `3.9.9 ...` for the version variable.
 
 In this way we saved the data in a customized variable for each host running
 the command. You can define as many variables you need.
+
+---
+### A command with input settings and input variables
+
+A configured command can also receive input values from the server in two forms:
+- **Input Settings**: refer to global settings, common to every hosts
+- **Input Variables**: refer to per-host values, specific only to the requesting
+  host. The input variables can be set from the superuser administrator or be
+  automatically set from another command like in the previous section.
+
+To test these features we'll create a new setting and we'll use the variables
+set from the previous example plus a new added variable.
+
+From the **Settings** section create a new setting like the following:
+- **Name**: set the name as `global message`
+- **Description**: set the description as `Welcome message`
+- **Value**: set as the setting value `Hello everyone`
+- **Active**: leave it as checked
+
+In the **Variables** section create a new variable called `name`, the category
+is not relevant at all.
+
+In the **Variable values** add a new variable like the following:
+
+- **Host**: select the host running the command
+- **Variable**: select the `name` variable
+- **Value**: set the variable value as `Muflone VM`
+
+Now we'll create a new command which will use both the setting and the new
+variable as input.
+
+These commands have to be set from the **Commands** section:
+
+- **Name**: set the command name as `Pass some settings and variables`
+- **Group**: choose the `Common for all the hosts` group
+- **Description**: put a descriptive text as `The settings and variables will
+  be passed as input for the command`
+- **Input settings**: choose the `global message` setting
+- **Input variables**: choose the `name` variablee
+- **Command**: set the following command:
+```python
+greet = __SETTINGS__['global message']
+host_name = __VARIABLES__['name'] or 'unnamed host'
+
+print(f'{greet} from {host_name}')
+```
+- **Timeout**: leave the default 15 seconds timeout
+- **Order**: set the order to 4
+- **Active**: leave it as checked
+
+If you run the command from the same host used in the previous commands you'll
+have the following output: `Hello everyone from Muflone VM`; if you run the same
+command from another host, whose variable `name` wasn't set you'll receive
+instead `Hello everyone from unnamed host` as the variable `name` was passed as
+None.
