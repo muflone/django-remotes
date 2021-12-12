@@ -26,6 +26,8 @@ import tempfile
 import urllib.parse
 import uuid
 
+import requests.exceptions
+
 from encryption.fernet_encrypt import FernetEncrypt
 from encryption.rsa_key import RsaKey
 
@@ -553,7 +555,11 @@ class Client(object):
 
             :return: True
             """
-            self.do_process_commands()
+            try:
+                self.do_process_commands()
+            except requests.exceptions.ConnectionError:
+                # Ignore connection errors during monitoring
+                pass
             return True
 
         recurring = RecurringJob()
