@@ -18,6 +18,16 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
-from .action_order_increase import ActionOrderIncrease            # noqa: F401
-from .action_set_active import ActionSetActive                    # noqa: F401
-from .action_set_inactive import ActionSetInactive                # noqa: F401
+class ActionOrderIncrease(object):
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
+    def order_increase(self, request, queryset) -> None:
+        """
+        Increase the order by 1
+
+        :param request: request page
+        :param queryset: data to update
+        :return: None
+        """
+        for obj in queryset.order_by('-order'):
+            obj.order += 1
+            obj.save()

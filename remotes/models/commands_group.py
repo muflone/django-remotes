@@ -23,7 +23,9 @@ from django.utils.translation import pgettext_lazy
 
 from remotes.models.command import CommandInline
 
-from utility.actions import ActionSetActive, ActionSetInactive
+from utility.actions import (ActionOrderIncrease,
+                             ActionSetActive,
+                             ActionSetInactive)
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -80,9 +82,10 @@ class CommandsGroup(BaseModel):
 
 
 class CommandsGroupAdmin(BaseModelAdmin,
+                         ActionOrderIncrease,
                          ActionSetActive,
                          ActionSetInactive):
-    actions = ['set_active', 'set_inactive']
+    actions = ['order_increase', 'set_active', 'set_inactive']
     inlines = [CommandInline]
     list_display = ('order', 'hosts', 'name', 'after', 'before', 'is_active')
     list_filter = ('hosts', 'is_active')
