@@ -25,6 +25,8 @@ from rest_framework.views import APIView
 from api.permissions import IsUserWithHost
 from api.views.save_request_mixin import SaveRequestMixin
 
+from project import PRODUCT_NAME, VERSION
+
 from remotes.constants import (HOSTS_GROUPS,
                                ID_FIELD,
                                STATUS_FIELD,
@@ -48,6 +50,8 @@ class HostStatusView(APIView, SaveRequestMixin):
         hosts_groups = host.hostsgroup_set.all()
         return Response(
             data={STATUS_FIELD: STATUS_OK,
+                  'app_name': PRODUCT_NAME,
+                  'version': VERSION,
                   ID_FIELD: host.pk,
                   USER_ID_FIELD: host.user.pk,
                   USER_NAME_FIELD: host.user.username,

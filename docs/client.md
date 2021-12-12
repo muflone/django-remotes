@@ -183,6 +183,8 @@ groups:
 ```json
 {
   "status": "OK",
+  "app_name": "Django Remotes",
+  "version": "0.3.1",
   "id": 165,
   "user_id": 147,
   "user_name": "000147",
