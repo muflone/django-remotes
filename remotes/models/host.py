@@ -124,11 +124,13 @@ class HostAdmin(BaseModelAdmin,
                 ActionSetActive,
                 ActionSetInactive):
     actions = ['set_active', 'set_inactive']
-    list_display = ('__str__', 'uuid', 'user', 'groups_list', 'description',
+    list_display = ('__str__', 'uuid', 'user', 'user_first_name',
+                    'user_last_name', 'groups_list', 'description',
                     'is_active')
     list_filter = ('is_active',)
     ordering = ['user']
-    readonly_fields = ('uuid', 'groups_list')
+    readonly_fields = ('user_first_name', 'user_last_name', 'uuid',
+                       'groups_list')
 
     # noinspection PyMethodMayBeStatic
     def groups_list(self, instance) -> str:
@@ -140,3 +142,23 @@ class HostAdmin(BaseModelAdmin,
         """
         return ', '.join(instance.hostsgroup_set.values_list('name',
                                                              flat=True))
+
+    # noinspection PyMethodMayBeStatic
+    def user_first_name(self, instance) -> str:
+        """
+        Return the User first name for the current host
+
+        :param instance: Host instance
+        :return: user first name
+        """
+        return instance.user.first_name
+
+    # noinspection PyMethodMayBeStatic
+    def user_last_name(self, instance) -> str:
+        """
+        Return the User last name for the current host
+
+        :param instance: Host instance
+        :return: user last name
+        """
+        return instance.user.last_name
