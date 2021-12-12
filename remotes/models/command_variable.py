@@ -23,7 +23,7 @@ from django.utils.translation import pgettext_lazy
 
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
-from utility.actions import ActionOrderIncrease
+from utility.actions import ActionOrderDecrease, ActionOrderIncrease
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
 
@@ -66,8 +66,9 @@ class CommandVariable(BaseModel):
 
 
 class CommandVariableAdmin(BaseModelAdmin,
+                           ActionOrderDecrease,
                            ActionOrderIncrease):
-    actions = ['order_increase']
+    actions = ['order_decrease', 'order_increase']
     list_display = ('command_id',
                     'group',
                     'command',

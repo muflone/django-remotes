@@ -24,7 +24,8 @@ from django.utils.translation import pgettext_lazy
 
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
-from utility.actions import (ActionOrderIncrease,
+from utility.actions import (ActionOrderDecrease,
+                             ActionOrderIncrease,
                              ActionSetActive,
                              ActionSetInactive)
 from utility.models import (BaseModel, BaseModelAdmin,
@@ -115,10 +116,12 @@ class CommandInline(TabularInline):
 
 
 class CommandAdmin(BaseModelAdmin,
+                   ActionOrderDecrease,
                    ActionOrderIncrease,
                    ActionSetActive,
                    ActionSetInactive):
-    actions = ['order_increase', 'set_active', 'set_inactive']
+    actions = ['order_decrease', 'order_increase',
+               'set_active', 'set_inactive']
     list_display = ('id', 'name', 'group', 'order', 'description', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
                    'is_active',
