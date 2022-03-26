@@ -128,7 +128,7 @@ class HostAdmin(BaseModelAdmin,
                     'user_last_name', 'groups_list', 'description',
                     'is_active')
     list_filter = ('is_active',)
-    ordering = ['user']
+    ordering = ['user__username']
     readonly_fields = ('user_first_name', 'user_last_name', 'uuid',
                        'groups_list')
 
