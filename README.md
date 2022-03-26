@@ -4,7 +4,7 @@
 
 **Description:** A Django application to execute remote commands 
 
-**Copyright:** 2021 Fabio Castelli (Muflone) <muflone@muflone.com>
+**Copyright:** 2021-2022 Fabio Castelli (Muflone) <muflone@muflone.com>
 
 **License:** GPL-3+
 
