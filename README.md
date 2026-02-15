@@ -39,11 +39,11 @@ instructions.
 The Python dependencies for the server part are listed in the
 `requirements_server.txt` file.
 
-* Python >= 3.9
-* Django 4.0.x (https://pypi.org/project/Django/)
-* Django Rest Framework 3.13.x (https://pypi.org/project/djangorestframework/)
+* Python >= 3.13
+* Django 6.0.x (https://pypi.org/project/Django/)
+* Django Rest Framework 3.16.x (https://pypi.org/project/djangorestframework/)
 * Django Admin List Filter Dropdown (https://pypi.org/project/django-admin-list-filter-dropdown/)
-* Cryptography 36.x (https://pypi.org/project/cryptography/)
+* Cryptography 46.x (https://pypi.org/project/cryptography/)
 
 Additional optional dependencies might be needed to use your desired
 database.
@@ -152,8 +152,8 @@ instructions.
 The Python dependencies for the server part are listed in the
 `requirements_client.txt` file.
 
-* Python >= 3.9
-* Cryptography 36.x (https://pypi.org/project/cryptography/)
+* Python >= 3.13
+* Cryptography 46.x (https://pypi.org/project/cryptography/)
 * Requests 2.x (https://pypi.org/project/requests/)
 
 ## Usage

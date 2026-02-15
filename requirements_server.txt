@@ -1,4 +1,4 @@
-Django==4.0.3
-django-admin-list-filter-dropdown==1.0.3
-djangorestframework==3.13.1
-cryptography==36.0.2
+Django~=6.0
+django-admin-list-filter-dropdown~=1.0
+djangorestframework~=3.16
+cryptography~=46.0
