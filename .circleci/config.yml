@@ -6,12 +6,12 @@ orbs:
   # Orb commands and jobs help you with common scripting around a language/tool,
   # so you don't have to copy and paste it everywhere.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
-  python: circleci/python@1.2
+  python: circleci/python@4.0.0
 
 jobs:
   build:
     docker:
-      - image: circleci/python:3.9.5
+      - image: cimg/python:3.13.12
 
     working_directory: ~/repo
 
