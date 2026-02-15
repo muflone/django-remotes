@@ -82,7 +82,8 @@ class WmicParser(object):
         process = subprocess.run(args=arguments,
                                  capture_output=True,
                                  timeout=self.timeout)
-        return process.stdout.decode('utf-8')
+        return process.stdout.decode(encoding='utf-8',
+                                     errors='replace')
 
     def get(self,
             alias: str,

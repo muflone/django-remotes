@@ -489,7 +489,8 @@ class Client(object):
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
             try:
-                stdout, stderr = [stream.decode('utf-8')
+                stdout, stderr = [stream.decode(encoding='utf-8',
+                                                errors='replace')
                                   for stream
                                   in process.communicate(timeout=timeout)]
                 status = process.returncode
