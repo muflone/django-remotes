@@ -5,5 +5,5 @@ install:
   - pip install -r requirements_travis.txt
 script:
   - python -m compileall .
-  - pycodestyle .
+  - python -m pycodestyle .
   - python -m flake8 .
