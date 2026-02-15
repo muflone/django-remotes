@@ -104,7 +104,10 @@ class CommandPostView(APIView, SaveRequestMixin):
                 # Save data creating a new CommandOutput object
                 command_output = serializer.save()
                 # Save the output result into VariableValue objects
-                command_output_result = json.loads(s=command_output.result)
+                try:
+                    command_output_result = json.loads(s=command_output.result)
+                except json.JSONDecodeError:
+                    command_output_result = {'result': command_output.result}
                 command = command_output.command
                 variables = command.commandvariable_set.order_by('order')
                 # Save results in variables
