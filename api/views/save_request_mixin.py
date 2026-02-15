@@ -45,7 +45,7 @@ class SaveRequestMixin(object):
                 message_level=0,
                 method=request.method,
                 path=request.path,
-                raw_uri=request.get_raw_uri(),
+                raw_uri=request.build_absolute_uri(),
                 url_name=request.resolver_match.url_name,
                 func_name=request.resolver_match.func.__name__,
                 remote_addr=request.META.get('REMOTE_ADDR', ''),
