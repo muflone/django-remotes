@@ -180,7 +180,7 @@ class HostAdmin(BaseModelAdmin,
     list_display = ('__str__', 'uuid', 'user', 'user_first_name',
                     'user_last_name', 'groups_list', 'description',
                     'is_active')
-    list_filter = ('is_active',)
+    list_filter = ('is_active', 'include_in_apilog')
     ordering = ['user__username']
     readonly_fields = ('user_first_name', 'user_last_name', 'uuid')
 
