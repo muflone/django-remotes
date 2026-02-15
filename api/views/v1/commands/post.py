@@ -107,7 +107,7 @@ class CommandPostView(APIView, SaveRequestMixin):
                 try:
                     command_output_result = json.loads(s=command_output.result)
                 except json.JSONDecodeError:
-                    command_output_result = {'result': command_output.result}
+                    command_output_result = [command_output.result]
                 command = command_output.command
                 variables = command.commandvariable_set.order_by('order')
                 # Save results in variables
