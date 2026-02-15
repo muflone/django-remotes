@@ -18,6 +18,9 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
 
+from django import forms
+from django.apps import apps
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import pgettext_lazy
@@ -120,17 +123,62 @@ class Host(BaseModel):
                 use_base64=True)
 
 
+class HostAdminForm(forms.ModelForm):
+    """
+    Host admin form used to add HostGroup relationship
+    """
+    host_groups = forms.ModelMultipleChoiceField(
+        queryset=None,
+        required=False,
+        widget=admin.widgets.FilteredSelectMultiple(
+            pgettext_lazy('HostsGroup',
+                          'Hosts groups'), False),
+        label=pgettext_lazy('HostsGroup',
+                            'Hosts groups'))
+
+    class Meta:
+        model = Host
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        model = apps.get_model('remotes.HostsGroup')
+        self.fields['host_groups'].queryset = model.objects.all()
+
+        if self.instance.pk:
+            # Load initial HostGroups for Host
+            self.fields['host_groups'].initial = (
+                self.instance.hostsgroup_set.all())
+
+    def save(self, commit=True):
+        instance = super().save(commit=commit)
+
+        if commit:
+            # If commit is True, save immediately
+            instance.hostsgroup_set.set(self.cleaned_data['host_groups'])
+        else:
+            # If commit is False, save later using save_m2m
+            original_save_m2m = self.save_m2m
+
+            def save_m2m():
+                original_save_m2m()
+                instance.hostsgroup_set.set(self.cleaned_data['host_groups'])
+            self.save_m2m = save_m2m
+
+        return instance
+
+
 class HostAdmin(BaseModelAdmin,
                 ActionSetActive,
                 ActionSetInactive):
     actions = ['set_active', 'set_inactive']
+    form = HostAdminForm
     list_display = ('__str__', 'uuid', 'user', 'user_first_name',
                     'user_last_name', 'groups_list', 'description',
                     'is_active')
     list_filter = ('is_active',)
     ordering = ['user__username']
-    readonly_fields = ('user_first_name', 'user_last_name', 'uuid',
-                       'groups_list')
+    readonly_fields = ('user_first_name', 'user_last_name', 'uuid')
 
     # noinspection PyMethodMayBeStatic
     def groups_list(self, instance) -> str:
