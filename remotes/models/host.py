@@ -64,6 +64,10 @@ class Host(BaseModel):
                                     verbose_name=pgettext_lazy(
                                         'Host',
                                         'active'))
+    include_in_apilog = models.BooleanField(default=False,
+                                            verbose_name=pgettext_lazy(
+                                                'Host',
+                                                'include in API log'))
 
     # Set the managers for the model
     objects = models.Manager()

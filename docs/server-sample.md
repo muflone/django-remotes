@@ -324,10 +324,5 @@ There's another setting called `apilog_include_arguments` which enables logging
 even for the arguments passed to the API call. You can find the arguments in a
 field in the **Api logs** section.
 
-The `apilog_filter_users` can be set with a comma separated list of user names
-to exclude from the API calls log. For example setting it with `00004,00005`
-the hosts with name `00004` and `00005` will not be logged in the Api logs
-section.
-
 All the API logs are saved into another database different from the default
 database used for configuration and commands.

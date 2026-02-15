@@ -52,7 +52,6 @@ METHOD_GET = 'get'
 METHOD_POST = 'post'
 
 APILOG_ENABLE_LOGGING = 'apilog_enable_logging'
-APILOG_FILTER_USERS = 'apilog_filter_users'
 APILOG_INCLUDE_ARGS = 'apilog_include_arguments'
 
 ADMIN_SITE_HEADER = 'Django Remotes Server Administration'

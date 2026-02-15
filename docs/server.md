@@ -137,9 +137,6 @@ API requests logging (use 0 to disable, 1 to enable logging)
 - `apilog_include_arguments` - a boolean value to include or exclude
 the API requests arguments (its data) in the Api logs data
 
-- `apilog_filter_users` - a list of comma separated user names to
-exclude from the logging
-
 ---
 
 ## Registration token
