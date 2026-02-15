@@ -21,6 +21,8 @@
 import datetime
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from remotes.constants import (APILOG_ENABLE_LOGGING,
                                APILOG_INCLUDE_ARGS)
 from remotes.models.api_log import ApiLog
@@ -34,10 +36,14 @@ class SaveRequestMixin(object):
         log_enabled = get_setting_value(name=APILOG_ENABLE_LOGGING) == '1'
         log_arguments = get_setting_value(name=APILOG_INCLUDE_ARGS) == '1'
         # Check if the user has include_in_apilog
-        if (log_enabled and
-                request.user and
-                request.user.host and
-                request.user.host.include_in_apilog):
+        try:
+            include_in_apilog = (not request.user.is_anonymous and
+                                 request.user.host and
+                                 request.user.host.include_in_apilog)
+        except ObjectDoesNotExist:
+            include_in_apilog = False
+
+        if log_enabled and request.user and include_in_apilog:
             ApiLog.objects.create(
                 date=datetime.date.today(),
                 time=datetime.datetime.now().replace(microsecond=0),
