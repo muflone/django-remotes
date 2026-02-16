@@ -24,6 +24,9 @@ configuration tables
 - a new file named `docker-compose.yaml` used to build the stack with
 docker-compose (see below)
 
+- a basic Python file named `settings_container.py` used to customize the
+container (see below)
+
 ## Web server configuration
 
 The `nginx.conf` file will enable nginx to serve the static files only from the
@@ -55,12 +58,10 @@ server {
 This is the `docker-compose.yaml` file used to build the docker stack:
 
 ```yaml
-version: '3'
-
 services:
   web:
     container_name: django-remotes_web
-    image: nginx:1.21.3-alpine
+    image: nginx:1.29.5-alpine
     ports:
       - 8001:8000/tcp
     depends_on:
@@ -72,7 +73,7 @@ services:
 
   backend:
     container_name: django-remotes_backend
-    image: ilmuflone/django-remotes:0.2.1
+    image: ilmuflone/django-remotes:0.4.0
     environment:
       - SERVER_PORT=8080
     expose:
@@ -81,6 +82,30 @@ services:
       - ./static:/app/static
       - ./database.sqlite3:/var/lib/django-remotes.sqlite3
       - ./logs.sqlite3:/var/lib/django-remotes-logs.sqlite3
+      - ./settings_container.py:/app/project/settings_container.py:ro
+```
+
+## Settings file
+
+This is the `settings_container.py` file used to customize the container:
+
+```python
+from .settings import *
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/var/lib/django-remotes.sqlite3',
+    },
+    'api_logs': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/var/lib/django-remotes-logs.sqlite3',
+    }
+}
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8001",
+]
 ```
 
 ## Initialize the project
@@ -94,7 +119,7 @@ With the container running you can create a new administrator account using the
 following command:
 
 ```shell
-docker exec -it django-remotes_backend \
+docker compose exec backend \
   python /app/manage.py createsuperuser \
   --settings project.settings_container
 ```

@@ -48,12 +48,10 @@ server {
 Create a new `docker-compose.yaml` file with the following:
 
 ```yaml
-version: '3'
-
 services:
   web:
     container_name: django-remotes_web
-    image: nginx:1.21.3-alpine
+    image: nginx:1.29.5-alpine
     ports:
       - 8001:8000/tcp
     depends_on:
@@ -65,7 +63,7 @@ services:
 
   backend:
     container_name: django-remotes_backend
-    image: ilmuflone/django-remotes:0.2.1
+    image: ilmuflone/django-remotes:0.4.0
     environment:
       - SERVER_PORT=8080
     expose:
@@ -74,6 +72,7 @@ services:
       - ./static:/app/static
       - ./database.sqlite3:/var/lib/django-remotes.sqlite3
       - ./logs.sqlite3:/var/lib/django-remotes-logs.sqlite3
+      - ./settings_container.py:/app/project/settings_container.py:ro
 ```
 
 The directories `static` and `logs` can be initially empty, they will
@@ -83,6 +82,27 @@ At the same way you could move your database outside of the container
 by mapping the two files `django-remotes.sqlite` and
 `django-remotes-logs.sqlite` thus those files can initially be empty
 and they will be populated during the first startup.
+
+Create a `settings_container.py` file used to customize the container:
+
+```python
+from .settings import *
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/var/lib/django-remotes.sqlite3',
+    },
+    'api_logs': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/var/lib/django-remotes-logs.sqlite3',
+    }
+}
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8001",
+]
+```
 
 Finally create the containers using the command `docker-compose up -d`
 
@@ -94,7 +114,7 @@ With the container running you can create a new administrator account
 using the command:
 
 ```shell
-docker exec -it django-remotes_backend \
+docker compose exec backend \
   python /app/manage.py createsuperuser \
   --settings project.settings_container
 ```
@@ -166,7 +186,7 @@ In the case of a running container you can execute the command this
 way:
 
 ```shell
-docker exec -it django-remotes_backend \
+docker compose exec backend \
   python /app/manage.py registration_token \
   --settings project.settings_container
 ```
