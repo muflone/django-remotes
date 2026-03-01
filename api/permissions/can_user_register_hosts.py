@@ -28,4 +28,7 @@ class CanUserRegisterHosts(IsAuthenticated):
     Authentication for users with can_register_hosts permissions
     """
     def has_permission(self, request, view):
-        return request.user.has_perm(PERMISSION_CAN_REGISTER_HOSTS_FULL)
+        if not super().has_permission(request, view):
+            return False
+        else:
+            return request.user.has_perm(PERMISSION_CAN_REGISTER_HOSTS_FULL)

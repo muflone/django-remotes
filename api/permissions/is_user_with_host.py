@@ -28,5 +28,10 @@ class IsUserWithHost(IsAuthenticated):
     Authentication for users with host only
     """
     def has_permission(self, request, view):
-        host = Host.objects_enabled.filter(user_id=request.user.pk).first()
-        return bool(host)
+        if not super().has_permission(request, view):
+            return False
+        else:
+            user_pk = getattr(request.user, 'pk', None)
+            if not user_pk:
+                return False
+            return Host.objects_enabled.filter(user_id=user_pk).exists()
