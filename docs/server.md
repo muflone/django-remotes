@@ -63,7 +63,7 @@ services:
 
   backend:
     container_name: django-remotes_backend
-    image: ilmuflone/django-remotes:0.4.0
+    image: ilmuflone/django-remotes:0.4.1
     environment:
       - SERVER_PORT=8080
     expose:
