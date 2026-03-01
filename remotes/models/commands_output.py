@@ -23,8 +23,7 @@ from django.utils.translation import pgettext_lazy
 
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
-from utility.models import (BaseModel, BaseModelAdmin,
-                            ManagerEnabled, ManagerDisabled)
+from utility.models import BaseModel, BaseModelAdmin
 
 
 class CommandsOutput(BaseModel):

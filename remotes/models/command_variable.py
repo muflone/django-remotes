@@ -24,8 +24,7 @@ from django.utils.translation import pgettext_lazy
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
 from utility.actions import ActionOrderDecrease, ActionOrderIncrease
-from utility.models import (BaseModel, BaseModelAdmin,
-                            ManagerEnabled, ManagerDisabled)
+from utility.models import BaseModel, BaseModelAdmin
 
 
 class CommandVariable(BaseModel):

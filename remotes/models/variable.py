@@ -21,8 +21,7 @@
 from django.db import models
 from django.utils.translation import pgettext_lazy
 
-from utility.models import (BaseModel, BaseModelAdmin,
-                            ManagerEnabled, ManagerDisabled)
+from utility.models import BaseModel, BaseModelAdmin
 
 
 class Variable(BaseModel):
