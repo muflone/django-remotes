@@ -47,11 +47,6 @@ class CommandVariable(BaseModel):
                                             'CommandVariable',
                                             'order'))
 
-    # Set the managers for the model
-    objects = models.Manager()
-    objects_enabled = ManagerEnabled()
-    objects_disabled = ManagerDisabled()
-
     class Meta:
         # Define the database table
         ordering = ['command', 'order', 'variable']
