@@ -46,7 +46,7 @@ class HostStatusView(APIView, SaveRequestMixin):
         # Save request
         self.save_request(request, args, kwargs)
         # Find host matching with the user
-        host = Host.objects.get(user_id=self.request.user.pk)
+        host = Host.objects_enabled.get(user_id=self.request.user.pk)
         hosts_groups = host.hostsgroup_set.all()
         return Response(
             data={STATUS_FIELD: STATUS_OK,

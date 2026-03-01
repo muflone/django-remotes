@@ -48,7 +48,7 @@ class CommandGetSerializer(ModelSerializer):
         result = {item.name: None
                   for item in variables}
         # Find host matching with the user
-        host = Host.objects.get(user=self.context['request'].user)
+        host = Host.objects_enabled.get(user=self.context['request'].user)
         # Update variable values
         variables_values = VariableValue.objects.filter(host=host,
                                                         variable__in=variables)
@@ -65,7 +65,7 @@ class CommandGetView(RetrieveAPIEncryptedView):
 
     def get_queryset(self):
         # Find host matching with the user
-        host = Host.objects.get(user_id=self.request.user.pk)
+        host = Host.objects_enabled.get(user_id=self.request.user.pk)
         # Find the commands group item
         queryset = self.model.objects_enabled.filter(
             pk=self.kwargs['pk'],
