@@ -57,6 +57,7 @@ from remotes.client.settings import (Settings,
                                      SECTION_HOST,
                                      SECTION_SERVER)
 from remotes.constants import (COMMAND_FIELD,
+                               COMMAND_TYPE_PYTHON_FILE,
                                COMMANDS_RESULTS_FIELD,
                                ENCRYPTED_FIELD,
                                ENCRYPTION_KEY_FIELD,
@@ -451,76 +452,41 @@ class Client(object):
             decryptor.load_key(key=self.key.decrypt(
                 text=results[ENCRYPTION_KEY_FIELD],
                 use_base64=True))
-            # Create a new temporary file with the decrypted command
-            temp_file_fd, temp_file_source = tempfile.mkstemp(
-                prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
-                text=True)
-            with os.fdopen(temp_file_fd, 'w') as file:
-                # Initialize modules path
-                remotes_path = pathlib.Path(remotes.__path__[0])
-                file.write('import sys\n'
-                           f'sys.path.append(r"{remotes_path.parent}")\n')
-                # Initialize __RESULT__ variable
-                file.write('__RESULT__ = ""\n')
-                # Save settings
-                items = {key: decryptor.decrypt(text=value)
-                         for key, value in results['settings'].items()}
-                file.write(f'__SETTINGS__ = {items}\n')
-                # Save variables
-                items = {key: decryptor.decrypt(text=value) if value
-                         else None
-                         for key, value in results['variables'].items()}
-                file.write(f'__VARIABLES__ = {items}\n')
-                file.write('\n')
-                # Write command
-                file.write(decryptor.decrypt(text=results['command']))
-                # Convert __RESULT__ in list if it's not a list and
-                # write __RESULT__ in JSON format in stderr
-                file.write('\n'
-                           '\n'
-                           'import json\n'
-                           'import sys\n'
-                           'if not isinstance(__RESULT__, list):\n'
-                           '    __RESULT__ = [__RESULT__]\n'
-                           'sys.stderr.write(json.dumps(obj=__RESULT__,\n'
-                           '                            indent=2))\n')
-            # Execute the source code in a Python process
-            process = subprocess.Popen(args=['python', temp_file_source],
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.PIPE)
-            try:
-                stdout, stderr = [stream.decode(encoding='utf-8',
-                                                errors='replace')
-                                  for stream
-                                  in process.communicate(timeout=timeout)]
-                status = process.returncode
-            except subprocess.TimeoutExpired:
-                status = -1
-                stdout = None
-                stderr = None
-                results['output'] = {STATUS_FIELD: STATUS_ERROR,
-                                     MESSAGE_FIELD: 'timeout'}
-            # Remove the temporary file
-            try:
-                os.remove(path=temp_file_source)
-            except FileNotFoundError:
-                # File was already removed
-                pass
-            # Transmit command results
-            if stdout is not None:
-                url = self.build_url(section=SECTION_ENDPOINTS,
-                                     option=ACTION_COMMAND_POST,
-                                     extra=f'{command_id}/')
-                data = {'output': self.encryptor.encrypt(text=stdout),
-                        'result': self.encryptor.encrypt(text=stderr)}
-                post_results = self.do_api_request(method=METHOD_POST,
-                                                   url=url,
-                                                   headers=headers,
-                                                   data=data)
-                # Save results
-                results['stdout'] = stdout
-                results['stderr'] = stderr
-                results['output'] = post_results
+            decrypted_command = decryptor.decrypt(text=results['command'])
+            decrypted_settings = {key: decryptor.decrypt(text=value)
+                                  for key, value
+                                  in results['settings'].items()}
+            decrypted_variables = {key: decryptor.decrypt(text=value)
+                                   if value
+                                   else None
+                                   for key, value
+                                   in results['variables'].items()}
+            execution_type = results.get('execution_type',
+                                         COMMAND_TYPE_PYTHON_FILE)
+            if execution_type == COMMAND_TYPE_PYTHON_FILE:
+                # Execute command with Python and external file
+                status, stdout, stderr = self.execute_python_file(
+                    command=decrypted_command,
+                    timeout=timeout,
+                    settings=decrypted_settings,
+                    variables=decrypted_variables)
+            else:
+                # Invalid command execution type
+                status = 2
+                return status, results
+            url = self.build_url(section=SECTION_ENDPOINTS,
+                                 option=ACTION_COMMAND_POST,
+                                 extra=f'{command_id}/')
+            data = {'output': self.encryptor.encrypt(text=stdout),
+                    'result': self.encryptor.encrypt(text=stderr)}
+            post_results = self.do_api_request(method=METHOD_POST,
+                                               url=url,
+                                               headers=headers,
+                                               data=data)
+            # Save results
+            results['stdout'] = stdout
+            results['stderr'] = stderr
+            results['output'] = post_results
         else:
             # Invalid command
             status = 1
@@ -639,3 +605,75 @@ class Client(object):
         else:
             results = None
         return results
+
+    def execute_python_file(self,
+                            command: str,
+                            timeout: int,
+                            settings: dict[str, str],
+                            variables: dict[str, str]
+                            ) -> tuple[int, str, str]:
+        """
+        Executes a Python file with the specified command
+
+        The method creates a temporary Python file containing the provided
+        command with extra settings, and external variables.
+        It ensures the source code is executed in an isolated Python process.
+        The temporary file is removed after execution.
+
+        :param command: The Python code to be executed
+        :param timeout: The maximum time in seconds to complete the command
+        :param settings: A dictionary containing extra settings
+        :param variables: A dictionary containing external variables
+        :return: A tuple containing the process return code, standard output,
+                 standard error
+        """
+        # Create a new temporary file with the decrypted command
+        temp_file_fd, temp_file_source = tempfile.mkstemp(
+            prefix=f'{PRODUCT_NAME.lower().replace(" ", "_")}-',
+            text=True)
+        with os.fdopen(temp_file_fd, 'w') as file:
+            # Initialize modules path
+            remotes_path = pathlib.Path(remotes.__path__[0])
+            file.write('import sys\n'
+                       f'sys.path.append(r"{remotes_path.parent}")\n')
+            # Initialize __RESULT__ variable
+            file.write('__RESULT__ = ""\n')
+            # Save settings
+            file.write(f'__SETTINGS__ = {settings}\n')
+            # Save variables
+            file.write(f'__VARIABLES__ = {variables}\n')
+            file.write('\n')
+            # Write command
+            file.write(command)
+            # Convert __RESULT__ in list if it's not a list and
+            # write __RESULT__ in JSON format in stderr
+            file.write('\n'
+                       '\n'
+                       'import json\n'
+                       'import sys\n'
+                       'if not isinstance(__RESULT__, list):\n'
+                       '    __RESULT__ = [__RESULT__]\n'
+                       'sys.stderr.write(json.dumps(obj=__RESULT__,\n'
+                       '                            indent=2))\n')
+        # Execute the source code in a Python process
+        process = subprocess.Popen(args=['python', temp_file_source],
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        try:
+            stdout, stderr = [stream.decode(encoding='utf-8',
+                                            errors='replace')
+                              for stream
+                              in process.communicate(timeout=timeout)]
+            status = process.returncode
+        except subprocess.TimeoutExpired:
+            stdout = None
+            stderr = None
+            status = -1
+        # Remove the temporary file
+        try:
+            os.remove(path=temp_file_source)
+        except FileNotFoundError:
+            # File was already removed
+            pass
+        # Return results
+        return status, stdout, stderr

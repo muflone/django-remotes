@@ -57,3 +57,5 @@ APILOG_INCLUDE_ARGS = 'apilog_include_arguments'
 ADMIN_SITE_HEADER = 'Django Remotes Server Administration'
 ADMIN_SITE_TITLE = ADMIN_SITE_HEADER
 ADMIN_SITE_INDEX_TITLE = 'Django Remotes Server Administration page'
+
+COMMAND_TYPE_PYTHON_FILE = 'python_file'
