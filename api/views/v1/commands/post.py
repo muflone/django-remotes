@@ -50,26 +50,25 @@ class CommandPostSerializer(Serializer):
     """
     Serializer for CommandPostView
     """
-    id = IntegerField(required=True)
-    host = PrimaryKeyRelatedField(queryset=Host.objects.all(),
-                                  required=True,
-                                  many=False)
+    id = IntegerField(write_only=True)
+    host = PrimaryKeyRelatedField(read_only=True)
     output = CharField(required=True,
                        allow_blank=True)
     result = CharField(required=True,
                        allow_blank=True)
 
-    def create(self, data) -> CommandsOutput:
+    def create(self, validated_data) -> CommandsOutput:
         """
         Create new CommandsOutput object
 
-        :param data: data to save
+        :param validated_data: data to save
         :return: new CommandsOutput object
         """
-        results = CommandsOutput.objects.create(command_id=data['id'],
-                                                host=data['host'],
-                                                output=data['output'],
-                                                result=data['result'])
+        results = CommandsOutput.objects.create(
+            command_id=validated_data['id'],
+            host=validated_data['host'],
+            output=validated_data['output'],
+            result=validated_data['result'])
         return results
 
 
@@ -85,24 +84,23 @@ class CommandPostView(APIView, SaveRequestMixin):
         # Find host matching with the user
         host = Host.objects_enabled.get(user_id=self.request.user.pk)
         # Find the CommandGroupItem and check if it's in the same host group
-        command = Command.objects.filter(pk=kwargs['pk'],
-                                         group__hosts__hosts=host.pk).first()
+        command = Command.objects_enabled.filter(
+            pk=kwargs['pk'],
+            group__is_active=True,
+            group__hosts__hosts=host.pk).first()
         if command:
-            serializer = CommandPostSerializer(data=request.data.copy())
-            # Add ID to the data from the querystring
-            serializer.initial_data['id'] = kwargs['pk']
-            serializer.initial_data['host'] = host.pk
             # Decrypt data using the host UUID
             decryptor = FernetEncrypt()
             decryptor.load_key_from_uuid(host.uuid)
-            serializer.initial_data['output'] = decryptor.decrypt(
-                text=request.data['output'])
-            serializer.initial_data['result'] = decryptor.decrypt(
-                text=request.data['result'])
             # Process the data
+            serializer = CommandPostSerializer(data={
+                'id': kwargs['pk'],
+                'output': decryptor.decrypt(text=request.data['output']),
+                'result': decryptor.decrypt(text=request.data['result']),
+            })
             if serializer.is_valid():
                 # Save data creating a new CommandOutput object
-                command_output = serializer.save()
+                command_output = serializer.save(host=host)
                 # Save the output result into VariableValue objects
                 try:
                     command_output_result = json.loads(s=command_output.result)
@@ -125,7 +123,7 @@ class CommandPostView(APIView, SaveRequestMixin):
                         else '')
                     variable_value.save()
                 # Show results
-                results = {ID_FIELD: serializer.data['id']}
+                results = {ID_FIELD: kwargs['pk']}
                 return Response(data={STATUS_FIELD: STATUS_OK,
                                       RESULTS_FIELD: results},
                                 status=status.HTTP_201_CREATED)
