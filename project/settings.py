@@ -139,7 +139,7 @@ USE_TZ = True
 DATETIME_FORMAT = 'Y-m-d H:i:s'
 DATE_FORMAT = 'Y-m-d'
 TIME_FORMAT = 'H:i:s'
-
+FORMAT_MODULE_PATH = ['remotes.formats']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
