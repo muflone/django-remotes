@@ -38,7 +38,7 @@ class ApiLog(BaseModel):
         'message level'))
     method = models.CharField(max_length=255,
                               verbose_name=pgettext_lazy('ApiLog',
-                                                         'metod'))
+                                                         'method'))
     path = models.CharField(max_length=255,
                             verbose_name=pgettext_lazy('ApiLog',
                                                        'path'))
