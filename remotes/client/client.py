@@ -58,6 +58,7 @@ from remotes.client.settings import (Settings,
                                      SECTION_SERVER)
 from remotes.constants import (COMMAND_FIELD,
                                COMMAND_TYPE_PYTHON_FILE,
+                               COMMAND_TYPE_PYTHON_INLINE,
                                COMMANDS_RESULTS_FIELD,
                                ENCRYPTED_FIELD,
                                ENCRYPTION_KEY_FIELD,
@@ -470,6 +471,13 @@ class Client(object):
                     timeout=timeout,
                     settings=decrypted_settings,
                     variables=decrypted_variables)
+            elif execution_type == COMMAND_TYPE_PYTHON_INLINE:
+                # Execute command with Python inline
+                status, stdout, stderr = self.execute_python_inline(
+                    command=decrypted_command,
+                    timeout=timeout,
+                    settings=decrypted_settings,
+                    variables=decrypted_variables)
             else:
                 # Invalid command execution type
                 status = 2
@@ -675,5 +683,66 @@ class Client(object):
         except FileNotFoundError:
             # File was already removed
             pass
+        # Return results
+        return status, stdout, stderr
+
+    def execute_python_inline(self,
+                              command: str,
+                              timeout: int,
+                              settings: dict[str, str],
+                              variables: dict[str, str]
+                              ) -> tuple[int, str, str]:
+        """
+        Executes a Python inline code with the specified command
+
+        The method executes a Python command using python -c with extra
+        settings, and external variables.
+        It ensures the source code is executed in an isolated Python process.
+
+        :param command: The Python code to be executed
+        :param timeout: The maximum time in seconds to complete the command
+        :param settings: A dictionary containing extra settings
+        :param variables: A dictionary containing external variables
+        :return: A tuple containing the process return code, standard output,
+                 standard error
+        """
+        lines = []
+        # Initialize modules path
+        remotes_path = pathlib.Path(remotes.__path__[0])
+        lines.append('import sys')
+        lines.append('sys.path.append(r"{remotes_path.parent}")')
+        # Initialize __RESULT__ variable
+        lines.append('__RESULT__ = ""')
+        # Save settings
+        lines.append(f'__SETTINGS__ = {settings}')
+        # Save variables
+        lines.append(f'__VARIABLES__ = {variables}')
+        lines.append('')
+        # Write command
+        lines.append(command)
+        # Convert __RESULT__ in list if it's not a list and
+        # write __RESULT__ in JSON format in stderr
+        lines.append('')
+        lines.append('')
+        lines.append('import json')
+        lines.append('import sys')
+        lines.append('if not isinstance(__RESULT__, list):')
+        lines.append('    __RESULT__ = [__RESULT__]')
+        lines.append('sys.stderr.write(json.dumps(obj=__RESULT__,'
+                     '                            indent=2))')
+        # Execute the source code in a Python process
+        process = subprocess.Popen(args=['python', '-c', '\n'.join(lines)],
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        try:
+            stdout, stderr = [stream.decode(encoding='utf-8',
+                                            errors='replace')
+                              for stream
+                              in process.communicate(timeout=timeout)]
+            status = process.returncode
+        except subprocess.TimeoutExpired:
+            stdout = None
+            stderr = None
+            status = -1
         # Return results
         return status, stdout, stderr
