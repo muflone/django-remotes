@@ -59,3 +59,10 @@ ADMIN_SITE_TITLE = ADMIN_SITE_HEADER
 ADMIN_SITE_INDEX_TITLE = 'Django Remotes Server Administration page'
 
 COMMAND_TYPE_PYTHON_FILE = 'python_file'
+COMMAND_TYPE_PYTHON_INLINE = 'python_inline'
+COMMAND_TYPE_EXEC = 'python_exec'
+COMMAND_TYPE_SYSTEM = 'python_os_system'
+COMMAND_TYPE_POPEN_ARGS = 'popen_args'
+COMMAND_TYPE_POPEN_SHELL = 'popen_shell'
+COMMAND_TYPE_POWERSHELL_FILE = 'powershell_file'
+COMMAND_TYPE_POWERSHELL_INLINE = 'powershell_inline'

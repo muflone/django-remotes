@@ -35,7 +35,8 @@ class CommandGetSerializer(ModelSerializer):
 
     class Meta:
         model = Command
-        fields = ['id', 'name', 'settings', 'variables', 'command', 'timeout']
+        fields = ['id', 'name', 'settings', 'variables', 'command', 'timeout',
+                  'execution_type']
 
     # noinspection PyMethodMayBeStatic
     def get_settings(self, instance):

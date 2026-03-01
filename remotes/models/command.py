@@ -24,12 +24,48 @@ from django.utils.translation import pgettext_lazy
 
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 
+from remotes.constants import (COMMAND_TYPE_PYTHON_FILE,
+                               COMMAND_TYPE_PYTHON_INLINE,
+                               COMMAND_TYPE_EXEC,
+                               COMMAND_TYPE_SYSTEM,
+                               COMMAND_TYPE_POPEN_ARGS,
+                               COMMAND_TYPE_POPEN_SHELL,
+                               COMMAND_TYPE_POWERSHELL_FILE,
+                               COMMAND_TYPE_POWERSHELL_INLINE)
+
 from utility.actions import (ActionOrderDecrease,
                              ActionOrderIncrease,
                              ActionSetActive,
                              ActionSetInactive)
 from utility.models import (BaseModel, BaseModelAdmin,
                             ManagerEnabled, ManagerDisabled)
+
+
+class CommandExecutionType(models.TextChoices):
+    PYTHON_FILE = (COMMAND_TYPE_PYTHON_FILE,
+                   pgettext_lazy('Command',
+                                 'Python file'))
+    PYTHON_INLINE = (COMMAND_TYPE_PYTHON_INLINE,
+                     pgettext_lazy('Command',
+                                   'Python with -c'))
+    EXEC = (COMMAND_TYPE_EXEC,
+            pgettext_lazy('Command',
+                          'Python exec()'))
+    SYSTEM = (COMMAND_TYPE_SYSTEM,
+              pgettext_lazy('Command',
+                            'Python os.system()'))
+    POPEN_ARGS = (COMMAND_TYPE_POPEN_ARGS,
+                  pgettext_lazy('Command',
+                                'Command arguments'))
+    POPEN_SHELL = (COMMAND_TYPE_POPEN_SHELL,
+                   pgettext_lazy('Command',
+                                 'Shell commands'))
+    POWERSHELL_FILE = (COMMAND_TYPE_POWERSHELL_FILE,
+                       pgettext_lazy('Command',
+                                     'Powershell file'))
+    POWERSHELL_INLINE = (COMMAND_TYPE_POWERSHELL_INLINE,
+                         pgettext_lazy('Command',
+                                       'Powershell with -Command'))
 
 
 class Command(BaseModel):
@@ -80,6 +116,14 @@ class Command(BaseModel):
                                         verbose_name=pgettext_lazy(
                                             'Command',
                                             'order'))
+    execution_type = models.CharField(max_length=255,
+                                      blank=False,
+                                      null=False,
+                                      default=CommandExecutionType.PYTHON_FILE,
+                                      choices=CommandExecutionType,
+                                      verbose_name=pgettext_lazy(
+                                          'Command',
+                                          'execution type'))
     is_active = models.BooleanField(default=True,
                                     verbose_name=pgettext_lazy(
                                         'Command',
@@ -124,5 +168,6 @@ class CommandAdmin(BaseModelAdmin,
                'set_active', 'set_inactive']
     list_display = ('id', 'name', 'group', 'order', 'description', 'is_active')
     list_filter = (('group', RelatedDropdownFilter),
+                   'execution_type',
                    'is_active',
                    'group__hosts')
