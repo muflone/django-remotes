@@ -444,7 +444,7 @@ class Client(object):
                                       headers=headers,
                                       data=None)
         # Check if there's a valid command in the command
-        if 'id' in results and results['id'] == command_id:
+        if results.get('id') == command_id:
             timeout = results['timeout']
             # Get the symmetric key used to decrypt the command to process
             decryptor = FernetEncrypt()
