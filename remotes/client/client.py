@@ -726,7 +726,7 @@ class Client(object):
         # Initialize modules path
         remotes_path = pathlib.Path(remotes.__path__[0])
         lines.append('import sys')
-        lines.append('sys.path.append(r"{remotes_path.parent}")')
+        lines.append(f'sys.path.append(r"{remotes_path.parent}")')
         # Initialize __RESULT__ variable
         lines.append('__RESULT__ = ""')
         # Save settings
@@ -785,7 +785,7 @@ class Client(object):
         # Initialize modules path
         remotes_path = pathlib.Path(remotes.__path__[0])
         lines.append('import sys')
-        lines.append('sys.path.append(r"{remotes_path.parent}")')
+        lines.append(f'sys.path.append(r"{remotes_path.parent}")')
         # Initialize __RESULT__ variable
         lines.append('__RESULT__ = ""')
         # Save settings
