@@ -19,12 +19,14 @@
 ##
 
 import argparse
+import io
 import os
 import pathlib
 import subprocess
 import tempfile
 import urllib.parse
 import uuid
+import sys
 
 import requests.exceptions
 
@@ -59,6 +61,7 @@ from remotes.client.settings import (Settings,
 from remotes.constants import (COMMAND_FIELD,
                                COMMAND_TYPE_PYTHON_FILE,
                                COMMAND_TYPE_PYTHON_INLINE,
+                               COMMAND_TYPE_EXEC,
                                COMMANDS_RESULTS_FIELD,
                                ENCRYPTED_FIELD,
                                ENCRYPTION_KEY_FIELD,
@@ -478,6 +481,12 @@ class Client(object):
                     timeout=timeout,
                     settings=decrypted_settings,
                     variables=decrypted_variables)
+            elif execution_type == COMMAND_TYPE_EXEC:
+                # Execute command with Python exec()
+                status, stdout, stderr = self.execute_python_exec(
+                    command=decrypted_command,
+                    settings=decrypted_settings,
+                    variables=decrypted_variables)
             else:
                 # Invalid command execution type
                 status = 2
@@ -744,5 +753,70 @@ class Client(object):
             stdout = None
             stderr = None
             status = -1
+        # Return results
+        return status, stdout, stderr
+
+    def execute_python_exec(self,
+                            command: str,
+                            settings: dict[str, str],
+                            variables: dict[str, str]
+                            ) -> tuple[str, str]:
+        """
+        Executes a Python code with the specified command
+
+        The method executes a Python command using exec with extra
+        settings, and external variables.
+        It ensures the source code is executed in an isolated Python process.
+
+        :param command: The Python code to be executed
+        :param settings: A dictionary containing extra settings
+        :param variables: A dictionary containing external variables
+        :return: A tuple containing the process return code, standard output,
+                 standard error
+        """
+        lines = []
+        # Initialize modules path
+        remotes_path = pathlib.Path(remotes.__path__[0])
+        lines.append('import sys')
+        lines.append('sys.path.append(r"{remotes_path.parent}")')
+        # Initialize __RESULT__ variable
+        lines.append('__RESULT__ = ""')
+        # Save settings
+        lines.append(f'__SETTINGS__ = {settings}')
+        # Save variables
+        lines.append(f'__VARIABLES__ = {variables}')
+        lines.append('')
+        # Write command
+        lines.append(command)
+        # Convert __RESULT__ in list if it's not a list and
+        # write __RESULT__ in JSON format in stderr
+        lines.append('')
+        lines.append('')
+        lines.append('import json')
+        lines.append('import sys')
+        lines.append('if not isinstance(__RESULT__, list):')
+        lines.append('    __RESULT__ = [__RESULT__]')
+        lines.append('sys.stderr.write(json.dumps(obj=__RESULT__,'
+                     '                            indent=2))')
+        # Execute the source code with exec
+        local_variables = {}
+        # Catch stdout by replacing sys.stdout
+        stderr_capture = io.StringIO()
+        stdout_capture = io.StringIO()
+        try:
+            sys.stderr = stderr_capture
+            sys.stdout = stdout_capture
+            exec('\n'.join(lines),
+                 globals={},
+                 locals=local_variables)
+            status = 0
+        except Exception as error:
+            sys.stderr.write(str(error))
+            status = -1
+        finally:
+            sys.stderr = sys.__stderr__
+            sys.stdout = sys.__stdout__
+        stderr = stderr_capture.getvalue()
+        stdout = stdout_capture.getvalue()
         # Return results
         return status, stdout, stderr
