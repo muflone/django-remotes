@@ -494,8 +494,8 @@ class Client(object):
             url = self.build_url(section=SECTION_ENDPOINTS,
                                  option=ACTION_COMMAND_POST,
                                  extra=f'{command_id}/')
-            data = {'output': self.encryptor.encrypt(text=stdout),
-                    'result': self.encryptor.encrypt(text=stderr)}
+            data = {'output': self.encryptor.encrypt(text=stdout or ''),
+                    'result': self.encryptor.encrypt(text=stderr or '')}
             post_results = self.do_api_request(method=METHOD_POST,
                                                url=url,
                                                headers=headers,
