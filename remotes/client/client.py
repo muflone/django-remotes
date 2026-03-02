@@ -62,6 +62,7 @@ from remotes.constants import (COMMAND_FIELD,
                                COMMAND_TYPE_PYTHON_FILE,
                                COMMAND_TYPE_PYTHON_INLINE,
                                COMMAND_TYPE_EXEC,
+                               COMMAND_TYPE_SYSTEM,
                                COMMANDS_RESULTS_FIELD,
                                ENCRYPTED_FIELD,
                                ENCRYPTION_KEY_FIELD,
@@ -487,6 +488,12 @@ class Client(object):
                     command=decrypted_command,
                     settings=decrypted_settings,
                     variables=decrypted_variables)
+            elif execution_type == COMMAND_TYPE_SYSTEM:
+                # Execute command with os.system()
+                status = self.execute_os_system(
+                    command=decrypted_command)
+                stdout = None
+                stderr = None
             else:
                 # Invalid command execution type
                 status = 2
@@ -820,3 +827,18 @@ class Client(object):
         stdout = stdout_capture.getvalue()
         # Return results
         return status, stdout, stderr
+
+    def execute_os_system(self,
+                          command: str,
+                          ) -> int:
+        """
+        Executes a command-line
+
+        The method executes a command-line using os.system.
+
+        :param command: The command-line to be executed
+        :return: The process return code
+        """
+        status = os.system(command)
+        # Return results
+        return status
